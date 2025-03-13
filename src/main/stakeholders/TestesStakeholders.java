@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;   
-package ControleFuncionario;
+import cadastros.ControleFuncionario;
 
 public class TestesStakeholders {
     
