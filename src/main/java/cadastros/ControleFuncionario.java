@@ -1,5 +1,8 @@
+package cadastros;
 import java.util.List;
 import java.util.ArrayList;
+import stakeholders.Funcionario;
+
 public class ControleFuncionario {
 
     private List<Funcionario> listaFuncionarios;
@@ -15,20 +18,23 @@ public class ControleFuncionario {
     }
 
     public Funcionario consultarFuncionario(String cpf) {
-        for (Funcionario f : funcionarios) {
+        for (Funcionario f : listaFuncionarios) {
             if (f.getCpf().equals(cpf)) {
                 return f;
             }
         }
+        return null;
     }
 
-    public void alterarFuncionario(String cpf, String novoNome, String novoCargo) {
+    public void alterarFuncionario(String novoNome, String novoTelefone, String cpf, String novoCargo) {
         Funcionario funcionario = consultarFuncionario(cpf);
         if (funcionario != null) {
             funcionario.setNome(novoNome);
             funcionario.setCargo(novoCargo);
+            funcionario.setTelefone(novoTelefone);
             System.out.println("Funcionário alterado com sucesso: " + novoNome);
-        } else {
+        } 
+        else {
             System.out.println("Funcionário não encontrado.");
         }
     }

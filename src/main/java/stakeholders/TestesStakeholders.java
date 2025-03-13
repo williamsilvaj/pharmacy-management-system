@@ -1,14 +1,20 @@
 import java.util.ArrayList;
-import java.util.List;   
+import java.util.List;  
+import stakeholders.Funcionario;
+import stakeholders.Gerente;
+import stakeholders.Farmaceutico; 
+
 import cadastros.ControleFuncionario;
 
 public class TestesStakeholders {
+
+    
     
     public static void main(String[] args) {
         // Criando um objeto Funcionário
         ControleFuncionario controleDeFuncionarios = new ControleFuncionario();
-        Funcionario funcionario01 = new Funcionario("Juam Silva", "1234-5678", "123.456.789-00");
-        Funcionario funcionario02 = new Funcionario("Marcos Lima", "8895-5678", "168.456.789-00");
+        Funcionario funcionario01 = new Funcionario("Juam Silva", "1234-5678", "123.456.789-00", " atendente");
+        Funcionario funcionario02 = new Funcionario("Marcos Lima", "8895-5678", "168.456.789-00", " atendente");
         Farmaceutico farmaceutico01 = new Farmaceutico("noturno","839234",12.0f);
         List<Funcionario> funcionariosSupervisionados = new ArrayList<>();
         
