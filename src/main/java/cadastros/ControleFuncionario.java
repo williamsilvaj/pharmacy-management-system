@@ -38,5 +38,42 @@ public class ControleFuncionario {
             System.out.println("Funcionário não encontrado.");
         }
     }
+
+    public void removerFuncionario(String nome) {
+        for (Funcionario f : listaFuncionarios) {
+            if (f.getNome().equals(nome)) {
+                listaFuncionarios.remove(f);
+                System.out.println("Funcionário removido com sucesso.");
+                return;
+            }
+        }
+        System.out.println("Funcionário não encontrado.");
+    }
+
+    // Listar todos os funcionários
+    public void listarFuncionarios() {
+        if (listaFuncionarios.isEmpty()) {
+            System.out.println("Nenhum funcionário cadastrado.");
+        } else {
+            System.out.println("Lista de Funcionários:");
+            for (Funcionario f : listaFuncionarios) {
+                System.out.println(f);
+            }
+        }
+    }
+
+    // Atribuir um cargo a um funcionário
+    public void atribuirCargo(String nome, String novoCargo) {
+        for (Funcionario f : listaFuncionarios) {
+            if (f.getNome().equals(nome)) {
+                f.setCargo(novoCargo);
+                System.out.println("Cargo atribuído com sucesso: " + f);
+                return;
+            }
+        }
+        System.out.println("Funcionário não encontrado.");
+    }
+
+
     
 }
