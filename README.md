@@ -10,7 +10,7 @@
 
 1. **Baixar dependências e instalar**:
    ```bash
-   mvn install -DskipTests
+   mvn install
    ```
 2. **Compilar o projeto**:
    ```bash
