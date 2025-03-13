@@ -40,8 +40,3 @@ mvn spotless:apply
 
 ### Eclipse:
 1. Instale o plugin **EditorConfig Eclipse Plugin**.
-
----
-
-## Observação:
-- A execução de `mvn clean compile` já garante que a formatação do código será verificada automaticamente durante o processo de compilação.
