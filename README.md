@@ -10,7 +10,7 @@
 
 1. **Baixar dependências e instalar**:
    ```bash
-   mvn install -DskipTests
+   mvn install
    ```
 2. **Compilar o projeto**:
    ```bash
@@ -29,16 +29,6 @@ mvn spotless:apply
 
 ---
 
-## Verificar formatação do código:
-
-Para garantir que o código está conforme as regras de estilo (como Google Java Style Guide), use o Checkstyle:
-
-```bash
-mvn checkstyle:check
-```
-
----
-
 ## Manter padrão em várias IDEs:
 
 ### IntelliJ IDEA:
@@ -50,8 +40,3 @@ mvn checkstyle:check
 
 ### Eclipse:
 1. Instale o plugin **EditorConfig Eclipse Plugin**.
-
----
-
-## Observação:
-- A execução de `mvn clean compile` já garante que a formatação do código será verificada automaticamente durante o processo de compilação.
