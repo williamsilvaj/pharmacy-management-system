@@ -1,4 +1,5 @@
 package cadastros;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +12,7 @@ public class ControleFornecedor {
     //construtor
 
     public ControleFornecedor() {
-        this.listaFornecedores = new ArrayList();
-  
+        this.listaFornecedores = new ArrayList<>();
     }
 
     public void cadastrarFornecedor(String nome, String cnpj, String email, boolean status){
