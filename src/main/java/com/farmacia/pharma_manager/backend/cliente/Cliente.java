@@ -1,4 +1,6 @@
-package stakeholders;
+package com.farmacia.pharma_manager.backend.cliente;
+
+import com.farmacia.pharma_manager.backend.endereco.Endereco;
 
 public class Cliente {
 

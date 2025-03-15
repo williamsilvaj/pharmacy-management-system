@@ -1,4 +1,4 @@
-package stakeholders;
+package com.farmacia.pharma_manager.backend.fornecedor;
 
 public class Fornecedor {
     private String nome;

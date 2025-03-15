@@ -1,6 +1,4 @@
-package stakeholders;
-import java.util.ArrayList;
-import java.util.List;
+package com.farmacia.pharma_manager.backend.endereco;
 
 public class Endereco {
 

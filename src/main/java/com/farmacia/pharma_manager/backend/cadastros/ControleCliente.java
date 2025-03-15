@@ -1,8 +1,8 @@
-package cadastros;
+package com.farmacia.pharma_manager.backend.cadastros;
 import java.util.ArrayList;
 import java.util.List;
 
-import stakeholders.*;
+import com.farmacia.pharma_manager.backend.cliente.Cliente;
 
 public class ControleCliente {
 
