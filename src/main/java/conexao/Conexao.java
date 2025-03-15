@@ -7,23 +7,28 @@ import java.sql.SQLException;
 
 public class Conexao {
 
-    private static final String url = "jbdc:mysql://localhost:3306/pharmabd";
-    private static final String user = "root";
-    private static final String password = "root";
 
-    private static Connection conn;
+     private static final String url = "jdbc:mysql://172.28.254.2:3306/pharmabd";
 
-    public static Connection getConexao(){
+    public static void main (String[] args){
+       
+
+        String user = "root";
+        String password = "Aa1234@!";
+        Connection conn;
+        conn = null;
+
         try {
             if(conn == null){
                 conn = DriverManager.getConnection(url, user, password);
-                return conn;
+                System.out.println("conectou");
+                //return conn;
             }else{
-                return conn;
+                //return conn;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            //return null;
         }
         
     }

@@ -1,13 +1,14 @@
 package stakeholders;
 //import java.util.List;
 
-public class Farmaceutico {
+public class Farmaceutico extends Funcionario  {
     private String turno;
     private String crf;
     private float cargaHoraria;
 
     // Construtor
-    public Farmaceutico(String turno, String crf, float cargaHoraria) {
+    public Farmaceutico (String nome, String telefone, String cpf, String cargo, String turno, String crf, float cargaHoraria) {
+        super(nome, telefone, cpf, cargo);
         this.turno = turno;
         this.crf = crf;
         this.cargaHoraria = cargaHoraria;

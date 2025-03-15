@@ -1,14 +1,17 @@
 package stakeholders;
 import java.util.List;
 
-public class Gerente {
+public class Gerente extends Funcionario {
+    
     private String nivel;
     private List<Funcionario> funcionariosSupervisionados;
 
     // Construtor
-    public Gerente(String nivel, List<Funcionario> funcionariosSupervisionados) {
+    public Gerente (String nome, String telefone, String cpf, String cargo, String nivel, List<Funcionario> funcionariosSupervisionados ) {
+        super(nome, telefone, cpf, cargo);
         this.nivel = nivel;
         this.funcionariosSupervisionados = funcionariosSupervisionados;
+
     }
 
     // Getters e Setters
