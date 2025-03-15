@@ -1,8 +1,6 @@
-package com.farmacia.pharma_manager.backend.cadastros;
+package com.farmacia.pharma_manager.backend.fornecedor;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.farmacia.pharma_manager.backend.fornecedor.Fornecedor;
 
 public class ControleFornecedor {
 

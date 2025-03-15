@@ -1,6 +1,6 @@
 package test;
 
-import com.farmacia.pharma_manager.backend.cadastros.ControleFornecedor;
+import com.farmacia.pharma_manager.backend.fornecedor.ControleFornecedor;
 
 public class TestesStakeholders {
 

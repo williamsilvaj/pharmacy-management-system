@@ -1,7 +1,6 @@
-package com.farmacia.pharma_manager.backend.cadastros;
+package com.farmacia.pharma_manager.backend.funcionario;
 import java.util.List;
 import java.util.ArrayList;
-import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
 
 public class ControleFuncionario {
 
