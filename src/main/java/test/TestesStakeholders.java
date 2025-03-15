@@ -1,4 +1,4 @@
-package tests;
+package test;
 
 import com.farmacia.pharma_manager.backend.cadastros.ControleFornecedor;
 

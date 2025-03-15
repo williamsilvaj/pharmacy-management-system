@@ -1,4 +1,4 @@
-package tests;
+package test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +8,7 @@ public class TesteConexaoBD {
 
   public static void main(String[] args) {
 
-    String urlLocal = "jdbc:mysql://localhost:3306/pharmamanager";
+    String urlLocal = "jdbc:mysql://localhost:3306/pharmaManager";
     String userLocal = "root";
     String passwordLocal = "1234";
 

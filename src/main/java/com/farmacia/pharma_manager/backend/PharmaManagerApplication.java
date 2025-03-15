@@ -2,7 +2,6 @@ package com.farmacia.pharma_manager.backend;
 
 import javax.swing.*;
 
-//import org.opensingular.singular.form.showcase.component.form.core.search.form.Funcionario;
 import com.farmacia.pharma_manager.frontend.TelaPrincipal;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
