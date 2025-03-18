@@ -1,14 +1,23 @@
 package com.farmacia.pharma_manager.backend.gerente;
+
 import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
 
+import jakarta.persistence.*;
 import java.util.List;
 
-public class Gerente {
+@Entity
+@Table(name = "gerente")
+public class Gerente extends Funcionario {
+
+    @Column(name = "nivel")
     private String nivel;
+
+    @OneToMany(mappedBy = "gerente")
     private List<Funcionario> funcionariosSupervisionados;
 
     // Construtor
-    public Gerente(String nivel, List<Funcionario> funcionariosSupervisionados) {
+    public Gerente(String nome, String telefone, String cpf, String cargo, String nivel, List<Funcionario> funcionariosSupervisionados) {
+        super(nome, telefone, cpf, cargo);
         this.nivel = nivel;
         this.funcionariosSupervisionados = funcionariosSupervisionados;
     }
