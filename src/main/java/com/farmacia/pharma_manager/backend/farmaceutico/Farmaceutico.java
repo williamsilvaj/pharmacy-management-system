@@ -1,10 +1,19 @@
 package com.farmacia.pharma_manager.backend.farmaceutico;
 import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
-//import java.util.List;
 
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "farmaceutico")
 public class Farmaceutico extends Funcionario  {
+    @Column(name = "turno")
     private String turno;
+
+    @Column(name = "crf")
     private String crf;
+
+    @Column(name = "cargaHoraria")
     private float cargaHoraria;
 
     // Construtor

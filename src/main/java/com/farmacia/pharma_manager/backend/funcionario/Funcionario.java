@@ -1,10 +1,21 @@
 package com.farmacia.pharma_manager.backend.funcionario;
+
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "funcionario")
 public class Funcionario {
 
     // Atributos da classe
+
+    @Column(name = "nome")
     private String nome;
+    @Column(name = "telefone")
     private String telefone;
+    @Column(name = "cpf")
     private String cpf;
+    @Column(name = "cargo")
     private String cargo;
 
     // Construtor para inicializar os atributos

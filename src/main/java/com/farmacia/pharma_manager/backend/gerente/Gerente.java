@@ -1,5 +1,4 @@
 package com.farmacia.pharma_manager.backend.gerente;
-
 import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
 
 import jakarta.persistence.*;
