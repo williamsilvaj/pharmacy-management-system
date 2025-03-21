@@ -35,14 +35,14 @@ public class GerenteController {
 
     // buscar um Gerente pelo ID
     @GetMapping("/{id}")
-    public ResponseEntity<Gerente> getGerenteById(@PathVariable Integer id) {
+    public ResponseEntity<Gerente> getGerenteById(@PathVariable Long id) {
         Optional<Gerente> gerente = gerenteService.getGerenteById(id);
         return gerente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // deletar um Gerente pelo ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGerente(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteGerente(@PathVariable Long id) {
         Optional<Gerente> gerente = gerenteService.getGerenteById(id);
         if (gerente.isPresent()) {
             gerenteService.deleteGerente(id);

@@ -28,7 +28,7 @@ public class FuncionarioController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Funcionario> buscarFuncionarioPorId(@PathVariable Integer id) {
+    public Optional<Funcionario> buscarFuncionarioPorId(@PathVariable Long id) {
         return funcionarioService.buscarFuncionarioPorId(id);
     }
 
@@ -43,7 +43,7 @@ public class FuncionarioController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletarFuncionario(@PathVariable Integer id) {
+    public void deletarFuncionario(@PathVariable Long id) {
         funcionarioService.deletarFuncionario(id);
     }
 }

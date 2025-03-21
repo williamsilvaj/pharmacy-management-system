@@ -1,70 +1,71 @@
 package com.farmacia.pharma_manager.backend.fornecedor;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
 public class ControleFornecedor {
 
-    private List<Fornecedor> listaFornecedores;
+    private final FornecedorService fornecedorService;
 
-    //construtor
-
-    public ControleFornecedor() {
-        this.listaFornecedores = new ArrayList();
-
+    @Autowired
+    public ControleFornecedor(FornecedorService fornecedorService) {
+        this.fornecedorService = fornecedorService;
     }
 
-    public void cadastrarFornecedor(String nome, String cnpj, String email, boolean status){
+    // Cadastrar um fornecedor
+    public void cadastrarFornecedor(String nome, String cnpj, String email, boolean status) {
         Fornecedor fornecedor = new Fornecedor(nome, cnpj, email, status);
-        listaFornecedores.add(fornecedor);
+        fornecedorService.cadastrarFornecedor(fornecedor);
         System.out.println("Fornecedor cadastrado com sucesso: " + fornecedor);
     }
 
+    // Alterar os dados de um fornecedor
     public void alterarFornecedor(String cnpj, String novoNome, String novoEmail, boolean novoStatus) {
-        for (Fornecedor f : listaFornecedores) {
-            if (f.getCnpj().equals(cnpj)) {
-                f.setNome(novoNome);
-                f.setEmail(novoEmail);
-                f.setStatus(novoStatus);
-                System.out.println("Fornecedor alterado com sucesso: " + f);
-                return;
-            }
+        Optional<Fornecedor> fornecedorOpt = fornecedorService.consultarFornecedorPorCnpj(cnpj);
+        if (fornecedorOpt.isPresent()) {
+            Fornecedor fornecedor = fornecedorOpt.get();
+            fornecedor.setNome(novoNome);
+            fornecedor.setEmail(novoEmail);
+            fornecedor.setStatus(novoStatus);
+            fornecedorService.cadastrarFornecedor(fornecedor); // Atualiza o fornecedor no banco
+            System.out.println("Fornecedor alterado com sucesso: " + fornecedor);
+        } else {
+            System.out.println("Fornecedor não encontrado.");
         }
-        System.out.println("Fornecedor não encontrado.");
     }
 
     // Remover um fornecedor
     public void removerFornecedor(String cnpj) {
-        for (Fornecedor f : listaFornecedores) {
-            if (f.getCnpj().equals(cnpj)) {
-                listaFornecedores.remove(f);
-                System.out.println("Fornecedor removido com sucesso.");
-                return;
-            }
+        Optional<Fornecedor> fornecedorOpt = fornecedorService.consultarFornecedorPorCnpj(cnpj);
+        if (fornecedorOpt.isPresent()) {
+            fornecedorService.removerFornecedor(fornecedorOpt.get().getId());
+            System.out.println("Fornecedor removido com sucesso.");
+        } else {
+            System.out.println("Fornecedor não encontrado.");
         }
-        System.out.println("Fornecedor não encontrado.");
     }
 
+    // Consultar um fornecedor pelo CNPJ
     public void consultarFornecedor(String cnpj) {
-        for (Fornecedor f : listaFornecedores) {
-            if (f.getCnpj().equals(cnpj)) {
-                System.out.println("Fornecedor encontrado: " + f);
-                return;
-            }
+        Optional<Fornecedor> fornecedorOpt = fornecedorService.consultarFornecedorPorCnpj(cnpj);
+        if (fornecedorOpt.isPresent()) {
+            System.out.println("Fornecedor encontrado: " + fornecedorOpt.get());
+        } else {
+            System.out.println("Fornecedor não encontrado.");
         }
-        System.out.println("Fornecedor não encontrado.");
     }
 
-    //lista todos os Fornecedores
+    // Listar todos os fornecedores
     public void listarFornecedores() {
-        if (listaFornecedores.isEmpty()) {
+        List<Fornecedor> fornecedores = fornecedorService.listarFornecedores();
+        if (fornecedores.isEmpty()) {
             System.out.println("Nenhum fornecedor cadastrado.");
         } else {
             System.out.println("Lista de Fornecedores:");
-            for (Fornecedor f : listaFornecedores) {
-                System.out.println(f);
-            }
+            fornecedores.forEach(f -> System.out.println(f));
         }
     }
-
-
 }

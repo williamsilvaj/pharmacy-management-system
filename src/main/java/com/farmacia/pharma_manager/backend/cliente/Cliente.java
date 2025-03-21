@@ -1,17 +1,35 @@
 package com.farmacia.pharma_manager.backend.cliente;
 
 import com.farmacia.pharma_manager.backend.endereco.Endereco;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "clientes") // Nome da tabela no banco de dados
 public class Cliente {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Gerar automaticamente o ID para cada instância
+    @Column(name = "id")
+    private Long id; // Chave primária
+
+    @Column(name = "nome", nullable = false)
     private String nome;
-    private String cpf;
+
+    @Column(name = "cpf", nullable = false, unique = true)
+    private Long cpf;
+
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "telefone", nullable = false)
     private String telefone;
+
+    @ManyToOne
+    @JoinColumn(name = "endereco_id") // Definindo o relacionamento com a entidade Endereco
     private Endereco endereco;
 
     // Construtor
-    public Cliente(String nome, String cpf, String email, String telefone, Endereco endereco) {
+    public Cliente(String nome, Long cpf, String email, String telefone, Endereco endereco) {
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
@@ -20,6 +38,14 @@ public class Cliente {
     }
 
     // Getters e Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -28,11 +54,11 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public String getCpf() {
+    public Long getCpf() {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
+    public void setCpf(Long cpf) {
         this.cpf = cpf;
     }
 
@@ -62,8 +88,6 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return "Nome: " + nome + ", CPF: " + cpf + ", Email: " + email + ", Telefone: " + telefone + ", Endereço: " + endereco;
+        return "Cliente [Nome=" + nome + ", CPF=" + cpf + ", Email=" + email + ", Telefone=" + telefone + ", Endereço=" + endereco + "]";
     }
 }
-
-

@@ -1,16 +1,44 @@
 package com.farmacia.pharma_manager.backend.fornecedor;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "fornecedor")
 public class Fornecedor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "nome", nullable = false)
     private String nome;
+
+    @Column(name = "cnpj", nullable = false, unique = true)
     private String cnpj;
+
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "status")
     private boolean status; // true = Ativo, false = Inativo
+
+    // Construtores
+    public Fornecedor() {}
 
     public Fornecedor(String nome, String cnpj, String email, boolean status) {
         this.nome = nome;
         this.cnpj = cnpj;
         this.email = email;
         this.status = status;
+    }
+
+    // Getters e Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -47,6 +75,6 @@ public class Fornecedor {
 
     @Override
     public String toString() {
-        return "Nome: " + nome + ", CNPJ: " + cnpj + ", Email: " + email + ", Status: " + (status ? "Ativo" : "Inativo");
+        return "Fornecedor [id=" + id + ", nome=" + nome + ", cnpj=" + cnpj + ", email=" + email + ", status=" + (status ? "Ativo" : "Inativo") + "]";
     }
 }

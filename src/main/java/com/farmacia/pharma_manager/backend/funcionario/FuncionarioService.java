@@ -30,7 +30,7 @@ public class FuncionarioService {
     }
 
     // Método para buscar um funcionário pelo ID
-    public Optional<Funcionario> buscarFuncionarioPorId(Integer id) {
+    public Optional<Funcionario> buscarFuncionarioPorId(Long id) {
         return funcionarioRepository.findById(id);
     }
 
@@ -46,7 +46,7 @@ public class FuncionarioService {
 
     // Método para deletar um funcionário por ID
       // deletar um Gerente pelo ID
-    public void deletarFuncionario(Integer id) {
+    public void deletarFuncionario(Long id) {
     if (funcionarioRepository.existsById(id)) {
         funcionarioRepository.deleteById(id);
     } else {
