@@ -9,6 +9,11 @@ import java.util.List;
 @Table(name = "gerente")
 public class Gerente extends Funcionario {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idGerente")
+    private Integer idGerente;
+
     @Column(name = "nivel")
     private String nivel;
 
@@ -20,6 +25,10 @@ public class Gerente extends Funcionario {
         super(nome, telefone, cpf, cargo);
         this.nivel = nivel;
         this.funcionariosSupervisionados = funcionariosSupervisionados;
+    }
+
+    public Gerente() {
+        super();
     }
 
     // Getters e Setters
