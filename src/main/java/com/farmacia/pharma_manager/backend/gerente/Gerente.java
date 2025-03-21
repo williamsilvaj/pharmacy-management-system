@@ -8,10 +8,15 @@ import java.util.List;
 @Table(name = "gerente")
 public class Gerente extends Funcionario {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Gerar automaticamente o ID para cada instância
+    @Column(name = "id")
+    private Long id;
+
     @Column(name = "nivel")
     private String nivel;
 
-    @OneToMany(mappedBy = "gerente")
+    @Column(name = "Funcionarios Supervisionados")
     private List<Funcionario> funcionariosSupervisionados;
 
     // Construtor
