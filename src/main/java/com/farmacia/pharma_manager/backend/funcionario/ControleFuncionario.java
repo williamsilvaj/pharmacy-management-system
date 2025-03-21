@@ -1,78 +1,67 @@
 package com.farmacia.pharma_manager.backend.funcionario;
-import java.util.List;
-import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
 public class ControleFuncionario {
 
-    private List<Funcionario> listaFuncionarios;
+    private final FuncionarioRepository funcionarioRepository;
 
-      // Construtor
-      public ControleFuncionario() {
-        listaFuncionarios = new ArrayList<>();
+    @Autowired
+    public ControleFuncionario(FuncionarioRepository funcionarioRepository) {
+        this.funcionarioRepository = funcionarioRepository;
     }
 
-    public void cadastrarFuncionario (Funcionario funcionario){
-        listaFuncionarios.add(funcionario);
-        System.out.println("Funcionário cadastrado com sucesso: " + funcionario.getNome());
+    // Cadastrar um novo funcionário
+    public Funcionario cadastrarFuncionario(Funcionario funcionario) {
+        return funcionarioRepository.save(funcionario);
     }
 
+    // Consultar um funcionário pelo CPF
     public Funcionario consultarFuncionario(String cpf) {
-        for (Funcionario f : listaFuncionarios) {
-            if (f.getCpf().equals(cpf)) {
-                return f;
-            }
-        }
-        return null;
+        Optional<Funcionario> funcionario = funcionarioRepository.findByCpf(cpf);
+        return funcionario.orElse(null); // Retorna o funcionário ou null caso não encontrado
     }
 
-    public void alterarFuncionario(String novoNome, String novoTelefone, String cpf, String novoCargo) {
+    // Alterar um funcionário
+    public Funcionario alterarFuncionario(String novoNome, String novoTelefone, String cpf, String novoCargo) {
         Funcionario funcionario = consultarFuncionario(cpf);
         if (funcionario != null) {
             funcionario.setNome(novoNome);
             funcionario.setCargo(novoCargo);
             funcionario.setTelefone(novoTelefone);
-            System.out.println("Funcionário alterado com sucesso: " + novoNome);
+            return funcionarioRepository.save(funcionario); // Atualiza e retorna o funcionário alterado
         }
-        else {
-            System.out.println("Funcionário não encontrado.");
-        }
+        return null; // Retorna null se não encontrar o funcionário
     }
 
-    public void removerFuncionario(String nome) {
-        for (Funcionario f : listaFuncionarios) {
-            if (f.getNome().equals(nome)) {
-                listaFuncionarios.remove(f);
-                System.out.println("Funcionário removido com sucesso.");
-                return;
-            }
+    // Remover um funcionário pelo nome
+    public boolean removerFuncionario(String nome) {
+        Funcionario funcionario = funcionarioRepository.findByNome(nome);
+        if (funcionario != null) {
+            funcionarioRepository.delete(funcionario);
+            return true; // Retorna true se o funcionário foi removido
         }
-        System.out.println("Funcionário não encontrado.");
+        return false; // Retorna false se não encontrar o funcionário
     }
 
     // Listar todos os funcionários
-    public void listarFuncionarios() {
-        if (listaFuncionarios.isEmpty()) {
-            System.out.println("Nenhum funcionário cadastrado.");
-        } else {
-            System.out.println("Lista de Funcionários:");
-            for (Funcionario f : listaFuncionarios) {
-                System.out.println(f);
-            }
-        }
+    public List<Funcionario> listarFuncionarios() {
+        return funcionarioRepository.findAll(); // Retorna todos os funcionários do banco
     }
 
     // Atribuir um cargo a um funcionário
-    public void atribuirCargo(String nome, String novoCargo) {
-        for (Funcionario f : listaFuncionarios) {
-            if (f.getNome().equals(nome)) {
-                f.setCargo(novoCargo);
-                System.out.println("Cargo atribuído com sucesso: " + f);
-                return;
-            }
+    public boolean atribuirCargo(String nome, String novoCargo) {
+        Funcionario funcionario = funcionarioRepository.findByNome(nome);
+        if (funcionario != null) {
+            funcionario.setCargo(novoCargo);
+            funcionarioRepository.save(funcionario);
+            return true; // Retorna true se o cargo foi atribuído
         }
-        System.out.println("Funcionário não encontrado.");
+        return false; // Retorna false se não encontrar o funcionário
     }
-
-
-
 }
