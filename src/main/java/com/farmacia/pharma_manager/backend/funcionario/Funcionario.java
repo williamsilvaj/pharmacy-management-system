@@ -1,10 +1,29 @@
 package com.farmacia.pharma_manager.backend.funcionario;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "funcionario")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)  // Define que as classes derivadas (como Gerente) serão armazenadas na mesma tabela
+@DiscriminatorColumn(name = "tipo_funcionario", discriminatorType = DiscriminatorType.STRING)  // Usado para distinguir as subclasses
 public class Funcionario {
 
     // Atributos da classe
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Gerar automaticamente o ID para cada instância
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "nome", nullable = false)
     private String nome;
+
+    @Column(name = "telefone")
     private String telefone;
+
+    @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
+
+    @Column(name = "cargo", nullable = false)
     private String cargo;
 
     // Construtor para inicializar os atributos
@@ -16,6 +35,13 @@ public class Funcionario {
     }
 
     // Métodos getters e setters para cada atributo
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;
@@ -41,22 +67,17 @@ public class Funcionario {
         this.cpf = cpf;
     }
 
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
-    }
-
     public String getCargo() {
         return cargo;
     }
 
-
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
 
     // Método toString para representar o objeto como uma string
     @Override
     public String toString() {
-        return "Funcionario [Nome=" + nome + ", Telefone=" + telefone + ", CPF=" + cpf + "]";
+        return "Funcionario [Nome=" + nome + ", Telefone=" + telefone + ", CPF=" + cpf + ", Cargo=" + cargo + "]";
     }
-
 }
-
-

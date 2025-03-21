@@ -1,70 +1,57 @@
 package com.farmacia.pharma_manager.backend.cliente;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
 public class ControleCliente {
 
+    private final ClienteService clienteService;
 
-    private List<Cliente> clientes;
-
-    // Construtor
-    public ControleCliente() {
-        this.clientes = new ArrayList<>();
+    @Autowired
+    public ControleCliente(ClienteService clienteService) {
+        this.clienteService = clienteService;
     }
 
     // Cadastrar cliente
-    public void cadastrarCliente(Cliente cliente) {
-        clientes.add(cliente);
-        System.out.println("Cliente cadastrado com sucesso: " + cliente);
+    public Cliente cadastrarCliente(Cliente cliente) {
+        return clienteService.cadastrarCliente(cliente);
     }
 
     // Alterar dados de um cliente
-    public void alterarCliente(String cpf, Cliente clienteAtualizado) {
-        for (Cliente cliente : clientes) {
-            if (cliente.getCpf().equals(cpf)) {
-                cliente.setNome(clienteAtualizado.getNome());
-                cliente.setEmail(clienteAtualizado.getEmail());
-                cliente.setTelefone(clienteAtualizado.getTelefone());
-                cliente.setEndereco(clienteAtualizado.getEndereco());
-                System.out.println("Cliente alterado com sucesso: " + cliente);
-                return;
-            }
+    public Cliente alterarCliente(Long cpf, Cliente clienteAtualizado) {
+        Optional<Cliente> clienteOpt = clienteService.consultarClientePorCpf(cpf);
+        if (clienteOpt.isPresent()) {
+            Cliente cliente = clienteOpt.get();
+            cliente.setNome(clienteAtualizado.getNome());
+            cliente.setEmail(clienteAtualizado.getEmail());
+            cliente.setTelefone(clienteAtualizado.getTelefone());
+            cliente.setEndereco(clienteAtualizado.getEndereco());
+            return clienteService.cadastrarCliente(cliente); // Atualiza o cliente
         }
-        System.out.println("Cliente não encontrado.");
+        return null; // Retorna null caso o cliente não seja encontrado
     }
 
     // Remover cliente
-    public void removerCliente(String cpf) {
-        for (Cliente cliente : clientes) {
-            if (cliente.getCpf().equals(cpf)) {
-                clientes.remove(cliente);
-                System.out.println("Cliente removido com sucesso.");
-                return;
-            }
+    public boolean removerCliente(Long cpf) {
+        Optional<Cliente> clienteOpt = clienteService.consultarClientePorCpf(cpf);
+        if (clienteOpt.isPresent()) {
+            clienteService.removerCliente(clienteOpt.get().getId());
+            return true; // Retorna true se o cliente foi removido
         }
-        System.out.println("Cliente não encontrado.");
+        return false; // Retorna false caso o cliente não seja encontrado
     }
 
-    // Consultar cliente
-    public void consultarCliente(String cpf) {
-        for (Cliente cliente : clientes) {
-            if (cliente.getCpf().equals(cpf)) {
-                System.out.println("Cliente encontrado: " + cliente);
-                return;
-            }
-        }
-        System.out.println("Cliente não encontrado.");
+    // Consultar cliente por CPF
+    public Cliente consultarCliente(Long cpf) {
+        Optional<Cliente> clienteOpt = clienteService.consultarClientePorCpf(cpf);
+        return clienteOpt.orElse(null); // Retorna o cliente ou null se não encontrado
     }
 
     // Listar todos os clientes
-    public void listarClientes() {
-        if (clientes.isEmpty()) {
-            System.out.println("Nenhum cliente cadastrado.");
-        } else {
-            System.out.println("Lista de Clientes:");
-            for (Cliente cliente : clientes) {
-                System.out.println(cliente);
-            }
-        }
+    public List<Cliente> listarClientes() {
+        return clienteService.listarClientes(); // Retorna todos os clientes cadastrados
     }
 }
