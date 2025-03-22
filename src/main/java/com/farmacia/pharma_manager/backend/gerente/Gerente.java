@@ -8,20 +8,27 @@ import java.util.List;
 @Table(name = "gerente")
 public class Gerente extends Funcionario {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idGerente")
+    private Integer id;
+
     @Column(name = "nivel")
     private String nivel;
 
-    @OneToMany(mappedBy = "gerente")
+    @OneToMany(mappedBy = "gerente", fetch = FetchType.LAZY)
     private List<Funcionario> funcionariosSupervisionados;
 
-    // Construtor
+
     public Gerente(String nome, String telefone, String cpf, String cargo, String nivel, List<Funcionario> funcionariosSupervisionados) {
         super(nome, telefone, cpf, cargo);
         this.nivel = nivel;
         this.funcionariosSupervisionados = funcionariosSupervisionados;
     }
 
-    // Getters e Setters
+    public Gerente() {}
+
+
     public String getNivel() {
         return nivel;
     }
@@ -38,7 +45,7 @@ public class Gerente extends Funcionario {
         this.funcionariosSupervisionados = funcionariosSupervisionados;
     }
 
-    // Método para exibir as informações do Gerente
+
     @Override
     public String toString() {
         return "Gerente{" +

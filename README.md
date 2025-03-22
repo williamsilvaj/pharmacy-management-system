@@ -1,47 +1,3 @@
-<<<<<<< HEAD
-
-# Guia de Configuração
-
-## Iniciar o projeto:
-
-0. **Ferramentas**:
-   - Instalar JDK 21 e Maven 3.9.9
-   - Configurar variaveis de ambiente no PC
-
-
-1. **Baixar dependências e instalar**:
-   ```bash
-   mvn install
-   ```
-2. **Compilar o projeto**:
-   ```bash
-   mvn clean compile
-   ```
-
----
-
-## Formatar código automaticamente:
-
-Para garantir que o código siga o padrão de formatação, use o Spotless:
-
-```bash
-mvn spotless:apply
-```
-
----
-
-## Manter padrão em várias IDEs:
-
-### IntelliJ IDEA:
-1. Vá em **File > Settings > Editor > Code Style**.
-2. Ative a opção **Enable EditorConfig support**.
-
-### VS Code:
-1. Instale a extensão **[EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)**.
-
-### Eclipse:
-1. Instale o plugin **EditorConfig Eclipse Plugin**.
-=======
 
 # Guia de Configuração
 
@@ -99,4 +55,3 @@ mvn checkstyle:check
 
 ## Observação:
 - A execução de `mvn clean compile` já garante que a formatação do código será verificada automaticamente durante o processo de compilação.
->>>>>>> cadastrar

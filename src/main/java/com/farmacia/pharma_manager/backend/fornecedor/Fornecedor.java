@@ -8,7 +8,8 @@ public class Fornecedor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "idFornecedor")
+    private Integer id;
 
     @Column(name = "nome", nullable = false)
     private String nome;
@@ -20,7 +21,7 @@ public class Fornecedor {
     private String email;
 
     @Column(name = "status")
-    private boolean status; // true = Ativo, false = Inativo
+    private boolean status; 
 
     // Construtores
     public Fornecedor() {}
@@ -32,12 +33,12 @@ public class Fornecedor {
         this.status = status;
     }
 
-    // Getters e Setters
-    public Long getId() {
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

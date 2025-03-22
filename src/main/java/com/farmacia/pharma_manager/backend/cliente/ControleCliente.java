@@ -21,7 +21,7 @@ public class ControleCliente {
     }
 
     // Alterar dados de um cliente
-    public Cliente alterarCliente(Long cpf, Cliente clienteAtualizado) {
+    public Cliente alterarCliente(String cpf, Cliente clienteAtualizado) {
         Optional<Cliente> clienteOpt = clienteService.consultarClientePorCpf(cpf);
         if (clienteOpt.isPresent()) {
             Cliente cliente = clienteOpt.get();
@@ -35,17 +35,17 @@ public class ControleCliente {
     }
 
     // Remover cliente
-    public boolean removerCliente(Long cpf) {
+    public boolean removerCliente(String cpf) {
         Optional<Cliente> clienteOpt = clienteService.consultarClientePorCpf(cpf);
         if (clienteOpt.isPresent()) {
-            clienteService.removerCliente(clienteOpt.get().getId());
+            clienteService.removerCliente(clienteOpt.get().getCpf());
             return true; // Retorna true se o cliente foi removido
         }
         return false; // Retorna false caso o cliente não seja encontrado
     }
 
     // Consultar cliente por CPF
-    public Cliente consultarCliente(Long cpf) {
+    public Cliente consultarCliente(String cpf) {
         Optional<Cliente> clienteOpt = clienteService.consultarClientePorCpf(cpf);
         return clienteOpt.orElse(null); // Retorna o cliente ou null se não encontrado
     }

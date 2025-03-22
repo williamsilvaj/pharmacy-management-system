@@ -1,18 +1,16 @@
 package com.farmacia.pharma_manager.backend.funcionario;
 
+import com.farmacia.pharma_manager.backend.gerente.Gerente;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "funcionario")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)  // Define que as classes derivadas (como Gerente) serão armazenadas na mesma tabela
-@DiscriminatorColumn(name = "tipo_funcionario", discriminatorType = DiscriminatorType.STRING)  // Usado para distinguir as subclasses
-public class Funcionario {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Funcionario {
 
-    // Atributos da classe
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Gerar automaticamente o ID para cada instância
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idFuncionario")
+    private Integer id;
 
     @Column(name = "nome", nullable = false)
     private String nome;
@@ -26,7 +24,11 @@ public class Funcionario {
     @Column(name = "cargo", nullable = false)
     private String cargo;
 
-    // Construtor para inicializar os atributos
+    @ManyToOne
+    @JoinColumn(name = "idGerente")
+    private Gerente gerente;
+
+
     public Funcionario(String nome, String telefone, String cpf, String cargo) {
         this.nome = nome;
         this.telefone = telefone;
@@ -34,12 +36,14 @@ public class Funcionario {
         this.cargo = cargo;
     }
 
-    // Métodos getters e setters para cada atributo
-    public Long getId() {
+    public Funcionario() {}
+
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -75,7 +79,7 @@ public class Funcionario {
         this.cargo = cargo;
     }
 
-    // Método toString para representar o objeto como uma string
+
     @Override
     public String toString() {
         return "Funcionario [Nome=" + nome + ", Telefone=" + telefone + ", CPF=" + cpf + ", Cargo=" + cargo + "]";

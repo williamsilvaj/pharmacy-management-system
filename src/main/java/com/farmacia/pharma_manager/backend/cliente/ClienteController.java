@@ -28,7 +28,7 @@ public class ClienteController {
 
     // Endpoint para consultar um cliente por CPF
     @GetMapping("/{cpf}")
-    public ResponseEntity<Cliente> consultarCliente(@PathVariable Long cpf) {
+    public ResponseEntity<Cliente> consultarCliente(@PathVariable String cpf) {
         Optional<Cliente> cliente = clienteService.consultarClientePorCpf(cpf);
         return cliente.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
@@ -36,7 +36,7 @@ public class ClienteController {
 
     // Endpoint para alterar um cliente
     @PutMapping("/{cpf}")
-    public ResponseEntity<Cliente> alterarCliente(@PathVariable Long cpf, @RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> alterarCliente(@PathVariable String cpf, @RequestBody Cliente cliente) {
         Optional<Cliente> clienteExistente = clienteService.consultarClientePorCpf(cpf);
         if (clienteExistente.isPresent()) {
             cliente.setCpf(cpf); // Mantém o CPF existente
@@ -48,7 +48,7 @@ public class ClienteController {
 
     // Endpoint para remover um cliente
     @DeleteMapping("/{cpf}")
-    public ResponseEntity<Void> removerCliente(@PathVariable Long cpf) {
+    public ResponseEntity<Void> removerCliente(@PathVariable String cpf) {
         if (clienteService.removerCliente(cpf)) {
             return ResponseEntity.noContent().build(); // Retorna status 204 (sem conteúdo)
         }
