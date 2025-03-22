@@ -1,13 +1,31 @@
 package com.farmacia.pharma_manager.backend.cliente;
 
 import com.farmacia.pharma_manager.backend.endereco.Endereco;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "cliente")
 public class Cliente {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idCliente")
+    private Integer id;
+
+    @Column(name = "nome", nullable = false)
     private String nome;
+
+    @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
+
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "telefone", nullable = false)
     private String telefone;
+
+    @ManyToOne
+    @JoinColumn(name = "idEndereco")
     private Endereco endereco;
 
     // Construtor
@@ -19,7 +37,17 @@ public class Cliente {
         this.endereco = endereco;
     }
 
+    public Cliente() {}
+
     // Getters e Setters
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -62,8 +90,6 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return "Nome: " + nome + ", CPF: " + cpf + ", Email: " + email + ", Telefone: " + telefone + ", Endereço: " + endereco;
+        return "Cliente [Nome=" + nome + ", CPF=" + cpf + ", Email=" + email + ", Telefone=" + telefone + ", Endereço=" + endereco + "]";
     }
 }
-
-

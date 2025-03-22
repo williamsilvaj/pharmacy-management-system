@@ -27,12 +27,12 @@ public class GerenteService {
   }
 
   //  buscar um Gerente pelo ID
-  public Optional<Gerente> getGerenteById(Integer id) {
+  public Optional<Gerente> getGerenteById(Long id) {
     return gerenteRepository.findById(id);
   }
 
   // deletar um Gerente pelo ID
-  public void deleteGerente(Integer id) {
+  public void deleteGerente(Long id) {
     gerenteRepository.deleteById(id);
   }
 }

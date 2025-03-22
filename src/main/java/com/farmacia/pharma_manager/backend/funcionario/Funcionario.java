@@ -1,13 +1,34 @@
 package com.farmacia.pharma_manager.backend.funcionario;
-public class Funcionario {
 
-    // Atributos da classe
+import com.farmacia.pharma_manager.backend.gerente.Gerente;
+import jakarta.persistence.*;
+
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Funcionario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idFuncionario")
+    private Integer id;
+
+    @Column(name = "nome", nullable = false)
     private String nome;
+
+    @Column(name = "telefone")
     private String telefone;
+
+    @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
+
+    @Column(name = "cargo", nullable = false)
     private String cargo;
 
-    // Construtor para inicializar os atributos
+    @ManyToOne
+    @JoinColumn(name = "idGerente")
+    private Gerente gerente;
+
+
     public Funcionario(String nome, String telefone, String cpf, String cargo) {
         this.nome = nome;
         this.telefone = telefone;
@@ -15,7 +36,16 @@ public class Funcionario {
         this.cargo = cargo;
     }
 
-    // Métodos getters e setters para cada atributo
+    public Funcionario() {}
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;
@@ -41,22 +71,17 @@ public class Funcionario {
         this.cpf = cpf;
     }
 
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
-    }
-
     public String getCargo() {
         return cargo;
     }
 
-
-
-    // Método toString para representar o objeto como uma string
-    @Override
-    public String toString() {
-        return "Funcionario [Nome=" + nome + ", Telefone=" + telefone + ", CPF=" + cpf + "]";
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
 
+
+    @Override
+    public String toString() {
+        return "Funcionario [Nome=" + nome + ", Telefone=" + telefone + ", CPF=" + cpf + ", Cargo=" + cargo + "]";
+    }
 }
-
-
