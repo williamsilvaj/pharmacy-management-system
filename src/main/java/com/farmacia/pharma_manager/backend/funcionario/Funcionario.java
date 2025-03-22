@@ -1,5 +1,6 @@
 package com.farmacia.pharma_manager.backend.funcionario;
 
+import com.farmacia.pharma_manager.backend.gerente.Gerente;
 import jakarta.persistence.*;
 
 @Entity
@@ -7,7 +8,7 @@ import jakarta.persistence.*;
 public abstract class Funcionario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idFuncionario")
     private Integer id;
 
@@ -23,13 +24,19 @@ public abstract class Funcionario {
     @Column(name = "cargo", nullable = false)
     private String cargo;
 
-   
+    @ManyToOne
+    @JoinColumn(name = "idGerente")
+    private Gerente gerente;
+
+
     public Funcionario(String nome, String telefone, String cpf, String cargo) {
         this.nome = nome;
         this.telefone = telefone;
         this.cpf = cpf;
         this.cargo = cargo;
     }
+
+    public Funcionario() {}
 
 
     public Integer getId() {

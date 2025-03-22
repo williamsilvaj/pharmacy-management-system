@@ -16,17 +16,19 @@ public class Gerente extends Funcionario {
     @Column(name = "nivel")
     private String nivel;
 
-    @Column(name = "Funcionarios Supervisionados")
+    @OneToMany(mappedBy = "gerente", fetch = FetchType.LAZY)
     private List<Funcionario> funcionariosSupervisionados;
 
-    
+
     public Gerente(String nome, String telefone, String cpf, String cargo, String nivel, List<Funcionario> funcionariosSupervisionados) {
         super(nome, telefone, cpf, cargo);
         this.nivel = nivel;
         this.funcionariosSupervisionados = funcionariosSupervisionados;
     }
 
-  
+    public Gerente() {}
+
+
     public String getNivel() {
         return nivel;
     }
@@ -43,7 +45,7 @@ public class Gerente extends Funcionario {
         this.funcionariosSupervisionados = funcionariosSupervisionados;
     }
 
-    
+
     @Override
     public String toString() {
         return "Gerente{" +

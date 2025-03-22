@@ -30,6 +30,8 @@ public class Farmaceutico extends Funcionario  {
         this.cargaHoraria = cargaHoraria;
     }
 
+    public Farmaceutico() {}
+
     // Getters e Setters
     public String getTurno() {
         return turno;
