@@ -10,7 +10,7 @@ public class Farmaceutico extends Funcionario  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "idFarmaceutico")
     private Integer id;
 
     @Column(name = "turno")

@@ -9,8 +9,8 @@ import java.util.List;
 public class Gerente extends Funcionario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Gerar automaticamente o ID para cada instância
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idGerente")
     private Integer id;
 
     @Column(name = "nivel")
@@ -19,14 +19,14 @@ public class Gerente extends Funcionario {
     @Column(name = "Funcionarios Supervisionados")
     private List<Funcionario> funcionariosSupervisionados;
 
-    // Construtor
+    
     public Gerente(String nome, String telefone, String cpf, String cargo, String nivel, List<Funcionario> funcionariosSupervisionados) {
         super(nome, telefone, cpf, cargo);
         this.nivel = nivel;
         this.funcionariosSupervisionados = funcionariosSupervisionados;
     }
 
-    // Getters e Setters
+  
     public String getNivel() {
         return nivel;
     }
@@ -43,7 +43,7 @@ public class Gerente extends Funcionario {
         this.funcionariosSupervisionados = funcionariosSupervisionados;
     }
 
-    // Método para exibir as informações do Gerente
+    
     @Override
     public String toString() {
         return "Gerente{" +
