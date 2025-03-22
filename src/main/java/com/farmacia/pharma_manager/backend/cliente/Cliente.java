@@ -4,13 +4,13 @@ import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "clientes") // Nome da tabela no banco de dados
+@Table(name = "cliente")
 public class Cliente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Gerar automaticamente o ID para cada instância
-    @Column(name = "id")
-    private Integer id; // Chave primária
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idCliente")
+    private Integer id;
 
     @Column(name = "nome", nullable = false)
     private String nome;
@@ -25,7 +25,7 @@ public class Cliente {
     private String telefone;
 
     @ManyToOne
-    @JoinColumn(name = "endereco_id") // Definindo o relacionamento com a entidade Endereco
+    @JoinColumn(name = "idEndereco")
     private Endereco endereco;
 
     // Construtor
@@ -36,6 +36,8 @@ public class Cliente {
         this.telefone = telefone;
         this.endereco = endereco;
     }
+
+    public Cliente() {}
 
     // Getters e Setters
     public Integer getId() {
