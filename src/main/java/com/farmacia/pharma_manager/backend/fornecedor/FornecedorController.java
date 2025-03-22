@@ -44,14 +44,14 @@ public class FornecedorController {
     // Endpoint para alterar dados de um fornecedor
     @PutMapping("/{id}")
     public Fornecedor alterarFornecedor(
-            @PathVariable Long id,
+            @PathVariable Integer id,
             @RequestBody Fornecedor fornecedor) {
         return fornecedorService.alterarFornecedor(id, fornecedor);
     }
 
     // Endpoint para remover um fornecedor
     @DeleteMapping("/{id}")
-    public String removerFornecedor(@PathVariable Long id) {
+    public String removerFornecedor(@PathVariable Integer id) {
         boolean isRemoved = fornecedorService.removerFornecedor(id);
         return isRemoved ? "Fornecedor removido com sucesso" : "Fornecedor não encontrado";
     }

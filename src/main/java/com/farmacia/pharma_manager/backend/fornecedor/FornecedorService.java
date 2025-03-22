@@ -37,7 +37,7 @@ public class FornecedorService {
     }
 
     // Método para alterar os dados de um fornecedor
-    public Fornecedor alterarFornecedor(Long id, Fornecedor fornecedorAlterado) {
+    public Fornecedor alterarFornecedor(Integer id, Fornecedor fornecedorAlterado) {
         Optional<Fornecedor> fornecedorExistente = fornecedorRepository.findById(id);
         if (fornecedorExistente.isPresent()) {
             Fornecedor fornecedor = fornecedorExistente.get();
@@ -51,7 +51,7 @@ public class FornecedorService {
     }
 
     // Método para remover um fornecedor
-    public boolean removerFornecedor(Long id) {
+    public boolean removerFornecedor(Integer id) {
         if (fornecedorRepository.existsById(id)) {
             fornecedorRepository.deleteById(id);
             return true;

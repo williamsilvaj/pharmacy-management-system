@@ -21,7 +21,7 @@ public class ClienteService {
     }
 
     // Consultar um cliente por CPF
-    public Optional<Cliente> consultarClientePorCpf(Long cpf) {
+    public Optional<Cliente> consultarClientePorCpf(String cpf) {
         return clienteRepository.findByCpf(cpf); // Busca um cliente pelo CPF
     }
 
@@ -31,7 +31,7 @@ public class ClienteService {
     }
 
     // Remover um cliente
-    public boolean removerCliente(Long cpf) {
+    public boolean removerCliente(String cpf) {
         Optional<Cliente> cliente = consultarClientePorCpf(cpf);
         if (cliente.isPresent()) {
             clienteRepository.delete(cliente.get()); // Deleta o cliente do banco

@@ -11,7 +11,7 @@ public class Gerente extends Funcionario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Gerar automaticamente o ID para cada instância
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "nivel")
     private String nivel;

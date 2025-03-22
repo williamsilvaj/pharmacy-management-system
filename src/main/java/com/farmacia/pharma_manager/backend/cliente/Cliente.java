@@ -10,13 +10,13 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Gerar automaticamente o ID para cada instância
     @Column(name = "id")
-    private Long id; // Chave primária
+    private Integer id; // Chave primária
 
     @Column(name = "nome", nullable = false)
     private String nome;
 
     @Column(name = "cpf", nullable = false, unique = true)
-    private Long cpf;
+    private String cpf;
 
     @Column(name = "email", nullable = false)
     private String email;
@@ -29,7 +29,7 @@ public class Cliente {
     private Endereco endereco;
 
     // Construtor
-    public Cliente(String nome, Long cpf, String email, String telefone, Endereco endereco) {
+    public Cliente(String nome, String cpf, String email, String telefone, Endereco endereco) {
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
@@ -38,11 +38,11 @@ public class Cliente {
     }
 
     // Getters e Setters
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -54,11 +54,11 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public Long getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(Long cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
