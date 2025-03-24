@@ -1,6 +1,10 @@
 package com.farmacia.pharma_manager.backend.endereco;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "endereco")
@@ -8,8 +12,7 @@ public class Endereco {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idEndereco")
-    private Long id;
+    private Integer idEndereco;
 
     private String rua;
     private String numero;
@@ -18,24 +21,13 @@ public class Endereco {
     private String estado;
     private String cep;
 
-    public Endereco() {
+    // Getters and Setters
+    public Integer getIdEndereco() {
+        return idEndereco;
     }
 
-    public Endereco(String rua, String numero, String bairro, String cidade, String estado, String cep) {
-        this.rua = rua;
-        this.numero = numero;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
-        this.cep = cep;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdEndereco(Integer idEndereco) {
+        this.idEndereco = idEndereco;
     }
 
     public String getRua() {
