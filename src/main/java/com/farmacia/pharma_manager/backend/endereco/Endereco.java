@@ -3,46 +3,41 @@ package com.farmacia.pharma_manager.backend.endereco;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="endereco")
+@Table(name = "endereco")
 public class Endereco {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idEndereco")
-    private Integer idEndereco;
+    private Long id;
 
-    @Column(name = "rua", nullable = false)
     private String rua;
-
-    @Column(name = "numero", nullable = false)
     private String numero;
-
-    @Column(name = "bairro", nullable = false)
     private String bairro;
-
-    @Column(name = "cidade", nullable = false)
     private String cidade;
-
-    @Column(name = "estado", nullable = false)
     private String estado;
-
-    @Column(name = "cep", nullable = false)
     private String cep;
 
-
-    // Construtor
-    public Endereco(String rua, String numero, String bairro, String cidade, String estado, String cep) {
-            this.rua = rua;
-            this.numero = numero;
-            this.bairro = bairro;
-            this.cidade = cidade;
-            this.estado = estado;
-            this.cep = cep;
+    public Endereco() {
     }
 
-    public Endereco() {}
+    public Endereco(String rua, String numero, String bairro, String cidade, String estado, String cep) {
+        this.rua = rua;
+        this.numero = numero;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
+    }
 
-    // Getters e Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getRua() {
         return rua;
     }
@@ -89,10 +84,5 @@ public class Endereco {
 
     public void setCep(String cep) {
         this.cep = cep;
-    }
-
-    @Override
-    public String toString() {
-        return rua + ", " + numero + " - " + bairro + ", " + cidade + ", " + estado + " - CEP: " + cep;
     }
 }
