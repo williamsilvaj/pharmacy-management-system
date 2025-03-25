@@ -3,17 +3,26 @@ package com.farmacia.pharma_manager.backend.produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/produtos")
 public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
+
+        /**
+     * Método para redirecionar para a página de produtos.
+     */
+    @GetMapping("/pagina")
+    public String redirecionarParaProdutoPage() {
+        return "produto/produto";  // Nome do arquivo produto.html na pasta resources/templates
+    }
 
     /**
      * Endpoint para criar um novo produto.
