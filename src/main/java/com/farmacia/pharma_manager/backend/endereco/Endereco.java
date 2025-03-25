@@ -1,80 +1,115 @@
 package com.farmacia.pharma_manager.backend.endereco;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "endereco")
+@Table(name="endereco")
 public class Endereco {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idEndereco;
+    @Column(name = "idEndereco")
+    private int idEndereco;
 
+    @Column(name = "rua", nullable = false)
     private String rua;
+
+    @Column(name = "numero", nullable = false)
     private String numero;
+
+    @Column(name = "bairro", nullable = false)
     private String bairro;
+
+    @Column(name = "cidade", nullable = false)
     private String cidade;
+
+    @Column(name = "estado", nullable = false)
     private String estado;
+
+    @Column(name = "cep", nullable = false)
     private String cep;
 
-    // Getters and Setters
-    public Integer getIdEndereco() {
-        return idEndereco;
+
+    // Construtor
+    public Endereco(String rua, String numero, String bairro, String cidade, String estado, String cep) {
+            this.rua = rua;
+            this.numero = numero;
+            this.bairro = bairro;
+            this.cidade = cidade;
+            this.estado = estado;
+            this.cep = cep;
     }
 
-    public void setIdEndereco(Integer idEndereco) {
-        this.idEndereco = idEndereco;
-    }
+    public Endereco() {}
 
-    public String getRua() {
-        return rua;
-    }
+  public Endereco(int idEndereco, String rua, String numero, String bairro, String cidade, String estado, String cep) {
+    this.idEndereco = idEndereco;
+    this.rua = rua;
+    this.numero = numero;
+    this.bairro = bairro;
+    this.cidade = cidade;
+    this.estado = estado;
+    this.cep = cep;
+  }
 
-    public void setRua(String rua) {
-        this.rua = rua;
-    }
+  public int getIdEndereco() {
+    return idEndereco;
+  }
 
-    public String getNumero() {
-        return numero;
-    }
+  public void setIdEndereco(int idEndereco) {
+    this.idEndereco = idEndereco;
+  }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
+  public String getRua() {
+    return rua;
+  }
 
-    public String getBairro() {
-        return bairro;
-    }
+  public void setRua(String rua) {
+    this.rua = rua;
+  }
 
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
+  public String getNumero() {
+    return numero;
+  }
 
-    public String getCidade() {
-        return cidade;
-    }
+  public void setNumero(String numero) {
+    this.numero = numero;
+  }
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
+  public String getBairro() {
+    return bairro;
+  }
 
-    public String getEstado() {
-        return estado;
-    }
+  public void setBairro(String bairro) {
+    this.bairro = bairro;
+  }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+  public String getCidade() {
+    return cidade;
+  }
 
-    public String getCep() {
-        return cep;
-    }
+  public void setCidade(String cidade) {
+    this.cidade = cidade;
+  }
 
-    public void setCep(String cep) {
-        this.cep = cep;
+  public String getEstado() {
+    return estado;
+  }
+
+  public void setEstado(String estado) {
+    this.estado = estado;
+  }
+
+  public String getCep() {
+    return cep;
+  }
+
+  public void setCep(String cep) {
+    this.cep = cep;
+  }
+
+  @Override
+    public String toString() {
+        return rua + ", " + numero + " - " + bairro + ", " + cidade + ", " + estado + " - CEP: " + cep;
     }
 }
