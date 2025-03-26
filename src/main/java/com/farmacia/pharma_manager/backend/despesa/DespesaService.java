@@ -1,8 +1,5 @@
 package com.farmacia.pharma_manager.backend.despesa;
 
-import com.farmacia.pharma_manager.backend.despesa.Despesa;
-import com.farmacia.pharma_manager.backend.despesa.DespesaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,25 +8,35 @@ import java.util.Optional;
 @Service
 public class DespesaService {
 
-  private final DespesaRepository despesaRepository;
+    private final DespesaRepository despesaRepository;
 
-  public DespesaService(DespesaRepository despesaRepository) {
-    this.despesaRepository = despesaRepository;
-  }
+    public DespesaService(DespesaRepository despesaRepository) {
+        this.despesaRepository = despesaRepository;
+    }
 
-  public Despesa saveOrUpdateDespesa(Despesa despesa) {
-    return despesaRepository.save(despesa);
-  }
+    public List<Despesa> listarTodas() {
+        return despesaRepository.findAll();
+    }
 
-  public List<Despesa> getAllDespesas() {
-    return despesaRepository.findAll();
-  }
+    public Optional<Despesa> buscarPorId(Integer id) {
+        return despesaRepository.findById(id);
+    }
 
-  public Optional<Despesa> getDespesaById(Integer id) {
-    return despesaRepository.findById(id);
-  }
+    public Despesa salvar(Despesa despesa) {
+        return despesaRepository.save(despesa);
+    }
 
-  public void deleteDespesa(Integer id) {
-    despesaRepository.deleteById(id);
-  }
+    public Despesa atualizar(Integer id, Despesa despesaAtualizada) {
+        return despesaRepository.findById(id).map(despesa -> {
+            despesa.setDescricao(despesaAtualizada.getDescricao());
+            despesa.setData(despesaAtualizada.getData());
+            despesa.setValor(despesaAtualizada.getValor());
+            despesa.setGerente(despesaAtualizada.getGerente());
+            return despesaRepository.save(despesa);
+        }).orElseThrow(() -> new RuntimeException("Despesa não encontrada"));
+    }
+
+    public void deletar(Integer id) {
+        despesaRepository.deleteById(id);
+    }
 }

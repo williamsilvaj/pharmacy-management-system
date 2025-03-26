@@ -1,0 +1,238 @@
+
+-- -----------------------------------------------------
+-- Table pharmabd.cargo
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.cargo (
+  idCargo INT NOT NULL AUTO_INCREMENT,
+  titulo VARCHAR(45) NOT NULL,
+  dataContratacao DATE NOT NULL,
+  salario DOUBLE NOT NULL,
+  PRIMARY KEY (idCargo)
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.gerente
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.gerente (
+  idGerente INT NOT NULL AUTO_INCREMENT,
+  nivel VARCHAR(45) NOT NULL,
+  funcionariosSupervisionados VARCHAR(255) NOT NULL,
+  PRIMARY KEY (idGerente)
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.farmaceutico
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.farmaceutico (
+  idFarmaceutico INT NOT NULL AUTO_INCREMENT,
+  turno VARCHAR(45) NOT NULL,
+  crf VARCHAR(45) NOT NULL,
+  cargaHoraria FLOAT NOT NULL,
+  PRIMARY KEY (idFarmaceutico)
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.endereco
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.endereco (
+  idEndereco INT NOT NULL AUTO_INCREMENT,
+  rua VARCHAR(45) NOT NULL,
+  numero VARCHAR(45) NOT NULL,
+  bairro VARCHAR(45) NOT NULL,
+  cidade VARCHAR(45) NOT NULL,
+  estado VARCHAR(45) NOT NULL,
+  cep VARCHAR(45) NOT NULL,
+  PRIMARY KEY (idEndereco)
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.funcionario
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.funcionario (
+  idFuncionario INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(255) NOT NULL,
+  telefone VARCHAR(45) NOT NULL,
+  cpf VARCHAR(11) NOT NULL,
+  idCargo INT NOT NULL,
+  idGerente INT NULL,
+  idFarmaceutico INT NULL,
+  idEndereco INT NOT NULL,
+  PRIMARY KEY (idFuncionario),
+  UNIQUE (cpf),
+  CONSTRAINT fk_Funcionario_Cargo
+    FOREIGN KEY (idCargo)
+    REFERENCES pharmabd.cargo (idCargo)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_Funcionario_Gerente
+    FOREIGN KEY (idGerente)
+    REFERENCES pharmabd.gerente (idGerente)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_Funcionario_Farmaceutico
+    FOREIGN KEY (idFarmaceutico)
+    REFERENCES pharmabd.farmaceutico (idFarmaceutico)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_Funcionario_Endereco
+    FOREIGN KEY (idEndereco)
+    REFERENCES pharmabd.endereco (idEndereco)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.despesa
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.despesa (
+  idDespesa INT NOT NULL AUTO_INCREMENT,
+  descricao VARCHAR(255) NOT NULL,
+  data DATE NOT NULL,
+  valor DOUBLE NOT NULL,
+  idGerente INT NOT NULL,
+  PRIMARY KEY (idDespesa),
+  CONSTRAINT fk_Despesa_Gerente
+    FOREIGN KEY (idGerente)
+    REFERENCES pharmabd.gerente (idGerente)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.cliente
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.cliente (
+  idCliente INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(45) NOT NULL,
+  cpf VARCHAR(11) NOT NULL,
+  email VARCHAR(45) NOT NULL,
+  telefone VARCHAR(45) NOT NULL,
+  idEndereco INT NOT NULL,
+  PRIMARY KEY (idCliente),
+  UNIQUE (cpf),
+  UNIQUE (email),
+  UNIQUE (telefone),
+  CONSTRAINT fk_Cliente_Endereco
+    FOREIGN KEY (idEndereco)
+    REFERENCES pharmabd.endereco (idEndereco)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.venda
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.venda (
+  idVenda INT NOT NULL AUTO_INCREMENT,
+  nomeProduto VARCHAR(45) NOT NULL,
+  quantidade INT NOT NULL,
+  valor DOUBLE NOT NULL,
+  data DATE NOT NULL,
+  idFarmaceutico INT NOT NULL,
+  idCliente INT NOT NULL,
+  idEndereco INT NOT NULL,
+  PRIMARY KEY (idVenda),
+  CONSTRAINT fk_Venda_Farmaceutico
+    FOREIGN KEY (idFarmaceutico)
+    REFERENCES pharmabd.farmaceutico (idFarmaceutico)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_Venda_Cliente
+    FOREIGN KEY (idCliente)
+    REFERENCES pharmabd.cliente (idCliente)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+CONSTRAINT fk_Venda_Endereco
+    FOREIGN KEY (idEndereco)
+    REFERENCES pharmabd.cliente (idEndereco)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.produto
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.produto (
+  idProduto INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(255) NOT NULL,
+  codigo INT NOT NULL,
+  fabricante VARCHAR(45) NOT NULL,
+  concentracao FLOAT NOT NULL,
+  PRIMARY KEY (idProduto),
+  UNIQUE (codigo)
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.estoque
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.estoque (
+  idEstoque INT NOT NULL AUTO_INCREMENT,
+  quantidade INT NOT NULL,
+  dataEntrada DATE NOT NULL,
+  PRIMARY KEY (idEstoque)
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.item
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.item (
+  idItem INT NOT NULL AUTO_INCREMENT,
+  valor DOUBLE NOT NULL,
+  dataVencimento DATE NOT NULL,
+  idProduto INT NOT NULL,
+  Venda_idVenda INT NULL,
+  idEstoque INT NULL,
+  PRIMARY KEY (idItem),
+  CONSTRAINT fk_Item_Produto
+    FOREIGN KEY (idProduto)
+    REFERENCES pharmabd.produto (idProduto)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_Item_Venda
+    FOREIGN KEY (Venda_idVenda)
+    REFERENCES pharmabd.venda (idVenda)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_Item_Estoque
+    FOREIGN KEY (idEstoque)
+    REFERENCES pharmabd.estoque (idEstoque)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.fornecedor
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.fornecedor (
+  idFornecedor INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(255) NOT NULL,
+  cnpj VARCHAR(14) NOT NULL,
+  email VARCHAR(45) NOT NULL,
+  status TINYINT NOT NULL,
+  idEndereco INT NOT NULL,
+  PRIMARY KEY (idFornecedor),
+  CONSTRAINT fk_Fornecedor_Endereco
+    FOREIGN KEY (idEndereco)
+    REFERENCES pharmabd.endereco (idEndereco)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.fornecedor_item
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.fornecedor_item (
+  idFornecedor INT NOT NULL,
+  idItem INT NOT NULL,
+  PRIMARY KEY (idFornecedor, idItem),
+  CONSTRAINT fk_FornecedorItem_Fornecedor
+    FOREIGN KEY (idFornecedor)
+    REFERENCES pharmabd.fornecedor (idFornecedor)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_FornecedorItem_Item
+    FOREIGN KEY (idItem)
+    REFERENCES pharmabd.item (idItem)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);

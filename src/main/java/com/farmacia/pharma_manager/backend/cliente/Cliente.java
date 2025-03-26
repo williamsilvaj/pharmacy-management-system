@@ -1,25 +1,46 @@
 package com.farmacia.pharma_manager.backend.cliente;
 
 import com.farmacia.pharma_manager.backend.endereco.Endereco;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "cliente", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "cpf"),
+    @UniqueConstraint(columnNames = "email"),
+    @UniqueConstraint(columnNames = "telefone")
+})
 public class Cliente {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idCliente")
+    private Integer idCliente;
+
+    @Column(nullable = false, length = 45)
     private String nome;
+
+    @Column(nullable = false, length = 11, unique = true)
     private String cpf;
+
+    @Column(nullable = false, length = 45, unique = true)
     private String email;
+
+    @Column(nullable = false, length = 45, unique = true)
     private String telefone;
+
+    @ManyToOne
+    @JoinColumn(name = "idEndereco", nullable = false)
     private Endereco endereco;
 
-    // Construtor
-    public Cliente(String nome, String cpf, String email, String telefone, Endereco endereco) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.email = email;
-        this.telefone = telefone;
-        this.endereco = endereco;
+    // Getters e Setters
+    public Integer getIdCliente() {
+        return idCliente;
     }
 
-    // Getters e Setters
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -59,11 +80,4 @@ public class Cliente {
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
-
-    @Override
-    public String toString() {
-        return "Nome: " + nome + ", CPF: " + cpf + ", Email: " + email + ", Telefone: " + telefone + ", Endereço: " + endereco;
-    }
 }
-
-

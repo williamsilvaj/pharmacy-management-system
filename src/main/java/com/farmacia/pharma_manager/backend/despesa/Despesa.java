@@ -1,82 +1,71 @@
 package com.farmacia.pharma_manager.backend.despesa;
 
-import jakarta.persistence.*;
-import java.util.Date;
-
 import com.farmacia.pharma_manager.backend.gerente.Gerente;
+import jakarta.persistence.*;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "despesa")
 public class Despesa {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "idDespesa")
-  private Integer idDespesa;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idDespesa")
+    private Integer idDespesa;
 
-  @Column(name = "descricao", nullable = false)
-  private String descricao;
+    @Column(nullable = false, length = 255)
+    private String descricao;
 
-  @Column(name = "data", nullable = false)
-  private Date data;
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date data;
 
-  @Column(name = "valor", nullable = false)
-  private Double valor;
+    @Column(nullable = false)
+    private Double valor;
 
-  @ManyToOne
-  @JoinColumn(name = "idGerente", nullable = false)
-  private Gerente gerente;
+    @ManyToOne
+    @JoinColumn(name = "idGerente", nullable = false)
+    private Gerente gerente;
 
+    // Getters e Setters
+    public Integer getIdDespesa() {
+        return idDespesa;
+    }
 
-  public Despesa() {
+    public void setIdDespesa(Integer idDespesa) {
+        this.idDespesa = idDespesa;
+    }
 
-  }
+    public String getDescricao() {
+        return descricao;
+    }
 
-  public Despesa(String descricao, Date data, Double valor, Gerente Gerente) {
-    this.descricao = descricao;
-    this.data = data;
-    this.valor = valor;
-    this.gerente = Gerente;
-  }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-  // Getters e Setters
-  public Integer getIdDespesa() {
-    return idDespesa;
-  }
+    public Date getData() {
+        return data;
+    }
 
-  public void setIdDespesa(Integer idDespesa) {
-    this.idDespesa = idDespesa;
-  }
+    public void setData(Date data) {
+        this.data = data;
+    }
 
-  public String getDescricao() {
-    return descricao;
-  }
+    public Double getValor() {
+        return valor;
+    }
 
-  public void setDescricao(String descricao) {
-    this.descricao = descricao;
-  }
+    public void setValor(Double valor) {
+        this.valor = valor;
+    }
 
-  public Date getData() {
-    return data;
-  }
+    public Gerente getGerente() {
+        return gerente;
+    }
 
-  public void setData(Date data) {
-    this.data = data;
-  }
-
-  public Double getValor() {
-    return valor;
-  }
-
-  public void setValor(Double valor) {
-    this.valor = valor;
-  }
-
-  public Gerente getGerente() {
-    return gerente;
-  }
-
-  public void setGerente(Gerente gerente) {
-    this.gerente = gerente;
-  }
+    public void setGerente(Gerente gerente) {
+        this.gerente = gerente;
+    }
 }

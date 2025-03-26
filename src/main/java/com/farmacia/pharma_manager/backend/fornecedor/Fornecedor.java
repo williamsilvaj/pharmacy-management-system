@@ -1,16 +1,40 @@
 package com.farmacia.pharma_manager.backend.fornecedor;
 
-public class Fornecedor {
-    private String nome;
-    private String cnpj;
-    private String email;
-    private boolean status; // true = Ativo, false = Inativo
+import com.farmacia.pharma_manager.backend.endereco.Endereco;
+import jakarta.persistence.*;
 
-    public Fornecedor(String nome, String cnpj, String email, boolean status) {
-        this.nome = nome;
-        this.cnpj = cnpj;
-        this.email = email;
-        this.status = status;
+@Entity
+@Table(name = "fornecedor")
+public class Fornecedor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idFornecedor")
+    private Integer idFornecedor;
+
+    @Column(name = "nome")
+    private String nome;
+
+    @Column(name = "cnpj")
+    private String cnpj;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "status")
+    private Integer status;
+
+    @OneToOne
+    @JoinColumn(name = "idEndereco", referencedColumnName = "idEndereco")
+    private Endereco endereco;
+
+    // Getters e Setters
+    public Integer getIdFornecedor() {
+        return idFornecedor;
+    }
+
+    public void setIdFornecedor(Integer idFornecedor) {
+        this.idFornecedor = idFornecedor;
     }
 
     public String getNome() {
@@ -37,16 +61,19 @@ public class Fornecedor {
         this.email = email;
     }
 
-    public boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Nome: " + nome + ", CNPJ: " + cnpj + ", Email: " + email + ", Status: " + (status ? "Ativo" : "Inativo");
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 }
