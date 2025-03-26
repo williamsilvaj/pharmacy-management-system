@@ -1,49 +1,45 @@
 package com.farmacia.pharma_manager.backend.funcionario;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/funcionarios")
+@RequestMapping("/funcionarios")
 public class FuncionarioController {
 
-    private final FuncionarioService funcionarioService;
-
     @Autowired
-    public FuncionarioController(FuncionarioService funcionarioService) {
-        this.funcionarioService = funcionarioService;
-    }
+    private FuncionarioService funcionarioService;
 
     @PostMapping
-    public Funcionario salvarFuncionario(@RequestBody Funcionario funcionario) {
-        return funcionarioService.salvarFuncionario(funcionario);
-    }
-
-    @PutMapping
-    public Funcionario atualizarFuncionario(@RequestBody Funcionario funcionario) {
-        return funcionarioService.atualizarFuncionario(funcionario);
+    public ResponseEntity<Funcionario> criarFuncionario(@RequestBody Funcionario funcionario) {
+        Funcionario novoFuncionario = funcionarioService.criarFuncionario(funcionario);
+        return new ResponseEntity<>(novoFuncionario, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public Optional<Funcionario> buscarFuncionarioPorId(@PathVariable Long id) {
-        return funcionarioService.buscarFuncionarioPorId(id);
+    public ResponseEntity<Funcionario> obterFuncionarioPorId(@PathVariable Integer id) {
+        Optional<Funcionario> funcionario = funcionarioService.obterFuncionarioPorId(id);
+        return funcionario.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/cpf/{cpf}")
-    public Optional<Funcionario> buscarFuncionarioPorCpf(@PathVariable String cpf) {
-        return funcionarioService.buscarFuncionarioPorCpf(cpf);
-    }
-
-    @GetMapping
-    public List<Funcionario> listarFuncionarios() {
-        return funcionarioService.listarFuncionarios();
+    @PutMapping("/{id}")
+    public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable Integer id, @RequestBody Funcionario funcionario) {
+        Funcionario funcionarioAtualizado = funcionarioService.atualizarFuncionario(id, funcionario);
+        if (funcionarioAtualizado != null) {
+            return new ResponseEntity<>(funcionarioAtualizado, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deletarFuncionario(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarFuncionario(@PathVariable Integer id) {
         funcionarioService.deletarFuncionario(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

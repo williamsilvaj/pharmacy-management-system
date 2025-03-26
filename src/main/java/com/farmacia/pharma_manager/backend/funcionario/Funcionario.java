@@ -1,50 +1,48 @@
 package com.farmacia.pharma_manager.backend.funcionario;
 
+import com.farmacia.pharma_manager.backend.cargo.Cargo;
 import com.farmacia.pharma_manager.backend.gerente.Gerente;
+import com.farmacia.pharma_manager.backend.farmaceutico.Farmaceutico;
+import com.farmacia.pharma_manager.backend.endereco.Endereco;
+
 import jakarta.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Funcionario {
+@Table(name = "funcionario")
+public class Funcionario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idFuncionario")
-    private Integer id;
+    private Integer idFuncionario;
 
-    @Column(name = "nome", nullable = false)
     private String nome;
-
-    @Column(name = "telefone")
     private String telefone;
-
-    @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
 
-    @Column(name = "cargo", nullable = false)
-    private String cargo;
+    @ManyToOne
+    @JoinColumn(name = "idCargo", nullable = false)
+    private Cargo cargo;
 
     @ManyToOne
     @JoinColumn(name = "idGerente")
     private Gerente gerente;
 
+    @ManyToOne
+    @JoinColumn(name = "idFarmaceutico")
+    private Farmaceutico farmaceutico;
 
-    public Funcionario(String nome, String telefone, String cpf, String cargo) {
-        this.nome = nome;
-        this.telefone = telefone;
-        this.cpf = cpf;
-        this.cargo = cargo;
+    @ManyToOne
+    @JoinColumn(name = "idEndereco", nullable = false)
+    private Endereco endereco;
+
+    // Getters e Setters
+
+    public Integer getIdFuncionario() {
+        return idFuncionario;
     }
 
-    public Funcionario() {}
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdFuncionario(Integer idFuncionario) {
+        this.idFuncionario = idFuncionario;
     }
 
     public String getNome() {
@@ -71,17 +69,35 @@ public abstract class Funcionario {
         this.cpf = cpf;
     }
 
-    public String getCargo() {
+    public Cargo getCargo() {
         return cargo;
     }
 
-    public void setCargo(String cargo) {
+    public void setCargo(Cargo cargo) {
         this.cargo = cargo;
     }
 
+    public Gerente getGerente() {
+        return gerente;
+    }
 
-    @Override
-    public String toString() {
-        return "Funcionario [Nome=" + nome + ", Telefone=" + telefone + ", CPF=" + cpf + ", Cargo=" + cargo + "]";
+    public void setGerente(Gerente gerente) {
+        this.gerente = gerente;
+    }
+
+    public Farmaceutico getFarmaceutico() {
+        return farmaceutico;
+    }
+
+    public void setFarmaceutico(Farmaceutico farmaceutico) {
+        this.farmaceutico = farmaceutico;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 }

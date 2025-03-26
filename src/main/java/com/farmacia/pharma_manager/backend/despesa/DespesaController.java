@@ -1,8 +1,5 @@
 package com.farmacia.pharma_manager.backend.despesa;
 
-import com.farmacia.pharma_manager.backend.despesa.Despesa;
-import com.farmacia.pharma_manager.backend.despesa.DespesaService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,34 +10,40 @@ import java.util.Optional;
 @RequestMapping("/despesas")
 public class DespesaController {
 
-  private final DespesaService despesaService;
+    private final DespesaService despesaService;
 
-  public DespesaController(DespesaService despesaService) {
-    this.despesaService = despesaService;
-  }
+    public DespesaController(DespesaService despesaService) {
+        this.despesaService = despesaService;
+    }
 
-  @PostMapping
-  public ResponseEntity<Despesa> createOrUpdateDespesa(@RequestBody Despesa despesa) {
-    Despesa savedDespesa = despesaService.saveOrUpdateDespesa(despesa);
-    return new ResponseEntity<>(savedDespesa, HttpStatus.CREATED);
-  }
+    @GetMapping
+    public List<Despesa> listarTodas() {
+        return despesaService.listarTodas();
+    }
 
-  @GetMapping
-  public ResponseEntity<List<Despesa>> getAllDespesas() {
-    List<Despesa> despesas = despesaService.getAllDespesas();
-    return new ResponseEntity<>(despesas, HttpStatus.OK);
-  }
+    @GetMapping("/{id}")
+    public ResponseEntity<Despesa> buscarPorId(@PathVariable Integer id) {
+        Optional<Despesa> despesa = despesaService.buscarPorId(id);
+        return despesa.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<Despesa> getDespesaById(@PathVariable Integer id) {
-    Optional<Despesa> despesa = despesaService.getDespesaById(id);
-    return despesa.map(response -> new ResponseEntity<>(response, HttpStatus.OK))
-      .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-  }
+    @PostMapping
+    public Despesa criar(@RequestBody Despesa despesa) {
+        return despesaService.salvar(despesa);
+    }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteDespesa(@PathVariable Integer id) {
-    despesaService.deleteDespesa(id);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-  }
+    @PutMapping("/{id}")
+    public ResponseEntity<Despesa> atualizar(@PathVariable Integer id, @RequestBody Despesa despesa) {
+        try {
+            return ResponseEntity.ok(despesaService.atualizar(id, despesa));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
+        despesaService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
 }

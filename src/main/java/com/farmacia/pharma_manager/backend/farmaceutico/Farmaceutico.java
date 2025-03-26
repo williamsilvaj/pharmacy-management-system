@@ -1,38 +1,52 @@
 package com.farmacia.pharma_manager.backend.farmaceutico;
-import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
 
-import jakarta.persistence.*;
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+/**
+ * Entidade representando um farmacêutico.
+ * Esta classe é mapeada para a tabela "farmaceutico" no banco de dados.
+ */
 @Entity
 @Table(name = "farmaceutico")
-public class Farmaceutico extends Funcionario  {
+public class Farmaceutico {
 
+    /**
+     * ID único do farmacêutico.
+     * Este campo é gerado automaticamente pelo banco de dados.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idFarmaceutico")
-    private Integer id;
+    private Integer idFarmaceutico;
 
-    @Column(name = "turno")
+    /**
+     * Turno de trabalho do farmacêutico (Exemplo: manhã, tarde, noite).
+     */
     private String turno;
 
-    @Column(name = "crf")
+    /**
+     * CRF (Conselho Regional de Farmácia) do farmacêutico.
+     */
     private String crf;
 
-    @Column(name = "cargaHoraria")
-    private float cargaHoraria;
-
-    // Construtor
-    public Farmaceutico (String nome, String telefone, String cpf, String cargo, String turno, String crf, float cargaHoraria) {
-        super(nome, telefone, cpf, cargo);
-        this.turno = turno;
-        this.crf = crf;
-        this.cargaHoraria = cargaHoraria;
-    }
-
-    public Farmaceutico() {}
+    /**
+     * Carga horária semanal do farmacêutico.
+     */
+    private Float cargaHoraria;
 
     // Getters e Setters
+
+    public Integer getIdFarmaceutico() {
+        return idFarmaceutico;
+    }
+
+    public void setIdFarmaceutico(Integer idFarmaceutico) {
+        this.idFarmaceutico = idFarmaceutico;
+    }
+
     public String getTurno() {
         return turno;
     }
@@ -49,21 +63,11 @@ public class Farmaceutico extends Funcionario  {
         this.crf = crf;
     }
 
-    public float getCargaHoraria() {
+    public Float getCargaHoraria() {
         return cargaHoraria;
     }
 
-    public void setCargaHoraria(float cargaHoraria) {
+    public void setCargaHoraria(Float cargaHoraria) {
         this.cargaHoraria = cargaHoraria;
-    }
-
-    // Método para exibir as informações do Farmacêutico
-    @Override
-    public String toString() {
-        return "Farmacêutico{" +
-                "turno='" + turno + '\'' +
-                ", crf='" + crf + '\'' +
-                ", cargaHoraria=" + cargaHoraria +
-                '}';
     }
 }

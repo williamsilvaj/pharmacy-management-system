@@ -3,36 +3,59 @@ package com.farmacia.pharma_manager.backend.farmaceutico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
+/**
+ * Serviço de lógica de negócios para a entidade Farmaceutico.
+ * Contém os métodos que interagem com o repositório para manipular dados de farmacêuticos.
+ */
 @Service
 public class FarmaceuticoService {
 
-    private final FarmaceuticoRepository farmaceuticoRepository;
-
     @Autowired
-    public FarmaceuticoService(FarmaceuticoRepository farmaceuticoRepository) {
-        this.farmaceuticoRepository = farmaceuticoRepository;
-    }
+    private FarmaceuticoRepository farmaceuticoRepository;
 
-    // Salvar ou atualizar um Farmaceutico
-    public Farmaceutico saveOrUpdateFarmaceutico(Farmaceutico farmaceutico) {
+    /**
+     * Cria um novo farmacêutico no banco de dados.
+     *
+     * @param farmaceutico o farmacêutico a ser criado
+     * @return o farmacêutico criado
+     */
+    public Farmaceutico criarFarmaceutico(Farmaceutico farmaceutico) {
         return farmaceuticoRepository.save(farmaceutico);
     }
 
-    // Listar todos os Farmaceuticos
-    public List<Farmaceutico> getAllFarmaceuticos() {
-        return farmaceuticoRepository.findAll();
-    }
-
-    // Buscar um Farmaceutico pelo ID
-    public Optional<Farmaceutico> getFarmaceuticoById(Integer id) {
+    /**
+     * Obtém um farmacêutico pelo seu ID.
+     *
+     * @param id o ID do farmacêutico
+     * @return um Optional contendo o farmacêutico, caso encontrado
+     */
+    public Optional<Farmaceutico> obterFarmaceuticoPorId(Integer id) {
         return farmaceuticoRepository.findById(id);
     }
 
-    // Deletar um Farmaceutico pelo ID
-    public void deleteFarmaceutico(Integer id) {
+    /**
+     * Atualiza os dados de um farmacêutico existente.
+     *
+     * @param id o ID do farmacêutico a ser atualizado
+     * @param farmaceutico os novos dados do farmacêutico
+     * @return o farmacêutico atualizado
+     */
+    public Farmaceutico atualizarFarmaceutico(Integer id, Farmaceutico farmaceutico) {
+        if (farmaceuticoRepository.existsById(id)) {
+            farmaceutico.setIdFarmaceutico(id);
+            return farmaceuticoRepository.save(farmaceutico);
+        }
+        return null; // Retorna null caso o farmacêutico não exista
+    }
+
+    /**
+     * Deleta um farmacêutico pelo seu ID.
+     *
+     * @param id o ID do farmacêutico a ser deletado
+     */
+    public void deletarFarmaceutico(Integer id) {
         farmaceuticoRepository.deleteById(id);
     }
 }
