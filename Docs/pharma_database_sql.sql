@@ -130,7 +130,6 @@ CREATE TABLE pharmabd.venda (
   data DATE NOT NULL,
   idFarmaceutico INT NOT NULL,
   idCliente INT NOT NULL,
-  idEndereco INT NOT NULL,
   PRIMARY KEY (idVenda),
   CONSTRAINT fk_Venda_Farmaceutico
     FOREIGN KEY (idFarmaceutico)
@@ -142,11 +141,6 @@ CREATE TABLE pharmabd.venda (
     REFERENCES pharmabd.cliente (idCliente)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-CONSTRAINT fk_Venda_Endereco
-    FOREIGN KEY (idEndereco)
-    REFERENCES pharmabd.cliente (idEndereco)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE
 );
 
 -- -----------------------------------------------------
