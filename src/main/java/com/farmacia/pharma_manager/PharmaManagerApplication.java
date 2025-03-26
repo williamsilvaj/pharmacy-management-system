@@ -1,4 +1,4 @@
-package com.farmacia.pharma_manager.backend;
+package com.farmacia.pharma_manager;
 
 import javax.swing.*;
 
