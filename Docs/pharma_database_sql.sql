@@ -1,3 +1,8 @@
+-- -----------------------------------------------------
+-- Schema pharmabd
+-- -----------------------------------------------------
+CREATE SCHEMA pharmabd DEFAULT CHARACTER SET utf8;
+
 
 -- -----------------------------------------------------
 -- Table pharmabd.cargo
@@ -140,7 +145,7 @@ CREATE TABLE pharmabd.venda (
     FOREIGN KEY (idCliente)
     REFERENCES pharmabd.cliente (idCliente)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE NO ACTION
 );
 
 -- -----------------------------------------------------
