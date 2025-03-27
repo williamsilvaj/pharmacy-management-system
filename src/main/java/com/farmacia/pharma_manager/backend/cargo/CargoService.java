@@ -43,7 +43,7 @@ public class CargoService {
 
       return cargoRepository.save(cargo);
     } else {
-      throw new IllegalArgumentException("Cargo não encontrado para o id: " + id);
+      throw new IllegalArgumentException("Cargo não encontrado para o ID: " + id);
     }
   }
 
