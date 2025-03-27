@@ -1,44 +1,34 @@
 package com.farmacia.pharma_manager.backend.gerente;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.farmacia.pharma_manager.backend.cargo.Cargo;
+import com.farmacia.pharma_manager.backend.endereco.Endereco;
+import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
+
+import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "gerente") // Nome da tabela no banco de dados
-public class Gerente {
+@PrimaryKeyJoinColumn(name = "idFuncionario")
+@Table(name = "gerente")
+public class Gerente extends Funcionario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto incremento
-    private Integer idGerente;
+    @OneToMany(mappedBy = "supervisor", fetch = FetchType.LAZY)
+    private List<Funcionario> funcionariosSupervisionados;
 
-    private String nivel;
-    private String funcionariosSupervisionados;
+
+    public Gerente(String nome, String telefone, String cpf, Cargo cargo, Endereco endereco, List<Funcionario> funcionariosSupervisionados) {
+        super(nome, telefone, cpf, cargo, endereco);
+        this.funcionariosSupervisionados = funcionariosSupervisionados;
+    }
+
+    public Gerente() {}
 
     // Getters and Setters
-    public Integer getIdGerente() {
-        return idGerente;
-    }
-
-    public void setIdGerente(Integer idGerente) {
-        this.idGerente = idGerente;
-    }
-
-    public String getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(String nivel) {
-        this.nivel = nivel;
-    }
-
-    public String getFuncionariosSupervisionados() {
+    public List<Funcionario> getFuncionariosSupervisionados() {
         return funcionariosSupervisionados;
     }
 
-    public void setFuncionariosSupervisionados(String funcionariosSupervisionados) {
+    public void setFuncionariosSupervisionados(List<Funcionario> funcionariosSupervisionados) {
         this.funcionariosSupervisionados = funcionariosSupervisionados;
     }
 }

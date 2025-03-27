@@ -18,27 +18,6 @@ CREATE TABLE pharmabd.cargo (
 );
 
 -- -----------------------------------------------------
--- Table pharmabd.gerente
--- -----------------------------------------------------
-CREATE TABLE pharmabd.gerente (
-  idGerente INT NOT NULL AUTO_INCREMENT,
-  nivel VARCHAR(45) NOT NULL,
-  funcionariosSupervisionados VARCHAR(255) NOT NULL,
-  PRIMARY KEY (idGerente)
-);
-
--- -----------------------------------------------------
--- Table pharmabd.farmaceutico
--- -----------------------------------------------------
-CREATE TABLE pharmabd.farmaceutico (
-  idFarmaceutico INT NOT NULL AUTO_INCREMENT,
-  turno VARCHAR(45) NOT NULL,
-  crf VARCHAR(45) NOT NULL,
-  cargaHoraria FLOAT NOT NULL,
-  PRIMARY KEY (idFarmaceutico)
-);
-
--- -----------------------------------------------------
 -- Table pharmabd.endereco
 -- -----------------------------------------------------
 CREATE TABLE pharmabd.endereco (
@@ -62,7 +41,6 @@ CREATE TABLE pharmabd.funcionario (
   cpf VARCHAR(11) NOT NULL,
   idCargo INT NOT NULL,
   idGerente INT NULL,
-  idFarmaceutico INT NULL,
   idEndereco INT NOT NULL,
   PRIMARY KEY (idFuncionario),
   UNIQUE (cpf),
@@ -73,19 +51,34 @@ CREATE TABLE pharmabd.funcionario (
     ON UPDATE CASCADE,
   CONSTRAINT fk_Funcionario_Gerente
     FOREIGN KEY (idGerente)
-    REFERENCES pharmabd.gerente (idGerente)
+    REFERENCES pharmabd.gerente (idFuncionario)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_Funcionario_Farmaceutico
-    FOREIGN KEY (idFarmaceutico)
-    REFERENCES pharmabd.farmaceutico (idFarmaceutico)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT fk_Funcionario_Endereco
     FOREIGN KEY (idEndereco)
     REFERENCES pharmabd.endereco (idEndereco)
     ON DELETE NO ACTION
     ON UPDATE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.gerente
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.gerente (
+  idFuncionario INT PRIMARY KEY,
+  funcionariosSupervisionados VARCHAR(255) NULL,
+  FOREIGN KEY (idFuncionario) REFERENCES pharmabd.funcionario(idFuncionario) ON DELETE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table pharmabd.farmaceutico
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.farmaceutico (
+  idFuncionario INT PRIMARY KEY,
+  turno VARCHAR(45) NOT NULL,
+  crf VARCHAR(45) NOT NULL,
+  cargaHoraria FLOAT NOT NULL,
+  FOREIGN KEY (idFuncionario) REFERENCES pharmabd.funcionario(idFuncionario) ON DELETE CASCADE
 );
 
 -- -----------------------------------------------------

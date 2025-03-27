@@ -1,22 +1,27 @@
 package com.farmacia.pharma_manager.backend.funcionario;
 
 import com.farmacia.pharma_manager.backend.cargo.Cargo;
-import com.farmacia.pharma_manager.backend.gerente.Gerente;
-import com.farmacia.pharma_manager.backend.farmaceutico.Farmaceutico;
 import com.farmacia.pharma_manager.backend.endereco.Endereco;
+import com.farmacia.pharma_manager.backend.gerente.Gerente;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "funcionario")
-public class Funcionario {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Funcionario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idFuncionario")
     private Integer idFuncionario;
 
+    @Column(name = "nome", nullable = false)
     private String nome;
+
+    @Column(name = "telefone", nullable = false)
     private String telefone;
+
+    @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
 
     @ManyToOne
@@ -24,25 +29,33 @@ public class Funcionario {
     private Cargo cargo;
 
     @ManyToOne
-    @JoinColumn(name = "idGerente")
-    private Gerente gerente;
-
-    @ManyToOne
-    @JoinColumn(name = "idFarmaceutico")
-    private Farmaceutico farmaceutico;
-
-    @ManyToOne
     @JoinColumn(name = "idEndereco", nullable = false)
     private Endereco endereco;
 
+    // Supervisor desse funcionario
+    @ManyToOne
+    @JoinColumn(name = "idGerente", nullable = true)
+    private Gerente supervisor;
+
+
+    public Funcionario(String nome, String telefone, String cpf, Cargo cargo, Endereco endereco) {
+        this.nome = nome;
+        this.telefone = telefone;
+        this.cpf = cpf;
+        this.cargo = cargo;
+        this.endereco = endereco;
+    }
+
+    public Funcionario() {}
+
     // Getters e Setters
 
-    public Integer getIdFuncionario() {
+    public Integer getId() {
         return idFuncionario;
     }
 
-    public void setIdFuncionario(Integer idFuncionario) {
-        this.idFuncionario = idFuncionario;
+    public void setId(Integer id) {
+        this.idFuncionario = id;
     }
 
     public String getNome() {
@@ -77,22 +90,6 @@ public class Funcionario {
         this.cargo = cargo;
     }
 
-    public Gerente getGerente() {
-        return gerente;
-    }
-
-    public void setGerente(Gerente gerente) {
-        this.gerente = gerente;
-    }
-
-    public Farmaceutico getFarmaceutico() {
-        return farmaceutico;
-    }
-
-    public void setFarmaceutico(Farmaceutico farmaceutico) {
-        this.farmaceutico = farmaceutico;
-    }
-
     public Endereco getEndereco() {
         return endereco;
     }
@@ -100,4 +97,8 @@ public class Funcionario {
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
+
+    public Gerente getSupervisor() { return supervisor; }
+
+    public void setSupervisor(Gerente supervisor) { this.supervisor = supervisor; }
 }
