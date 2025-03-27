@@ -8,10 +8,10 @@ import java.sql.SQLException;
 public class Conexao {
 
 
-     private static final String url = "jdbc:mysql://172.28.254.2:3306/pharmabd";
+     private static final String url = "jdbc:mysql://localhost:3306/pharmabd";
 
     public static void main (String[] args){
-       
+
 
         String user = "root";
         String password = "Aa1234@!";
@@ -30,7 +30,7 @@ public class Conexao {
             e.printStackTrace();
             //return null;
         }
-        
+
     }
 
 }
