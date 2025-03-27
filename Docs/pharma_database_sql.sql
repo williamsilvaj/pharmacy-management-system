@@ -1,4 +1,11 @@
 
+-- Google Docs with the SQL code: https://docs.google.com/document/d/1OWprbhl9NUqkN31fnFTh3jOwb9HmJSusQdX7yXSN5s4/edit?tab=t.0
+
+-- -----------------------------------------------------
+-- Schema pharmabd
+-- -----------------------------------------------------
+CREATE SCHEMA pharmabd DEFAULT CHARACTER SET utf8;
+
 -- -----------------------------------------------------
 -- Table pharmabd.cargo
 -- -----------------------------------------------------
@@ -130,7 +137,6 @@ CREATE TABLE pharmabd.venda (
   data DATE NOT NULL,
   idFarmaceutico INT NOT NULL,
   idCliente INT NOT NULL,
-  idEndereco INT NOT NULL,
   PRIMARY KEY (idVenda),
   CONSTRAINT fk_Venda_Farmaceutico
     FOREIGN KEY (idFarmaceutico)
@@ -141,12 +147,7 @@ CREATE TABLE pharmabd.venda (
     FOREIGN KEY (idCliente)
     REFERENCES pharmabd.cliente (idCliente)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-CONSTRAINT fk_Venda_Endereco
-    FOREIGN KEY (idEndereco)
-    REFERENCES pharmabd.cliente (idEndereco)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE
+    ON UPDATE NO ACTION
 );
 
 -- -----------------------------------------------------
