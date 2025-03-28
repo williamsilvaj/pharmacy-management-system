@@ -40,18 +40,12 @@ CREATE TABLE pharmabd.funcionario (
   telefone VARCHAR(45) NOT NULL,
   cpf VARCHAR(11) NOT NULL,
   idCargo INT NOT NULL,
-  idGerente INT NULL,
   idEndereco INT NOT NULL,
   PRIMARY KEY (idFuncionario),
   UNIQUE (cpf),
   CONSTRAINT fk_Funcionario_Cargo
     FOREIGN KEY (idCargo)
     REFERENCES pharmabd.cargo (idCargo)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE,
-  CONSTRAINT fk_Funcionario_Gerente
-    FOREIGN KEY (idGerente)
-    REFERENCES pharmabd.gerente (idFuncionario)
     ON DELETE NO ACTION
     ON UPDATE CASCADE,
   CONSTRAINT fk_Funcionario_Endereco
@@ -61,6 +55,7 @@ CREATE TABLE pharmabd.funcionario (
     ON UPDATE CASCADE
 );
 
+
 -- -----------------------------------------------------
 -- Table pharmabd.gerente
 -- -----------------------------------------------------
@@ -69,6 +64,17 @@ CREATE TABLE pharmabd.gerente (
   funcionariosSupervisionados VARCHAR(255) NULL,
   FOREIGN KEY (idFuncionario) REFERENCES pharmabd.funcionario(idFuncionario) ON DELETE CASCADE
 );
+
+-- -----------------------------------------------------
+-- Adiciona fk_Gerente em pharmabd.funcionario
+-- -----------------------------------------------------
+ALTER TABLE pharmabd.funcionario
+ADD COLUMN idGerente INT NULL,
+ADD CONSTRAINT fk_Funcionario_Gerente
+    FOREIGN KEY (idGerente)
+    REFERENCES pharmabd.gerente (idFuncionario)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE;
 
 -- -----------------------------------------------------
 -- Table pharmabd.farmaceutico
@@ -93,7 +99,7 @@ CREATE TABLE pharmabd.despesa (
   PRIMARY KEY (idDespesa),
   CONSTRAINT fk_Despesa_Gerente
     FOREIGN KEY (idGerente)
-    REFERENCES pharmabd.gerente (idGerente)
+    REFERENCES pharmabd.gerente (idFuncionario)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 );
@@ -133,7 +139,7 @@ CREATE TABLE pharmabd.venda (
   PRIMARY KEY (idVenda),
   CONSTRAINT fk_Venda_Farmaceutico
     FOREIGN KEY (idFarmaceutico)
-    REFERENCES pharmabd.farmaceutico (idFarmaceutico)
+    REFERENCES pharmabd.farmaceutico (idFuncionario)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_Venda_Cliente
