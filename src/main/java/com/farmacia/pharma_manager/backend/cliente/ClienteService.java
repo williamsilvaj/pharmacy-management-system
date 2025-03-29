@@ -33,6 +33,10 @@ public class ClienteService {
     public Optional<Cliente> buscarPorTelefone(String telefone) {
         return clienteRepository.findByTelefone(telefone);
     }
+	
+	public List<Cliente> buscarPorNome(String nome) {
+		return clienteRepository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
+	}
 
     public Cliente salvar(Cliente cliente) {
         return clienteRepository.save(cliente);
