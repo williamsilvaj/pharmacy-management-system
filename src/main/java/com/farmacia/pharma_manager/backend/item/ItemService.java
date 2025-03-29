@@ -8,6 +8,8 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Cell;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -57,6 +59,23 @@ public class ItemService {
         }
         return false;
     }
+
+    public int countItensDisponiveisPorProduto(Integer idProduto) {
+        return itemRepository.countByProdutoIdProdutoAndVendaIsNull(idProduto);
+    }
+
+    public List<Item> listarItensDisponiveisPorProduto(Integer idProduto) {
+        return itemRepository.findByProdutoIdProdutoAndVendaIsNull(idProduto);
+    }
+	
+	public List<Item> findItensPorVenda(Integer idVenda) {
+        return itemRepository.findByVendaIdVenda(idVenda);
+    }
+
+    public List<Item> listarItensDisponiveisPorProdutoComLimite(Integer idProduto, int limit) {
+        Pageable pageable = PageRequest.of(0, limit);
+        return itemRepository.findByProdutoIdProdutoAndVendaIsNull(idProduto, pageable);
+    }
         public List<RelatorioEstoqueDTO> gerarRelatorioEstoque() {
         List<RelatorioEstoqueDTO> relatorio = new ArrayList<>();
 
@@ -101,4 +120,5 @@ public class ItemService {
         }
         return baos.toByteArray();
     }
+	
 }

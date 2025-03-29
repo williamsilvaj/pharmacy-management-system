@@ -3,7 +3,7 @@ package com.farmacia.pharma_manager.backend.venda;
 import com.farmacia.pharma_manager.backend.cliente.Cliente;
 import com.farmacia.pharma_manager.backend.farmaceutico.Farmaceutico;
 import jakarta.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "venda")
@@ -13,25 +13,20 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idVenda;
 
-    @Column(nullable = false)
     private Integer quantidade;
-
-    @Column(nullable = false)
     private Double valor;
-
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
-    private Date data;
+    private LocalDate data;
 
     @ManyToOne
-    @JoinColumn(name = "idFarmaceutico", nullable = false)
+    @JoinColumn(name = "idFarmaceutico", referencedColumnName = "idFuncionario")
     private Farmaceutico farmaceutico;
 
     @ManyToOne
-    @JoinColumn(name = "idCliente", nullable = false)
+    @JoinColumn(name = "idCliente", referencedColumnName = "idCliente")
     private Cliente cliente;
 
-    // Getters and Setters
+    // Getters e Setters
+
     public Integer getIdVenda() {
         return idVenda;
     }
@@ -56,11 +51,11 @@ public class Venda {
         this.valor = valor;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
