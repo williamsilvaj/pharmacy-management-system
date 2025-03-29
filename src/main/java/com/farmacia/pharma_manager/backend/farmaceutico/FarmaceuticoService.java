@@ -44,4 +44,9 @@ public class FarmaceuticoService {
   public void deletarFarmaceutico(Integer id) {
     farmaceuticoRepository.deleteById(id);
   }
+  
+  public List<Farmaceutico> buscarPorNomeOuCrf(String termo) {
+	return farmaceuticoRepository.findByNomeOrCrfContaining(termo);
+  }
+
 }

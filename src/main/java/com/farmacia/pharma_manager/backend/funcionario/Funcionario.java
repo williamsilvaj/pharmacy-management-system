@@ -5,6 +5,7 @@ import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import com.farmacia.pharma_manager.backend.gerente.Gerente;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -35,6 +36,7 @@ public abstract class Funcionario {
     // Supervisor desse funcionario
     @ManyToOne
     @JoinColumn(name = "idGerente", nullable = true)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Gerente supervisor;
 
 

@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     async function searchPharmacists() {
         const searchTerm = document.getElementById("pharmacistModalSearch").value;
-        const response = await fetch(`/farmaceuticos?nome=${encodeURIComponent(searchTerm)}`);
+        const response = await fetch(`/farmaceuticos/busca/${encodeURIComponent(searchTerm)}`);
         const pharmacists = await response.json();
         
         const resultsContainer = document.getElementById("pharmacistModalResults");
@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     async function searchProducts() {
         const searchTerm = document.getElementById("productModalSearch").value;
-        const response = await fetch(`/produtos?nome=${encodeURIComponent(searchTerm)}`);
+        const response = await fetch(`/produtos/busca/${encodeURIComponent(searchTerm)}`);
         const products = await response.json();
         
         const resultsContainer = document.getElementById("productModalResults");

@@ -89,4 +89,10 @@ public class ProdutoController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+	
+	@GetMapping("/busca/{termo}")
+    public ResponseEntity<List<Produto>> buscarPorNome(@PathVariable String termo) {
+        List<Produto> produtos = produtoService.buscarPorNome(termo);
+        return ResponseEntity.ok(produtos);
+    }
 }
