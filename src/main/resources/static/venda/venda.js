@@ -137,30 +137,74 @@ document.addEventListener("DOMContentLoaded", () => {
                 Concentração: ${product.concentracao}
             `;
             productElement.addEventListener("click", async () => {
-                // Buscar itens disponíveis para este produto
-                const itemsResponse = await fetch(`/itens?produtoId=${product.idProduto}&disponivel=true`);
-                const availableItems = await itemsResponse.json();
-                
-                if (availableItems.length === 0) {
-                    alert("Não há itens disponíveis deste produto no estoque");
-                    return;
+                // Verificar quantidade disponível primeiro
+                try {
+                    const disponibilidadeResponse = await fetch(`/itens/disponiveis/quantidade/${product.idProduto}`);
+                    if (!disponibilidadeResponse.ok) {
+                        throw new Error("Erro ao verificar estoque");
+                    }
+                    
+                    const { quantidadeDisponivel } = await disponibilidadeResponse.json();
+                    
+                    // Verificar itens já adicionados para este produto
+                    const alreadyAdded = saleItems.filter(item => item.product.idProduto === product.idProduto)
+                                                .reduce((sum, item) => sum + item.quantity, 0);
+                    
+                    const available = quantidadeDisponivel - alreadyAdded;
+                    
+                    if (available <= 0) {
+                        alert(`Não há mais unidades disponíveis deste produto no estoque`);
+                        return;
+                    }
+                    
+                    // Pedir quantidade desejada com limite máximo
+                    const quantity = prompt(`Quantidade desejada de ${product.nome} (Disponível: ${available}):`, "1");
+                    if (!quantity || isNaN(quantity) || parseInt(quantity) <= 0) {
+                        alert("Quantidade inválida");
+                        return;
+                    }
+                    
+                    const desiredQuantity = parseInt(quantity);
+                    
+                    if (desiredQuantity > available) {
+                        alert(`Quantidade solicitada (${desiredQuantity}) excede o disponível (${available})`);
+                        return;
+                    }
+                    
+                    // Buscar os itens disponíveis
+                    const itemsResponse = await fetch(`/itens/disponiveis/${product.idProduto}?limit=${desiredQuantity}`);
+                    const availableItems = await itemsResponse.json();
+                    
+                    if (availableItems.length < desiredQuantity) {
+                        alert(`Quantidade indisponível no momento. Disponível agora: ${availableItems.length}`);
+                        return;
+                    }
+                    
+                    // Adicionar itens à venda
+                    for (const item of availableItems) {
+                        addItemToSale(product, item);
+                    }
+                    
+                    productModal.style.display = "none";
+                } catch (error) {
+                    console.error("Erro:", error);
+                    alert("Erro ao verificar estoque");
                 }
-                
-                // Adicionar item à venda (usando o primeiro item disponível como exemplo)
-                const item = availableItems[0];
-                addItemToSale(product, item);
-                productModal.style.display = "none";
             });
             resultsContainer.appendChild(productElement);
         });
     }
-    
+
     function addItemToSale(product, item) {
-        const existingItem = saleItems.find(i => i.idItem === item.idItem);
+        // Verifica se já existe um item com o mesmo produto
+        const existingItem = saleItems.find(i => i.product.idProduto === product.idProduto);
         
         if (existingItem) {
+            // Se já existe, apenas incrementa a quantidade
             existingItem.quantity += 1;
+            existingItem.idItem = item.idItem; // Atualiza com o último item adicionado
         } else {
+            // Se não existe, cria um novo item
             saleItems.push({
                 idItem: item.idItem,
                 product: product,
@@ -181,24 +225,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const row = document.createElement("tr");
             row.innerHTML = `
                 <td>${saleItem.product.nome}</td>
-                <td>
-                    <input type="number" min="1" value="${saleItem.quantity}" 
-                           data-index="${index}" class="quantity-input">
-                </td>
+                <td>${saleItem.quantity}</td>
                 <td>R$ ${saleItem.item.valor.toFixed(2)}</td>
                 <td>R$ ${(saleItem.item.valor * saleItem.quantity).toFixed(2)}</td>
                 <td><button data-index="${index}" class="remove-item-btn">Remover</button></td>
             `;
             tableBody.appendChild(row);
-        });
-        
-        // Adicionar event listeners para os inputs de quantidade
-        document.querySelectorAll(".quantity-input").forEach(input => {
-            input.addEventListener("change", (e) => {
-                const index = parseInt(e.target.dataset.index);
-                saleItems[index].quantity = parseInt(e.target.value);
-                updateTotals();
-            });
         });
         
         // Adicionar event listeners para os botões de remover
@@ -211,6 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
+        
     
     function updateTotals() {
         const totalQuantity = saleItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -221,74 +254,118 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     async function confirmSale() {
-        if (!selectedClient || !selectedPharmacist || saleItems.length === 0) {
-            alert("Preencha todos os campos da venda");
-            return;
-        }
-        
-        const saleData = {
-            idCliente: selectedClient.idCliente,
-            idFarmaceutico: selectedPharmacist.idFuncionario,
-            itens: saleItems.map(item => ({
-                idItem: item.idItem,
-                quantidade: item.quantity
-            }))
-        };
-        
-        try {
-            const response = await fetch("/vendas", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(saleData)
-            });
-            
-            if (response.ok) {
-                alert("Venda registrada com sucesso!");
-                saleForm.style.display = "none";
-                loadSalesHistory();
-            } else {
-                throw new Error("Erro ao registrar venda");
-            }
-        } catch (error) {
-            console.error("Erro:", error);
-            alert("Erro ao registrar venda");
-        }
+    if (!selectedClient || !selectedPharmacist || saleItems.length === 0) {
+        alert("Selecione cliente, farmacêutico e pelo menos um produto");
+        return;
     }
-    
-    async function loadSalesHistory() {
-        const response = await fetch("/vendas");
-        const sales = await response.json();
-        
-        salesHistoryBody.innerHTML = "";
-        
-        sales.forEach(sale => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${new Date(sale.data).toLocaleDateString()}</td>
-                <td>${sale.cliente.nome}</td>
-                <td>${sale.farmaceutico.nome}</td>
-                <td>${sale.quantidade}</td>
-                <td>R$ ${sale.valor.toFixed(2)}</td>
-                <td>
-                    <button onclick="viewSaleDetails(${sale.idVenda})">Detalhes</button>
-                </td>
-            `;
-            salesHistoryBody.appendChild(row);
+
+    const saleData = {
+        idCliente: selectedClient.idCliente,
+        idFarmaceutico: selectedPharmacist.id,
+        itens: saleItems.map(item => ({
+            idProduto: item.product.idProduto,
+            quantidade: item.quantity
+        }))
+    };
+
+    try {
+        const response = await fetch("/vendas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(saleData)
         });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Erro ao registrar venda");
+        }
+
+        const result = await response.json();
+        alert(`Venda #${result.idVenda} registrada com sucesso!`);
+		saleForm.style.display = "none";
+        resetSaleForm();
+        loadSalesHistory();
+        
+    } catch (error) {
+        console.error("Erro na venda:", error);
+        alert(`Erro: ${error.message}`);
     }
+}
+    
+    // Adicione esta função para desfazer venda
+	window.undoSale = async (saleId) => {
+		if (confirm("Tem certeza que deseja desfazer esta venda?\nEsta ação não pode ser desfeita.")) {
+			try {
+				const response = await fetch(`/vendas/${saleId}/desfazer`, {
+					method: "POST"
+				});
+
+				if (!response.ok) {
+					throw new Error("Erro ao desfazer venda");
+				}
+
+				alert("Venda desfeita com sucesso!");
+				loadSalesHistory(); // Atualiza a tabela
+			} catch (error) {
+				console.error("Erro:", error);
+				alert(`Erro ao desfazer venda: ${error.message}`);
+			}
+		}
+	};
+
+	// Atualize a função loadSalesHistory para incluir o botão Desfazer
+	async function loadSalesHistory() {
+		const response = await fetch("/vendas");
+		const sales = await response.json();
+		
+		salesHistoryBody.innerHTML = "";
+		
+		sales.forEach(sale => {
+			const row = document.createElement("tr");
+			row.innerHTML = `
+				<td>${new Date(sale.data).toLocaleDateString()}</td>
+				<td>${sale.cliente.nome}</td>
+				<td>${sale.farmaceutico.nome}</td>
+				<td>${sale.quantidade}</td>
+				<td>R$ ${sale.valor.toFixed(2)}</td>
+				<td>
+					<button onclick="viewSaleDetails(${sale.idVenda})">Detalhes</button>
+					<button onclick="undoSale(${sale.idVenda})">Desfazer</button>
+				</td>
+			`;
+			salesHistoryBody.appendChild(row);
+		});
+	}
     
     window.viewSaleDetails = async (saleId) => {
-        const response = await fetch(`/vendas/${saleId}`);
-        const sale = await response.json();
-        
-        alert(`Detalhes da Venda #${sale.idVenda}\n
-Data: ${new Date(sale.data).toLocaleDateString()}\n
-Cliente: ${sale.cliente.nome}\n
-Farmacêutico: ${sale.farmaceutico.nome}\n
-Quantidade: ${sale.quantidade}\n
-Valor Total: R$ ${sale.valor.toFixed(2)}\n
-Itens:\n${sale.itens.map(item => `- ${item.produto.nome} (${item.quantidade}x R$ ${item.valor.toFixed(2)})`).join("\n")}`);
-    };
+		try {
+			// Busca os dados da venda
+			const vendaResponse = await fetch(`/vendas/${saleId}`);
+			if (!vendaResponse.ok) throw new Error("Erro ao buscar dados da venda");
+			const venda = await vendaResponse.json();
+
+			// Busca os itens da venda
+			const itensResponse = await fetch(`/itens/por-venda/${saleId}`);
+			if (!itensResponse.ok) throw new Error("Erro ao buscar itens da venda");
+			const itens = await itensResponse.json();
+
+			// Formata os detalhes dos itens
+			let itemsDetails = "Nenhum item encontrado";
+			if (itens && itens.length > 0) {
+				itemsDetails = itens.map(item => 
+					`- ${item.produto.nome} (R$ ${item.valor.toFixed(2)})`
+				).join("\n");
+			}
+
+			// Exibe os detalhes
+			alert(`Detalhes da Venda #${venda.idVenda}	
+Itens:\n${itemsDetails}`);
+
+		} catch (error) {
+			console.error("Erro:", error);
+			alert(`Erro ao carregar detalhes: ${error.message}`);
+		}
+	};
 });

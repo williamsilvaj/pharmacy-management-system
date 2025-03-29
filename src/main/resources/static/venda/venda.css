@@ -176,3 +176,22 @@ button:hover {
 #productResults div:hover {
     background: #f5f5f5;
 }
+
+/* Adicione ao final do arquivo */
+#salesHistoryBody button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#salesHistoryBody button:nth-child(1) {
+    background-color: #4CAF50; /* Verde para Detalhes */
+}
+
+#salesHistoryBody button:nth-child(2) {
+    background-color: #f44336; /* Vermelho para Desfazer */
+}
+
+#salesHistoryBody button:hover {
+    opacity: 0.8;
+}
