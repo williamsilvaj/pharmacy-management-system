@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,6 +26,8 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/vendas")
 public class VendaController {
+	@Autowired
+	private RelatorioVendasService relatorioVendasService;
 
     @Autowired
     private VendaService vendaService;
@@ -128,6 +133,26 @@ public class VendaController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Erro ao desfazer venda: " + e.getMessage());
+		}
+	}
+	
+	@GetMapping("/relatorio")
+	public ResponseEntity<byte[]> gerarRelatorioVendas(
+		@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+		@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim) {
+		
+		try {
+			byte[] pdf = relatorioVendasService.gerarRelatorioPDF(dataInicio, dataFim);
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_PDF);
+			headers.setContentDispositionFormData("filename", "relatorio_vendas.pdf");
+			
+			return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage().getBytes());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 }
