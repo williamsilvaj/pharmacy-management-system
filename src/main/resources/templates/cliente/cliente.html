@@ -1,49 +1,65 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestão de Clientes</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Cadastro de Cliente</title>
+  <link rel="stylesheet" href="/cliente/cliente.css">
+  <script src="/cliente/cliente.js" defer></script>
 </head>
 <body>
-<div class="tela-gestao-cliente">
-  <div class="botoes-panel">
-    <button id="btnCadastrarCliente">Cadastrar cliente</button>
-    <button id="btnConsultarCliente">Consultar cliente</button>
-    <button id="btnAlterarCliente">Alterar dados do cliente</button>
-    <button id="btnRemoverCliente">Remover cliente</button>
-    <button id="btnVoltar">Voltar</button>
-  </div>
+<nav>
+  <h1>Pharma Manager</h1>
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Funcionários</a></li>
+    <li><a href="#">Clientes</a></li>
+    <li><a href="#">Produtos</a></li>
+    <li><a href="#">Vendas</a></li>
+  </ul>
+</nav>
 
-  <!-- Formulário de Cadastro -->
-  <div id="formularioCadastro" class="formulario" style="display: none;">
-    <h2>Cadastro de Cliente</h2>
-    <input type="text" id="nomeCliente" placeholder="Nome do Cliente" required>
-    <input type="text" id="cpfCliente" placeholder="CPF do Cliente" required>
-    <input type="email" id="emailCliente" placeholder="Email do Cliente" required>
-    <button id="btnSalvarCliente">Salvar</button>
-    <button id="btnCancelarCadastro">Cancelar</button>
-  </div>
+<main>
+  <h2>Cadastro de Cliente</h2>
+  <button id="addClienteBtn">Adicionar Cliente</button>
+  <table>
+    <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Telefone</th>
+      <th>CPF</th>
+      <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody id="clienteTableBody">
+    <!-- Clientes serão inseridos aqui -->
+    </tbody>
+  </table>
+</main>
 
-  <!-- Formulário de Consultar Cliente -->
-  <div id="formularioConsultar" class="formulario" style="display: none;">
-    <h2>Consultar Cliente</h2>
-    <input type="text" id="cpfConsulta" placeholder="CPF do Cliente" required>
-    <button id="btnBuscarCliente">Buscar</button>
-    <button id="btnCancelarConsulta">Cancelar</button>
-  </div>
-
-  <!-- Lista de Clientes -->
-  <div id="listarClientes" class="formulario" style="display: none;">
-    <h2>Clientes Cadastrados</h2>
-    <ul id="clientesList">
-      <!-- Lista de clientes será gerada aqui -->
-    </ul>
-    <button id="btnVoltarListarClientes">Voltar</button>
+<!-- Modal de Adicionar Cliente -->
+<div id="clienteModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Adicionar Cliente</h3>
+    <form id="clienteForm">
+      <input type="hidden" id="clienteId">
+      <label>Nome: <input type="text" id="clienteNome" required></label><br>
+      <label>Telefone: <input type="text" id="clienteTelefone" required></label><br>
+      <label>Email: <input type="text" id="clienteEmail" required></label><br>
+      <label>CPF: <input type="text" id="clienteCpf" required></label><br>
+      <label>Endereço:</label>
+      <div id="enderecoFields">
+        <label>Rua: <input type="text" id="rua" required></label><br>
+        <label>Número: <input type="text" id="numero" required></label><br>
+        <label>Bairro: <input type="text" id="bairro" required></label><br>
+        <label>Cidade: <input type="text" id="cidade" required></label><br>
+        <label>Estado: <input type="text" id="estado" required></label><br>
+        <label>CEP: <input type="text" id="cep" required></label><br>
+      </div>
+      <button type="submit">Salvar</button>
+    </form>
   </div>
 </div>
-
-<script src="scripts.js"></script>
 </body>
 </html>
