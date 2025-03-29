@@ -1,52 +1,43 @@
 package com.farmacia.pharma_manager.backend.farmaceutico;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.farmacia.pharma_manager.backend.cargo.Cargo;
+import com.farmacia.pharma_manager.backend.endereco.Endereco;
+import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
 
-/**
- * Entidade representando um farmacêutico.
- * Esta classe é mapeada para a tabela "farmaceutico" no banco de dados.
- */
+import jakarta.persistence.*;
+
 @Entity
+@PrimaryKeyJoinColumn(name = "idFuncionario")
 @Table(name = "farmaceutico")
-public class Farmaceutico {
-
-    /**
-     * ID único do farmacêutico.
-     * Este campo é gerado automaticamente pelo banco de dados.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idFarmaceutico;
-
-    /**
-     * Turno de trabalho do farmacêutico (Exemplo: manhã, tarde, noite).
-     */
+public class Farmaceutico extends Funcionario {
+	
+	@Column(name = "idFuncionario", insertable = false, updatable = false)
+    private Integer id; // Campo adicional apenas para leitura
+	
+    @Column(name = "turno", nullable = false, length = 45)
     private String turno;
 
-    /**
-     * CRF (Conselho Regional de Farmácia) do farmacêutico.
-     */
+    @Column(name = "crf", nullable = false, length = 45)
     private String crf;
 
-    /**
-     * Carga horária semanal do farmacêutico.
-     */
+    @Column(name = "cargaHoraria", nullable = false)
     private Float cargaHoraria;
 
+    @OneToOne
+    @JoinColumn(name = "idFuncionario", referencedColumnName = "idFuncionario", insertable = false, updatable = false)
+    private Funcionario funcionario;
+
+
+    public Farmaceutico(String nome, String telefone, String cpf, Cargo cargo, Endereco endereco, String turno, String crf, Float cargaHoraria) {
+        super(nome, telefone, cpf, cargo, endereco);  // Chama o construtor da classe pai (Funcionario)
+        this.turno = turno;
+        this.crf = crf;
+        this.cargaHoraria = cargaHoraria;
+    }
+
+    public Farmaceutico() {}
+
     // Getters e Setters
-
-    public Integer getIdFarmaceutico() {
-        return idFarmaceutico;
-    }
-
-    public void setIdFarmaceutico(Integer idFarmaceutico) {
-        this.idFarmaceutico = idFarmaceutico;
-    }
-
     public String getTurno() {
         return turno;
     }

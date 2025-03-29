@@ -44,4 +44,8 @@ public class ProdutoService {
         }
         return false;
     }
+	
+	public List<Produto> buscarPorNome(String termo) {
+        return produtoRepository.findByNomeContainingIgnoreCaseOrderByNomeAsc(termo);
+    }
 }

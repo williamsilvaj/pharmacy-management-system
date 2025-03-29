@@ -1,5 +1,6 @@
 package test;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,18 +8,14 @@ import java.sql.SQLException;
 public class TesteConexaoBD {
 
   public static void main(String[] args) {
+    Dotenv dotenv = Dotenv.load();
 
-    String urlLocal = "jdbc:mysql://localhost:3306/pharmaManager";
-    String userLocal = "root";
-    String passwordLocal = "1234";
-
-    String url =
-        "jdbc:mysql://db-pharmamanager.cb0mek0yqv3r.us-east-2.rds.amazonaws.com:3306/pharmaManager";
-    String user = "admin";
-    String password = "!123456#";
+    String url = dotenv.get("DATABASE_URL");
+    String user = dotenv.get("DATABASE_USER");
+    String password = dotenv.get("DATABASE_PASSWORD");
 
     try {
-      Connection conn = DriverManager.getConnection(urlLocal, userLocal, passwordLocal);
+      Connection conn = DriverManager.getConnection(url, user, password);
       System.out.println("✅ Conexão bem-sucedida!");
       conn.close();
     } catch (SQLException e) {

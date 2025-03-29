@@ -1,11 +1,14 @@
 package com.farmacia.pharma_manager.backend.farmaceutico;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import java.util.List;
 
-/**
- * Repositório para realizar operações de banco de dados na tabela "farmaceutico".
- * Estende JpaRepository para fornecer métodos básicos como salvar, excluir e buscar.
- */
 public interface FarmaceuticoRepository extends JpaRepository<Farmaceutico, Integer> {
-    // Métodos adicionais de consulta podem ser adicionados aqui, caso necessário
+    
+    @Query("SELECT f FROM Farmaceutico f WHERE " +
+           "LOWER(f.funcionario.nome) LIKE LOWER(CONCAT('%', :termo, '%')) OR " +
+           "LOWER(f.crf) LIKE LOWER(CONCAT('%', :termo, '%'))")
+    List<Farmaceutico> findByNomeOrCrfContaining(@Param("termo") String termo);
 }

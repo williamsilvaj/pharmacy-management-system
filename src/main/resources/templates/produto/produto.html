@@ -1,32 +1,55 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Produto</title>
+    <title>Gerenciamento de Produtos</title>
     <link rel="stylesheet" href="/produto/produto.css">
     <script src="/produto/produto.js" defer></script>
-
 </head>
 <body>
-    <div class="container">
-        <h1>Criar Novo Produto</h1>
-        <form id="produtoForm">
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome" required>
+    <nav>
+        <h1>Pharma Manager</h1>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Produtos</a></li>
+            <li><a href="#">Clientes</a></li>
+            <li><a href="#">Vendas</a></li>
+        </ul>
+    </nav>
 
-            <label for="codigo">Código:</label>
-            <input type="number" id="codigo" name="codigo" required>
+    <main>
+        <h2>Gerenciamento de Produtos</h2>
+        <button id="addProductBtn">Adicionar Produto</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Código</th>
+                    <th>Fabricante</th>
+                    <th>Concentração</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody">
+                <!-- Produtos serão inseridos aqui -->
+            </tbody>
+        </table>
+    </main>
 
-            <label for="fabricante">Fabricante:</label>
-            <input type="text" id="fabricante" name="fabricante" required>
-
-            <label for="concentracao">Concentração:</label>
-            <input type="number" step="0.01" id="concentracao" name="concentracao" required>
-
-            <button type="submit">Criar Produto</button>
-        </form>
-        <p id="mensagem"></p>
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Adicionar Produto</h3>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <label>Nome: <input type="text" id="productName" required></label>
+                <label>Código: <input type="number" id="productCode" required></label>
+                <label>Fabricante: <input type="text" id="productManufacturer" required></label>
+                <label>Concentração: <input type="number" step="0.01" id="productConcentration" required></label>
+                <button type="submit">Salvar</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

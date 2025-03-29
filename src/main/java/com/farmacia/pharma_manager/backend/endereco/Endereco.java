@@ -42,15 +42,6 @@ public class Endereco {
 
     public Endereco() {}
 
-  public Endereco(int idEndereco, String rua, String numero, String bairro, String cidade, String estado, String cep) {
-    this.idEndereco = idEndereco;
-    this.rua = rua;
-    this.numero = numero;
-    this.bairro = bairro;
-    this.cidade = cidade;
-    this.estado = estado;
-    this.cep = cep;
-  }
 
   public int getIdEndereco() {
     return idEndereco;

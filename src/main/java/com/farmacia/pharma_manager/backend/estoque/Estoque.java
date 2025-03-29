@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "estoque")
@@ -16,7 +17,7 @@ public class Estoque {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEstoque;
     private Integer quantidade;
-    private LocalDate dataEntrada;
+    private Date dataEntrada;
 
     // Getters and Setters
     public Integer getIdEstoque() {
@@ -35,11 +36,11 @@ public class Estoque {
         this.quantidade = quantidade;
     }
 
-    public LocalDate getDataEntrada() {
+    public Date getDataEntrada() {
         return dataEntrada;
     }
 
-    public void setDataEntrada(LocalDate dataEntrada) {
+    public void setDataEntrada(Date dataEntrada) {
         this.dataEntrada = dataEntrada;
     }
 }

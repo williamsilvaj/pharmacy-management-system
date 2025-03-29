@@ -1,71 +1,57 @@
 package com.farmacia.pharma_manager.backend.cargo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
-/**
- * Controller class for handling HTTP requests related to cargos.
- */
 @RestController
 @RequestMapping("/cargos")
 public class CargoController {
 
-    @Autowired
-    private CargoService cargoService;
+  @Autowired
+  private CargoService cargoService;
 
-    /**
-     * Creates a new cargo.
-     *
-     * @param cargo The cargo object to create.
-     * @return The created cargo object.
-     */
-    @PostMapping
-    public Cargo createCargo(@RequestBody Cargo cargo) {
-        return cargoService.saveCargo(cargo);
-    }
+  // Endpoint para criar um cargo
+  @PostMapping
+  public ResponseEntity<Cargo> criarCargo(@RequestBody Cargo cargo) {
+    Cargo novoCargo = cargoService.criarCargo(cargo.getTitulo(), cargo.getDataContratacao(), cargo.getSalario());
+    return new ResponseEntity<>(novoCargo, HttpStatus.CREATED);
+  }
 
-    /**
-     * Retrieves a cargo by its ID.
-     *
-     * @param id The ID of the cargo to retrieve.
-     * @return The cargo object with the specified ID.
-     */
-    @GetMapping("/{id}")
-    public Cargo getCargoById(@PathVariable Integer id) {
-        return cargoService.getCargoById(id);
-    }
+  // Endpoint para obter todos os cargos
+  @GetMapping
+  public ResponseEntity<List<Cargo>> obterTodosCargos() {
+    List<Cargo> cargos = cargoService.obterTodosCargos();
+    return new ResponseEntity<>(cargos, HttpStatus.OK);
+  }
 
-    /**
-     * Retrieves all cargos.
-     *
-     * @return A list of all cargos.
-     */
-    @GetMapping
-    public List<Cargo> getAllCargos() {
-        return cargoService.getAllCargos();
-    }
+  // Endpoint para obter um cargo pelo ID
+  @GetMapping("/{id}")
+  public ResponseEntity<Cargo> obterCargoPorId(@PathVariable Integer id) {
+    Optional<Cargo> cargo = cargoService.obterCargoPorId(id);
+    return cargo.map(c -> new ResponseEntity<>(c, HttpStatus.OK))
+      .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
 
-    /**
-     * Deletes a cargo by its ID.
-     *
-     * @param id The ID of the cargo to delete.
-     */
-    @DeleteMapping("/{id}")
-    public void deleteCargo(@PathVariable Integer id) {
-        cargoService.deleteCargo(id);
+  // Endpoint para atualizar um cargo
+  @PutMapping("/{id}")
+  public ResponseEntity<Cargo> atualizarCargo(@PathVariable Integer id, @RequestBody Cargo novoCargo) {
+    try {
+      Cargo cargoAtualizado = cargoService.atualizarCargo(id, novoCargo);
+      return new ResponseEntity<>(cargoAtualizado, HttpStatus.OK);
+    } catch (IllegalArgumentException e) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+  }
 
-    /**
-     * Updates an existing cargo.
-     *
-     * @param id The ID of the cargo to update.
-     * @param cargo The cargo object with updated values.
-     * @return The updated cargo object.
-     */
-    @PutMapping("/{id}")
-    public Cargo updateCargo(@PathVariable Integer id, @RequestBody Cargo cargo) {
-        return cargoService.updateCargo(id, cargo);
-    }
+  // Endpoint para deletar um cargo
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deletarCargo(@PathVariable Integer id) {
+    cargoService.deletarCargo(id);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
 }

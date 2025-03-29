@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciamento de Despesas</title>
+  <link rel="stylesheet" href="/despesa/despesa.css">
+  <script src="/despesa/despesa.js" defer></script>
+</head>
+<body>
+<nav>
+  <h1>Pharma Manager</h1>
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Produtos</a></li>
+    <li><a href="#">Clientes</a></li>
+    <li><a href="#">Vendas</a></li>
+    <li><a href="#">Despesas</a></li>
+  </ul>
+</nav>
+
+<main>
+  <h2>Gerenciamento de Despesas</h2>
+  <button id="addExpenseBtn">Adicionar Despesa</button>
+  <table>
+    <thead>
+    <tr>
+      <th>Descrição</th>
+      <th>Data</th>
+      <th>Valor</th>
+      <th>Gerente</th>
+      <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody id="expenseTableBody">
+    <!-- Despesas serão inseridas aqui -->
+    </tbody>
+  </table>
+</main>
+
+<div id="expenseModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Adicionar Despesa</h3>
+    <form id="expenseForm">
+      <input type="hidden" id="expenseId">
+      <label>Descrição: <input type="text" id="expenseDescription" required></label>
+      <label>Data: <input type="date" id="expenseDate" required></label>
+      <label>Valor: <input type="number" step="0.01" id="expenseValue" required></label>
+      <label>Gerente:
+        <select id="expenseManager" required></select>
+      </label>
+      <button type="submit">Salvar</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

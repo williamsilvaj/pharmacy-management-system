@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Vendas</title>
+    <link rel="stylesheet" href="/venda/venda.css">
+    <script src="/venda/venda.js" defer></script>
+</head>
+<body>
+    <nav>
+        <h1>Pharma Manager</h1>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Produtos</a></li>
+            <li><a href="#">Clientes</a></li>
+            <li><a href="#">Vendas</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h2>Registro de Vendas</h2>
+        <button id="newSaleBtn">Nova Venda</button>
+        
+        <div id="saleForm" class="sale-form">
+            <div class="form-group">
+                <label>Cliente:</label>
+                <div class="search-container">
+                    <button id="searchClientBtn">Buscar</button>
+                </div>
+                <div id="selectedClient" class="selected-item"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Farmacêutico:</label>
+                <div class="search-container">
+                    <button id="searchPharmacistBtn">Buscar</button>
+                </div>
+                <div id="selectedPharmacist" class="selected-item"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Produtos:</label>
+                <div class="search-container">
+                    <button id="searchProductBtn">Adicionar Produto</button>
+                </div>
+                <div id="productResults"></div>
+                
+                <table id="saleItemsTable">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Preço Unitário</th>
+                            <th>Total</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="saleItemsBody">
+                        <!-- Itens da venda serão inseridos aqui -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="totals">
+                <div>Quantidade Total: <span id="totalQuantity">0</span></div>
+                <div>Valor Total: R$ <span id="totalValue">0.00</span></div>
+            </div>
+
+            <div class="form-actions">
+                <button id="cancelSaleBtn">Cancelar</button>
+                <button id="confirmSaleBtn">Confirmar Venda</button>
+            </div>
+        </div>
+
+        <table id="salesHistoryTable">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Farmacêutico</th>
+                    <th>Quantidade</th>
+                    <th>Valor Total</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="salesHistoryBody">
+                <!-- Histórico de vendas será inserido aqui -->
+            </tbody>
+        </table>
+    </main>
+
+    <!-- Modal para busca de clientes -->
+    <div id="clientModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Selecionar Cliente</h3>
+            <input type="text" id="clientModalSearch" placeholder="Digite o nome do cliente...">
+            <div id="clientModalResults" class="modal-results"></div>
+        </div>
+    </div>
+
+    <!-- Modal para busca de farmacêuticos -->
+    <div id="pharmacistModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Selecionar Farmacêutico</h3>
+            <input type="text" id="pharmacistModalSearch" placeholder="Digite o nome do farmacêutico...">
+            <div id="pharmacistModalResults" class="modal-results"></div>
+        </div>
+    </div>
+
+    <!-- Modal para busca de produtos -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Selecionar Produto</h3>
+            <input type="text" id="productModalSearch" placeholder="Digite o nome do produto...">
+            <div id="productModalResults" class="modal-results"></div>
+        </div>
+    </div>
+</body>
+</html>

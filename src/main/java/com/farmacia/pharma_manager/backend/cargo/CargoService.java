@@ -2,68 +2,54 @@ package com.farmacia.pharma_manager.backend.cargo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
-/**
- * Service class for handling the business logic of managing cargos.
- */
 @Service
 public class CargoService {
 
-    @Autowired
-    private CargoRepository cargoRepository;
+  @Autowired
+  private CargoRepository cargoRepository;
 
-    /**
-     * Creates or updates a cargo.
-     *
-     * @param cargo The cargo object to save or update.
-     * @return The saved or updated cargo object.
-     */
-    public Cargo saveCargo(Cargo cargo) {
-        return cargoRepository.save(cargo);
-    }
+  public Cargo criarCargo(String titulo, Date dataContratacao, Double salario) {
+    Cargo cargo = new Cargo(titulo, dataContratacao, salario);
+    return cargoRepository.save(cargo);
+  }
 
-    /**
-     * Retrieves a cargo by its ID.
-     *
-     * @param id The ID of the cargo to retrieve.
-     * @return The cargo object, or null if not found.
-     */
-    public Cargo getCargoById(Integer id) {
-        return cargoRepository.findById(id).orElse(null);
-    }
+  public List<Cargo> obterTodosCargos() {
+    return cargoRepository.findAll();
+  }
 
-    /**
-     * Deletes a cargo by its ID.
-     *
-     * @param id The ID of the cargo to delete.
-     */
-    public void deleteCargo(Integer id) {
-        cargoRepository.deleteById(id);
-    }
+  public Optional<Cargo> obterCargoPorId(Integer id) {
+    return cargoRepository.findById(id);
+  }
 
-    /**
-     * Retrieves all cargos.
-     *
-     * @return A list of all cargos.
-     */
-    public List<Cargo> getAllCargos() {
-        return cargoRepository.findAll();
-    }
+  public Cargo atualizarCargo(Integer id, Cargo cargoAtualizado) {
+    Optional<Cargo> cargoExistente = cargoRepository.findById(id);
 
-    /**
-     * Updates an existing cargo.
-     *
-     * @param id The ID of the cargo to update.
-     * @param cargo The cargo object with updated values.
-     * @return The updated cargo object, or null if not found.
-     */
-    public Cargo updateCargo(Integer id, Cargo cargo) {
-        if (cargoRepository.existsById(id)) {
-            cargo.setIdCargo(id); // Ensure the ID remains the same for update
-            return cargoRepository.save(cargo);
-        }
-        return null;
+    if (cargoExistente.isPresent()) {
+      Cargo cargo = cargoExistente.get();
+
+      if (cargoAtualizado.getTitulo() != null && !cargoAtualizado.getTitulo().isEmpty()) {
+        cargo.setTitulo(cargoAtualizado.getTitulo());
+      }
+      if (cargoAtualizado.getDataContratacao() != null) {
+        cargo.setDataContratacao(cargoAtualizado.getDataContratacao());
+      }
+      if (cargoAtualizado.getSalario() != null) {
+        cargo.setSalario(cargoAtualizado.getSalario());
+      }
+
+      return cargoRepository.save(cargo);
+    } else {
+      throw new IllegalArgumentException("Cargo não encontrado para o ID: " + id);
     }
+  }
+
+  public void deletarCargo(Integer id) {
+    Optional<Cargo> cargo = cargoRepository.findById(id);
+    cargo.ifPresent(value -> cargoRepository.delete(value));
+  }
+
 }

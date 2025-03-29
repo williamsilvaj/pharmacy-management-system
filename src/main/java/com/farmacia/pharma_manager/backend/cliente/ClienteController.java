@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/clientes")
 public class ClienteController {
 
@@ -32,6 +33,12 @@ public class ClienteController {
         Optional<Cliente> cliente = clienteService.buscarPorCpf(cpf);
         return cliente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+	
+	@GetMapping("/nome/{nome}")
+	public ResponseEntity<List<Cliente>> buscarPorNome(@PathVariable String nome) {
+		List<Cliente> clientes = clienteService.buscarPorNome(nome);
+		return ResponseEntity.ok(clientes);
+	}
 
     @PostMapping
     public Cliente criar(@RequestBody Cliente cliente) {

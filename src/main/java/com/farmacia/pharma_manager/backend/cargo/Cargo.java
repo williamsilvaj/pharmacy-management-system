@@ -1,31 +1,41 @@
 package com.farmacia.pharma_manager.backend.cargo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.util.Date;
 
-/**
- * Represents a Cargo (position) in the company.
- */
 @Entity
-@Table(name = "cargo")  // Specify the table name in the database
+@Table(name = "cargo")
 public class Cargo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idCargo")
     private Integer idCargo;
 
+    @Column(name = "titulo", nullable = false, length = 45)
     private String titulo;
 
+    @Column(name = "dataContratacao")
+    @Temporal(TemporalType.DATE)
     private Date dataContratacao;
 
+    @Column(name = "salario")
     private Double salario;
 
-    // Getters and setters
+    // Construtor
+    public Cargo(String titulo, Date dataContratacao, Double salario) {
 
+        if (titulo == null || titulo.isEmpty()) {
+            throw new IllegalArgumentException("Título do cargo não pode ser vazio.");
+        }
+        this.titulo = titulo;
+        this.salario = salario;
+        this.dataContratacao = dataContratacao;
+    }
+
+    public Cargo() {}
+
+    // Getters e Setters
     public Integer getIdCargo() {
         return idCargo;
     }
@@ -56,5 +66,16 @@ public class Cargo {
 
     public void setSalario(Double salario) {
         this.salario = salario;
+    }
+
+    // Método toString() para exibição
+    @Override
+    public String toString() {
+        return "Cargo{" +
+                "idCargo=" + idCargo +
+                ", titulo='" + titulo + '\'' +
+                ", dataContratacao=" + dataContratacao +
+                ", salario=" + salario +
+                '}';
     }
 }
