@@ -4,6 +4,7 @@ import com.farmacia.pharma_manager.backend.gerente.Gerente;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -20,7 +21,7 @@ public class Despesa {
 
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date data;
+    private LocalDate data;
 
     @Column(nullable = false)
     private Double valor;
@@ -46,11 +47,11 @@ public class Despesa {
         this.descricao = descricao;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
