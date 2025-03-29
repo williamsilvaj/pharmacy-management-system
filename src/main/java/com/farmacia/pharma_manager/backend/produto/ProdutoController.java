@@ -16,8 +16,8 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
-        /**
-     * Método para redirecionar para a página de produtos.
+    /**
+     * Metodo para redirecionar para a página de produtos.
      */
     @GetMapping("/pagina")
     public String redirecionarParaProdutoPage() {

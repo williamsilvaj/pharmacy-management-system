@@ -28,7 +28,7 @@ public abstract class Funcionario {
     @JoinColumn(name = "idCargo", nullable = false)
     private Cargo cargo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idEndereco", nullable = false)
     private Endereco endereco;
 
