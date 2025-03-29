@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Funcionário</title>
+  <link rel="stylesheet" href="/funcionario/funcionario.css">
+  <script src="/funcionario/funcionario.js" defer></script>
+</head>
+<body>
+<nav>
+  <h1>Pharma Manager</h1>
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Funcionários</a></li>
+    <li><a href="#">Produtos</a></li>
+    <li><a href="#">Vendas</a></li>
+  </ul>
+</nav>
+
+<main>
+  <h2>Cadastro de Funcionário</h2>
+  <button id="addFuncionarioBtn">Adicionar Funcionário</button>
+  <table>
+    <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Telefone</th>
+      <th>CPF</th>
+      <th>Cargo</th>
+      <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody id="funcionarioTableBody">
+    <!-- Funcionários serão inseridos aqui -->
+    </tbody>
+  </table>
+</main>
+
+<!-- Modal de Adicionar Funcionário -->
+<div id="funcionarioModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Adicionar Funcionário</h3>
+    <form id="funcionarioForm">
+      <input type="hidden" id="funcionarioId">
+      <label>Nome: <input type="text" id="funcionarioNome" required></label>
+      <label>Telefone: <input type="text" id="funcionarioTelefone" required></label>
+      <label>CPF: <input type="text" id="funcionarioCpf" required></label>
+      <label>Endereço:</label>
+      <div id="enderecoFields">
+        <label>Rua: <input type="text" id="rua" required></label><br>
+        <label>Número: <input type="text" id="numero" required></label><br>
+        <label>Bairro: <input type="text" id="bairro" required></label><br>
+        <label>Cidade: <input type="text" id="cidade" required></label><br>
+        <label>Estado: <input type="text" id="estado" required></label><br>
+        <label>CEP: <input type="text" id="cep" required></label><br>
+      </div>
+      <input type="hidden" id="cargo" name="cargo" required readonly><br>
+
+      <label>Tipo:</label>
+      <input type="radio" id="tipoFarmaceutico" name="tipo" value="Farmaceutico" checked>
+      <label for="tipoFarmaceutico">Farmacêutico</label>
+      <input type="radio" id="tipoGerente" name="tipo" value="Gerente">
+      <label for="tipoGerente">Gerente</label><br>
+
+      <div id="farmaceuticoFields">
+        <label for="turno">Turno:</label>
+        <input type="text" id="turno" name="turno"><br>
+
+        <label for="crf">CRF:</label>
+        <input type="text" id="crf" name="crf"><br>
+
+        <label for="cargaHoraria">Carga Horária:</label>
+        <input type="text" id="cargaHoraria" name="cargaHoraria"><br>
+      </div>
+
+      <div id="gerenteFields" style="display: none;">
+        <label for="funcionariosSupervisionados">Funcionários Supervisionados (IDs separados por vírgula):</label>
+        <input type="text" id="funcionariosSupervisionados" name="funcionariosSupervisionados"><br>
+      </div>
+
+      <button type="submit">Salvar</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

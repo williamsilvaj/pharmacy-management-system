@@ -16,8 +16,8 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
-        /**
-     * Método para redirecionar para a página de produtos.
+    /**
+     * Metodo para redirecionar para a página de produtos.
      */
     @GetMapping("/pagina")
     public String redirecionarParaProdutoPage() {
@@ -88,5 +88,11 @@ public class ProdutoController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+	
+	@GetMapping("/busca/{termo}")
+    public ResponseEntity<List<Produto>> buscarPorNome(@PathVariable String termo) {
+        List<Produto> produtos = produtoService.buscarPorNome(termo);
+        return ResponseEntity.ok(produtos);
     }
 }

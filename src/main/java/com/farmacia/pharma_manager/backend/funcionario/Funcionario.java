@@ -5,6 +5,7 @@ import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import com.farmacia.pharma_manager.backend.gerente.Gerente;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -28,13 +29,14 @@ public abstract class Funcionario {
     @JoinColumn(name = "idCargo", nullable = false)
     private Cargo cargo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idEndereco", nullable = false)
     private Endereco endereco;
 
     // Supervisor desse funcionario
     @ManyToOne
     @JoinColumn(name = "idGerente", nullable = true)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Gerente supervisor;
 
 

@@ -25,6 +25,12 @@ public class FarmaceuticoController {
   public List<Farmaceutico> obterTodosFarmaceuticos() {
     return farmaceuticoService.obterTodosFarmaceuticos();
   }
+  
+  @GetMapping("/busca/{termo}")
+    public ResponseEntity<List<Farmaceutico>> buscarPorNomeOuCrf(@PathVariable String termo) {
+		List<Farmaceutico> farmaceuticos = farmaceuticoService.buscarPorNomeOuCrf(termo);
+        return ResponseEntity.ok(farmaceuticos);
+    }
 
   @GetMapping("/{id}")
   public ResponseEntity<Farmaceutico> obterFarmaceuticoPorId(@PathVariable Integer id) {

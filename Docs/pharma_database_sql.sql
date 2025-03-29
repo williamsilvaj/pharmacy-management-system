@@ -130,7 +130,6 @@ CREATE TABLE pharmabd.cliente (
 -- -----------------------------------------------------
 CREATE TABLE pharmabd.venda (
   idVenda INT NOT NULL AUTO_INCREMENT,
-  nomeProduto VARCHAR(45) NOT NULL,
   quantidade INT NOT NULL,
   valor DOUBLE NOT NULL,
   data DATE NOT NULL,
