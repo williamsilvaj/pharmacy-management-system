@@ -1,6 +1,7 @@
 package com.farmacia.pharma_manager.backend.despesa;
 
 import com.farmacia.pharma_manager.backend.gerente.Gerente;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -18,7 +19,7 @@ public class Despesa {
     private String descricao;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date data;
 
     @Column(nullable = false)
