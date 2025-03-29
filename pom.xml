@@ -21,11 +21,10 @@
       <id>central</id>
       <url>https://repo.maven.apache.org/maven2</url>
     </repository>
-
     <repository>
-      <id>itext</id>
-      <name>iText Repository - releases</name>
-      <url>https://repo.itextsupport.com/releases</url>
+        <id>itext</id>
+        <name>iText Repository - releases</name>
+        <url>https://repo.itextsupport.com/releases</url>
     </repository>
   </repositories>
 
@@ -80,6 +79,12 @@
     <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+<dependency>
+    <groupId>com.itextpdf</groupId>
+    <artifactId>itext7-core</artifactId>
+    <version>8.0.1</version>
+    <type>pom</type>
 </dependency>
 
     <dependency>

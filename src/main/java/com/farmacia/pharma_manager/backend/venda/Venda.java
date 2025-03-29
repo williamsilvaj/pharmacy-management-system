@@ -2,10 +2,8 @@ package com.farmacia.pharma_manager.backend.venda;
 
 import com.farmacia.pharma_manager.backend.cliente.Cliente;
 import com.farmacia.pharma_manager.backend.farmaceutico.Farmaceutico;
-import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import jakarta.persistence.*;
-
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "venda")
@@ -13,49 +11,28 @@ public class Venda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idVenda")
     private Integer idVenda;
 
-    @Column(nullable = false, length = 45)
-    private String nomeProduto;
-
-    @Column(nullable = false)
     private Integer quantidade;
-
-    @Column(nullable = false)
     private Double valor;
-
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
-    private Date data;
+    private LocalDate data;
 
     @ManyToOne
-    @JoinColumn(name = "idFarmaceutico", nullable = false)
+    @JoinColumn(name = "idFarmaceutico", referencedColumnName = "idFuncionario")
     private Farmaceutico farmaceutico;
 
     @ManyToOne
-    @JoinColumn(name = "idCliente", nullable = false)
+    @JoinColumn(name = "idCliente", referencedColumnName = "idCliente")
     private Cliente cliente;
 
-    @ManyToOne
-    @JoinColumn(name = "idEndereco", nullable = false)
-    private Endereco endereco;
-
     // Getters e Setters
+
     public Integer getIdVenda() {
         return idVenda;
     }
 
     public void setIdVenda(Integer idVenda) {
         this.idVenda = idVenda;
-    }
-
-    public String getNomeProduto() {
-        return nomeProduto;
-    }
-
-    public void setNomeProduto(String nomeProduto) {
-        this.nomeProduto = nomeProduto;
     }
 
     public Integer getQuantidade() {
@@ -74,11 +51,11 @@ public class Venda {
         this.valor = valor;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
@@ -96,13 +73,5 @@ public class Venda {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
     }
 }
