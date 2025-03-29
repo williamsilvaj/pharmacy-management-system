@@ -2,9 +2,7 @@ package com.farmacia.pharma_manager.backend.venda;
 
 import com.farmacia.pharma_manager.backend.cliente.Cliente;
 import com.farmacia.pharma_manager.backend.farmaceutico.Farmaceutico;
-import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import jakarta.persistence.*;
-
 import java.util.Date;
 
 @Entity
@@ -13,11 +11,7 @@ public class Venda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idVenda")
     private Integer idVenda;
-
-    @Column(nullable = false, length = 45)
-    private String nomeProduto;
 
     @Column(nullable = false)
     private Integer quantidade;
@@ -37,25 +31,13 @@ public class Venda {
     @JoinColumn(name = "idCliente", nullable = false)
     private Cliente cliente;
 
-    @ManyToOne
-    @JoinColumn(name = "idEndereco", nullable = false)
-    private Endereco endereco;
-
-    // Getters e Setters
+    // Getters and Setters
     public Integer getIdVenda() {
         return idVenda;
     }
 
     public void setIdVenda(Integer idVenda) {
         this.idVenda = idVenda;
-    }
-
-    public String getNomeProduto() {
-        return nomeProduto;
-    }
-
-    public void setNomeProduto(String nomeProduto) {
-        this.nomeProduto = nomeProduto;
     }
 
     public Integer getQuantidade() {
@@ -96,13 +78,5 @@ public class Venda {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
     }
 }

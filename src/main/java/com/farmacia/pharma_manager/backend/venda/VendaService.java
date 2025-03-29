@@ -1,5 +1,6 @@
 package com.farmacia.pharma_manager.backend.venda;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,38 +9,35 @@ import java.util.Optional;
 @Service
 public class VendaService {
 
-    private final VendaRepository vendaRepository;
+    @Autowired
+    private VendaRepository vendaRepository;
 
-    public VendaService(VendaRepository vendaRepository) {
-        this.vendaRepository = vendaRepository;
-    }
-
-    public List<Venda> listarTodas() {
-        return vendaRepository.findAll();
-    }
-
-    public Optional<Venda> buscarPorId(Integer id) {
-        return vendaRepository.findById(id);
-    }
-
-    public Venda salvar(Venda venda) {
+    // Criar nova venda
+    public Venda criarVenda(Venda venda) {
         return vendaRepository.save(venda);
     }
 
-    public Venda atualizar(Integer id, Venda vendaAtualizada) {
-        return vendaRepository.findById(id).map(venda -> {
-            venda.setNomeProduto(vendaAtualizada.getNomeProduto());
-            venda.setQuantidade(vendaAtualizada.getQuantidade());
-            venda.setValor(vendaAtualizada.getValor());
-            venda.setData(vendaAtualizada.getData());
-            venda.setFarmaceutico(vendaAtualizada.getFarmaceutico());
-            venda.setCliente(vendaAtualizada.getCliente());
-            venda.setEndereco(vendaAtualizada.getEndereco());
-            return vendaRepository.save(venda);
-        }).orElseThrow(() -> new RuntimeException("Venda não encontrada"));
+    // Listar todas as vendas
+    public List<Venda> listarVendas() {
+        return vendaRepository.findAll();
     }
 
-    public void deletar(Integer id) {
+    // Buscar venda por ID
+    public Optional<Venda> buscarVendaPorId(Integer id) {
+        return vendaRepository.findById(id);
+    }
+
+    // Atualizar venda
+    public Venda atualizarVenda(Integer id, Venda venda) {
+        if (vendaRepository.existsById(id)) {
+            venda.setIdVenda(id);
+            return vendaRepository.save(venda);
+        }
+        return null; // Ou lançar uma exceção se não encontrado
+    }
+
+    // Deletar venda
+    public void deletarVenda(Integer id) {
         vendaRepository.deleteById(id);
     }
 }

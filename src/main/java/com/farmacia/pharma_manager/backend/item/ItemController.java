@@ -3,17 +3,34 @@ package com.farmacia.pharma_manager.backend.item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
 @RequestMapping("/itens")
 public class ItemController {
 
     @Autowired
     private ItemService itemService;
+
+        @GetMapping("/relatorio-pdf")
+    public ResponseEntity<byte[]> gerarRelatorioPdf() {
+        byte[] pdfBytes = itemService.gerarRelatorioEstoquePdf();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"relatorio_estoque.pdf\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
+    }
 
     @PostMapping
     public ResponseEntity<Item> criarItem(@RequestBody Item item) {

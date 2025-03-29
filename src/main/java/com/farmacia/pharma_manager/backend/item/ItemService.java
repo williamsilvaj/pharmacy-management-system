@@ -17,6 +17,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+
+
 @Service
 public class ItemService {
 
@@ -71,14 +73,15 @@ public class ItemService {
         return relatorio;
     }
 
-        public byte[] gerarRelatorioEstoquePdf() {
+    public byte[] gerarRelatorioEstoquePdf() {
         List<Item> itens = itemRepository.findAll();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try (PdfWriter writer = new PdfWriter(out);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (PdfWriter writer = new PdfWriter(baos);
              PdfDocument pdfDoc = new PdfDocument(writer);
              Document document = new Document(pdfDoc)) {
+
             document.add(new Paragraph("Relatório de Estoque").setBold().setFontSize(16));
-            float[] colWidths = {100f, 100f, 100f, 100f};
+            float[] colWidths = {150, 100, 100, 100};
             Table table = new Table(colWidths);
             table.addHeaderCell(new Cell().add(new Paragraph("Produto")));
             table.addHeaderCell(new Cell().add(new Paragraph("Quantidade")));
@@ -94,6 +97,6 @@ public class ItemService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return out.toByteArray();
+        return baos.toByteArray();
     }
 }

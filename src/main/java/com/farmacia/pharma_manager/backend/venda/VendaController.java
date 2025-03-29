@@ -1,49 +1,59 @@
 package com.farmacia.pharma_manager.backend.venda;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/vendas")
 public class VendaController {
 
-    private final VendaService vendaService;
+    @Autowired
+    private VendaService vendaService;
 
-    public VendaController(VendaService vendaService) {
-        this.vendaService = vendaService;
-    }
-
+    // Endpoint para listar todas as vendas
     @GetMapping
-    public List<Venda> listarTodas() {
-        return vendaService.listarTodas();
+    public List<Venda> listarVendas() {
+        return vendaService.listarVendas();
     }
 
+    // Endpoint para buscar uma venda por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Venda> buscarPorId(@PathVariable Integer id) {
-        Optional<Venda> venda = vendaService.buscarPorId(id);
-        return venda.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Venda> buscarVendaPorId(@PathVariable Integer id) {
+        Optional<Venda> venda = vendaService.buscarVendaPorId(id);
+        return venda.map(ResponseEntity::ok)
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    // Endpoint para criar uma nova venda
     @PostMapping
-    public Venda criar(@RequestBody Venda venda) {
-        return vendaService.salvar(venda);
+    public ResponseEntity<Venda> criarVenda(@RequestBody Venda venda) {
+        Venda novaVenda = vendaService.criarVenda(venda);
+        return new ResponseEntity<>(novaVenda, HttpStatus.CREATED);
     }
 
+    // Endpoint para atualizar uma venda
     @PutMapping("/{id}")
-    public ResponseEntity<Venda> atualizar(@PathVariable Integer id, @RequestBody Venda venda) {
-        try {
-            return ResponseEntity.ok(vendaService.atualizar(id, venda));
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Venda> atualizarVenda(@PathVariable Integer id, @RequestBody Venda venda) {
+        Venda vendaAtualizada = vendaService.atualizarVenda(id, venda);
+        if (vendaAtualizada != null) {
+            return new ResponseEntity<>(vendaAtualizada, HttpStatus.OK);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    // Endpoint para deletar uma venda
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        vendaService.deletar(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletarVenda(@PathVariable Integer id) {
+        if (vendaService.buscarVendaPorId(id).isPresent()) {
+            vendaService.deletarVenda(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
