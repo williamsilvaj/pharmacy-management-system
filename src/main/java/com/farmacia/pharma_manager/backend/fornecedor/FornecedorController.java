@@ -3,6 +3,7 @@ package com.farmacia.pharma_manager.backend.fornecedor;
 import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import com.farmacia.pharma_manager.backend.endereco.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/fornecedores")
 public class FornecedorController {
 
@@ -20,7 +21,13 @@ public class FornecedorController {
     @Autowired
     private EnderecoService enderecoService;
 
-    // Criar um novo Fornecedor
+  @GetMapping("/pagina")
+  public String redirecionarParaFornecedorPage() {
+    return "fornecedor/fornecedor";
+  }
+
+
+  // Criar um novo Fornecedor
     @PostMapping
     public ResponseEntity<Fornecedor> criarFornecedor(@RequestBody Fornecedor fornecedor) {
         Optional<Endereco> enderecoOptional = enderecoService.buscarPorId(fornecedor.getEndereco().getIdEndereco());

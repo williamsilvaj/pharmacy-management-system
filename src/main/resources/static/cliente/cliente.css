@@ -6,7 +6,7 @@ body {
 }
 
 nav {
-  background: #28a745; /* Alterei para um verde, já que é comum associar a clientes com cor positiva */
+  background: #007bff; /* Alterei para um verde, já que é comum associar a clientes com cor positiva */
   color: white;
   padding: 10px;
   display: flex;
@@ -50,7 +50,7 @@ th, td {
 }
 
 th {
-  background: #28a745; /* Mesma cor do nav para consistência */
+  background: #007bff; /* Mesma cor do nav para consistência */
   color: white;
 }
 

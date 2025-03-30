@@ -2,11 +2,11 @@ package com.farmacia.pharma_manager.backend.cliente;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.stereotype.Controller;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @CrossOrigin("*")
 @RequestMapping("/clientes")
 public class ClienteController {
@@ -17,7 +17,13 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    @GetMapping
+  @GetMapping("/pagina")
+  public String redirecionarParaClientePage() {
+    return "cliente/cliente";
+  }
+
+
+  @GetMapping
     public List<Cliente> listarTodos() {
         return clienteService.listarTodos();
     }
@@ -33,7 +39,7 @@ public class ClienteController {
         Optional<Cliente> cliente = clienteService.buscarPorCpf(cpf);
         return cliente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-	
+
 	@GetMapping("/nome/{nome}")
 	public ResponseEntity<List<Cliente>> buscarPorNome(@PathVariable String nome) {
 		List<Cliente> clientes = clienteService.buscarPorNome(nome);
