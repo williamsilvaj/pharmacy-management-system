@@ -59,7 +59,10 @@ public class ItemService {
         }
         return false;
     }
-
+// Adicione este método ao serviço
+public List<Item> listarItensPorDataEntrada(LocalDate dataInicio, LocalDate dataFim) {
+    return itemRepository.findByEstoqueDataEntradaBetween(dataInicio, dataFim);
+}
     public int countItensDisponiveisPorProduto(Integer idProduto) {
         return itemRepository.countByProdutoIdProdutoAndVendaIsNull(idProduto);
     }
@@ -67,7 +70,7 @@ public class ItemService {
     public List<Item> listarItensDisponiveisPorProduto(Integer idProduto) {
         return itemRepository.findByProdutoIdProdutoAndVendaIsNull(idProduto);
     }
-	
+
 	public List<Item> findItensPorVenda(Integer idVenda) {
         return itemRepository.findByVendaIdVenda(idVenda);
     }
@@ -120,5 +123,32 @@ public class ItemService {
         }
         return baos.toByteArray();
     }
-	
+
+    // Altere o método gerarRelatorioEstoquePdf para aceitar uma lista de itens
+public byte[] gerarRelatorioPdf(List<Item> itens) {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    try (PdfWriter writer = new PdfWriter(baos);
+         PdfDocument pdfDoc = new PdfDocument(writer);
+         Document document = new Document(pdfDoc)) {
+
+        document.add(new Paragraph("Relatório de Estoque").setBold().setFontSize(16));
+        float[] colWidths = {150, 100, 100, 100};
+        Table table = new Table(colWidths);
+        table.addHeaderCell(new Cell().add(new Paragraph("Produto")));
+        table.addHeaderCell(new Cell().add(new Paragraph("Quantidade")));
+        table.addHeaderCell(new Cell().add(new Paragraph("Valor")));
+        table.addHeaderCell(new Cell().add(new Paragraph("Data Vencimento")));
+        for (Item item : itens) {
+            table.addCell(new Cell().add(new Paragraph(item.getProduto().getNome())));
+            table.addCell(new Cell().add(new Paragraph(String.valueOf(item.getEstoque().getQuantidade()))));
+            table.addCell(new Cell().add(new Paragraph(String.format("%.2f", item.getValor()))));
+            table.addCell(new Cell().add(new Paragraph(item.getDataVencimento().toString())));
+        }
+        document.add(table);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return baos.toByteArray();
+}
+
 }

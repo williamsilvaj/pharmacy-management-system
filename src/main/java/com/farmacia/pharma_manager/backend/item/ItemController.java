@@ -36,6 +36,7 @@ public class ItemController {
                 .body(pdfBytes);
     }
 
+
     @PostMapping
     public ResponseEntity<Item> criarItem(@RequestBody Item item) {
         Item novoItem = itemService.criarItem(item);
@@ -71,7 +72,7 @@ public class ItemController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-	
+
 	@GetMapping("/disponiveis/quantidade/{idProduto}")
     public ResponseEntity<Map<String, Integer>> getQuantidadeDisponivel(@PathVariable Integer idProduto) {
         int quantidade = itemService.countItensDisponiveisPorProduto(idProduto);
@@ -82,17 +83,17 @@ public class ItemController {
     public ResponseEntity<List<Item>> getItensDisponiveis(
             @PathVariable Integer idProduto,
             @RequestParam(required = false) Integer limit) {
-        
+
         List<Item> itens;
         if (limit != null && limit > 0) {
             itens = itemService.listarItensDisponiveisPorProdutoComLimite(idProduto, limit);
         } else {
             itens = itemService.listarItensDisponiveisPorProduto(idProduto);
         }
-        
+
         return ResponseEntity.ok(itens);
     }
-	
+
 	@GetMapping("/por-venda/{idVenda}")
 	public ResponseEntity<List<Item>> getItensPorVenda(@PathVariable Integer idVenda) {
 		List<Item> itens = itemService.findItensPorVenda(idVenda);
