@@ -10,7 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const clientModal = document.getElementById("clientModal");
     const pharmacistModal = document.getElementById("pharmacistModal");
     const productModal = document.getElementById("productModal");
-    
+    const generateReportBtn = document.getElementById('generateReportBtn');
+	const reportModal = document.getElementById('reportModal');
+	const confirmGenerateReport = document.getElementById('confirmGenerateReport');
+
     // Variáveis de estado
     let selectedClient = null;
     let selectedPharmacist = null;
@@ -54,6 +57,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     
     document.getElementById("productModalSearch").addEventListener("input", searchProducts);
+	
+	//Relatorio de Vendas
+	document.getElementById('generateReportBtn').addEventListener('click', () => {
+    document.getElementById('reportModal').style.display = 'flex';
+	});
+	document.getElementById('confirmGenerateReport').addEventListener('click', generateSalesReport);
+
     
     // Fechar modais
     document.querySelectorAll(".close").forEach(closeBtn => {
@@ -368,4 +378,36 @@ Itens:\n${itemsDetails}`);
 			alert(`Erro ao carregar detalhes: ${error.message}`);
 		}
 	};
+	
+	async function generateSalesReport() {
+		const startDate = document.getElementById('reportStartDate').value;
+		const endDate = document.getElementById('reportEndDate').value;
+		
+		if (!startDate || !endDate) {
+			alert('Selecione ambas as datas');
+			return;
+		}
+
+		try {
+			const response = await fetch(`/vendas/relatorio?dataInicio=${startDate}&dataFim=${endDate}`);
+			
+			if (!response.ok) {
+				const error = await response.text();
+				throw new Error(error || 'Erro ao gerar relatório');
+			}
+
+			// Download do PDF
+			const blob = await response.blob();
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `relatorio_vendas_${startDate}_a_${endDate}.pdf`;
+			a.click();
+			window.URL.revokeObjectURL(url);
+			
+			document.getElementById('reportModal').style.display = 'none';
+		} catch (error) {
+			alert(`Erro: ${error.message}`);
+		}
+	}
 });
