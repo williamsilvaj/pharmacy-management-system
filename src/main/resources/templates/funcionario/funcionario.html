@@ -8,81 +8,95 @@
   <script src="/funcionario/funcionario.js" defer></script>
 </head>
 <body>
-<nav>
-  <h1>Pharma Manager</h1>
-  <ul>
-    <li><a href="#">Home</a></li>
-    <li><a href="#">Funcionários</a></li>
-    <li><a href="#">Produtos</a></li>
-    <li><a href="#">Vendas</a></li>
-  </ul>
-</nav>
+  <nav>
+    <h1>Pharma Manager</h1>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Funcionários</a></li>
+      <li><a href="#">Produtos</a></li>
+      <li><a href="#">Vendas</a></li>
+    </ul>
+  </nav>
 
-<main>
-  <h2>Cadastro de Funcionário</h2>
-  <button id="addFuncionarioBtn">Adicionar Funcionário</button>
-  <table>
-    <thead>
-    <tr>
-      <th>Nome</th>
-      <th>Telefone</th>
-      <th>CPF</th>
-      <th>Cargo</th>
-      <th>Ações</th>
-    </tr>
-    </thead>
-    <tbody id="funcionarioTableBody">
-    <!-- Funcionários serão inseridos aqui -->
-    </tbody>
-  </table>
-</main>
+  <main>
+    <h2>Cadastro de Funcionário</h2>
+    <button id="addFuncionarioBtn">Adicionar Funcionário</button>
+    <table id="funcionarioTable">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Telefone</th>
+          <th>CPF</th>
+          <th>Cargo</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="funcionarioTableBody">
+        <!-- Funcionários serão inseridos aqui -->
+      </tbody>
+    </table>
+  </main>
 
-<!-- Modal de Adicionar Funcionário -->
-<div id="funcionarioModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h3>Adicionar Funcionário</h3>
-    <form id="funcionarioForm">
-      <input type="hidden" id="funcionarioId">
-      <label>Nome: <input type="text" id="funcionarioNome" required></label>
-      <label>Telefone: <input type="text" id="funcionarioTelefone" required></label>
-      <label>CPF: <input type="text" id="funcionarioCpf" required></label>
-      <label>Endereço:</label>
-      <div id="enderecoFields">
-        <label>Rua: <input type="text" id="rua" required></label><br>
-        <label>Número: <input type="text" id="numero" required></label><br>
-        <label>Bairro: <input type="text" id="bairro" required></label><br>
-        <label>Cidade: <input type="text" id="cidade" required></label><br>
-        <label>Estado: <input type="text" id="estado" required></label><br>
-        <label>CEP: <input type="text" id="cep" required></label><br>
-      </div>
-      <input type="hidden" id="cargo" name="cargo" required readonly><br>
+  <!-- Modal de Adicionar/Editar Funcionário -->
+  <div id="funcionarioModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Adicionar Funcionário</h3>
+      <form id="funcionarioForm">
+        <input type="hidden" id="funcionarioId">
+        <div class="form-group">
+          <label>Nome:</label>
+          <input type="text" id="funcionarioNome" required>
+        </div>
+        <div class="form-group">
+          <label>Telefone:</label>
+          <input type="text" id="funcionarioTelefone" required>
+        </div>
+        <div class="form-group">
+          <label>CPF:</label>
+          <input type="text" id="funcionarioCpf" required>
+        </div>
+        <fieldset class="form-group">
+          <legend>Endereço</legend>
+          <label>Rua: <input type="text" id="rua" required></label>
+          <label>Número: <input type="text" id="numero" required></label>
+          <label>Bairro: <input type="text" id="bairro" required></label>
+          <label>Cidade: <input type="text" id="cidade" required></label>
+          <label>Estado: <input type="text" id="estado" required></label>
+          <label>CEP: <input type="text" id="cep" required></label>
+        </fieldset>
+        <!-- Campo oculto para cargo -->
+        <input type="hidden" id="cargo" name="cargo" required readonly>
 
-      <label>Tipo:</label>
-      <input type="radio" id="tipoFarmaceutico" name="tipo" value="Farmaceutico" checked>
-      <label for="tipoFarmaceutico">Farmacêutico</label>
-      <input type="radio" id="tipoGerente" name="tipo" value="Gerente">
-      <label for="tipoGerente">Gerente</label><br>
+        <div class="form-group">
+          <label>Tipo:</label>
+          <input type="radio" id="tipoFarmaceutico" name="tipo" value="Farmaceutico" checked>
+          <label for="tipoFarmaceutico">Farmacêutico</label>
+          <input type="radio" id="tipoGerente" name="tipo" value="Gerente">
+          <label for="tipoGerente">Gerente</label>
+        </div>
 
-      <div id="farmaceuticoFields">
-        <label for="turno">Turno:</label>
-        <input type="text" id="turno" name="turno"><br>
+        <!-- Campos específicos para Farmacêutico -->
+        <div id="farmaceuticoFields" class="form-group">
+          <label>Turno:</label>
+          <input type="text" id="turno" name="turno">
+          <label>CRF:</label>
+          <input type="text" id="crf" name="crf">
+          <label>Carga Horária:</label>
+          <input type="text" id="cargaHoraria" name="cargaHoraria">
+        </div>
 
-        <label for="crf">CRF:</label>
-        <input type="text" id="crf" name="crf"><br>
+        <!-- Campos específicos para Gerente -->
+        <div id="gerenteFields" class="form-group" style="display: none;">
+          <label>Funcionários Supervisionados (IDs separados por vírgula):</label>
+          <input type="text" id="funcionariosSupervisionados" name="funcionariosSupervisionados">
+        </div>
 
-        <label for="cargaHoraria">Carga Horária:</label>
-        <input type="text" id="cargaHoraria" name="cargaHoraria"><br>
-      </div>
-
-      <div id="gerenteFields" style="display: none;">
-        <label for="funcionariosSupervisionados">Funcionários Supervisionados (IDs separados por vírgula):</label>
-        <input type="text" id="funcionariosSupervisionados" name="funcionariosSupervisionados"><br>
-      </div>
-
-      <button type="submit">Salvar</button>
-    </form>
+        <div class="form-actions">
+          <button type="submit">Salvar</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 </body>
 </html>

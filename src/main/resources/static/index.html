@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pharma Manager - Landing Page</title>
+  <style>
+    /* Reset e fontes */
+    body, h1, h2, p, ul {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      line-height: 1.6;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Header / Navigation */
+    header {
+      background: #007bff;
+      color: white;
+      padding: 20px;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    nav ul li {
+      font-size: 1.1em;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      background: url('https://images.unsplash.com/photo-1595433562696-9c0f582c2d66?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+      height: 60vh;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      padding: 20px;
+    }
+    .hero-content h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+    .hero-content p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+
+    /* Landing Options */
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 40px auto;
+      max-width: 1200px;
+      gap: 20px;
+    }
+    .option {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      width: 300px;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .option:hover {
+      transform: scale(1.02);
+    }
+    .option img {
+      max-width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .option h2 {
+      margin: 15px 0 10px;
+      font-size: 1.5em;
+      color: #007bff;
+    }
+    .option p {
+      margin-bottom: 15px;
+      font-size: 1em;
+    }
+    .option button {
+      padding: 10px 20px;
+      background: #007bff;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .option button:hover {
+      background: #0056b3;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #007bff;
+      color: white;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .options {
+        flex-direction: column;
+        align-items: center;
+      }
+      .hero-content h1 {
+        font-size: 2.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="/">Início</a></li>
+        <li><a href="/produtos/pagina">Produtos</a></li>
+        <li><a href="/funcionarios/pagina">Funcionários</a></li>
+        <li><a href="/itens/relatorio-pdf">Relatórios</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Pharma Manager</h1>
+      <p>Gerencie sua farmácia com eficiência e praticidade.</p>
+      <button onclick="window.location.href=landingLinks.produtos">Saiba Mais</button>
+    </div>
+  </section>
+
+  <section class="options">
+    <div class="option">
+      <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=1430&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Produtos">
+      <h2>Produtos</h2>
+      <p>Criar e gerenciar o cadastro de produtos.</p>
+      <button onclick="window.location.href=landingLinks.produtos">Criar Produto</button>
+    </div>
+    <div class="option">
+      <img src="https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=400&q=80" alt="Relatórios">
+      <h2>Relatórios</h2>
+      <p>Gerar relatórios detalhados dos itens.</p>
+      <button onclick="window.location.href=landingLinks.relatorios">Relatório de Produtos</button>
+    </div>
+    <div class="option">
+      <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=400&q=80" alt="Funcionários">
+      <h2>Funcionários</h2>
+      <p>Cadastrar e gerenciar funcionários da farmácia.</p>
+      <button onclick="window.location.href=landingLinks.funcionarios">Cadastrar Funcionário</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Pharma Manager. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    // Módulo de configuração dos links da landing page
+    const landingLinks = {
+      produtos: '/produtos/pagina',
+      relatorios: '/itens/relatorio-pdf',
+      funcionarios: '/funcionarios/pagina'
+    };
+
+    // Caso precise atualizar os links, basta alterar os valores neste objeto.
+  </script>
+</body>
+</html>

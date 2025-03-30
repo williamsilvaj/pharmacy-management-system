@@ -10,10 +10,10 @@ import jakarta.persistence.*;
 @PrimaryKeyJoinColumn(name = "idFuncionario")
 @Table(name = "farmaceutico")
 public class Farmaceutico extends Funcionario {
-	
+
 	@Column(name = "idFuncionario", insertable = false, updatable = false)
     private Integer id; // Campo adicional apenas para leitura
-	
+
     @Column(name = "turno", nullable = false, length = 45)
     private String turno;
 
@@ -37,28 +37,45 @@ public class Farmaceutico extends Funcionario {
 
     public Farmaceutico() {}
 
-    // Getters e Setters
-    public String getTurno() {
-        return turno;
-    }
+  @Override
+  public Integer getId() {
+    return id;
+  }
 
-    public void setTurno(String turno) {
-        this.turno = turno;
-    }
+  @Override
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public String getCrf() {
-        return crf;
-    }
+  public String getTurno() {
+    return turno;
+  }
 
-    public void setCrf(String crf) {
-        this.crf = crf;
-    }
+  public void setTurno(String turno) {
+    this.turno = turno;
+  }
 
-    public Float getCargaHoraria() {
-        return cargaHoraria;
-    }
+  public String getCrf() {
+    return crf;
+  }
 
-    public void setCargaHoraria(Float cargaHoraria) {
-        this.cargaHoraria = cargaHoraria;
-    }
+  public void setCrf(String crf) {
+    this.crf = crf;
+  }
+
+  public Float getCargaHoraria() {
+    return cargaHoraria;
+  }
+
+  public void setCargaHoraria(Float cargaHoraria) {
+    this.cargaHoraria = cargaHoraria;
+  }
+
+  public Funcionario getFuncionario() {
+    return funcionario;
+  }
+
+  public void setFuncionario(Funcionario funcionario) {
+    this.funcionario = funcionario;
+  }
 }
