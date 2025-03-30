@@ -10,7 +10,10 @@ import jakarta.persistence.*;
 @PrimaryKeyJoinColumn(name = "idFuncionario")
 @Table(name = "farmaceutico")
 public class Farmaceutico extends Funcionario {
-
+	
+	@Column(name = "idFuncionario", insertable = false, updatable = false)
+    private Integer id; // Campo adicional apenas para leitura
+	
     @Column(name = "turno", nullable = false, length = 45)
     private String turno;
 

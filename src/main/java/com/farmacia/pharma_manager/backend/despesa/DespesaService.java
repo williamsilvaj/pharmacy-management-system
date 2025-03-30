@@ -14,9 +14,14 @@ public class DespesaService {
         this.despesaRepository = despesaRepository;
     }
 
-    public List<Despesa> listarTodas() {
-        return despesaRepository.findAll();
+  public List<Despesa> listarTodas() {
+    try {
+      return despesaRepository.findAll();
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new RuntimeException("Erro ao buscar despesas", e);
     }
+  }
 
     public Optional<Despesa> buscarPorId(Integer id) {
         return despesaRepository.findById(id);
