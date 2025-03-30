@@ -148,6 +148,7 @@
         <li><a href="/produtos/pagina">Produtos</a></li>
         <li><a href="/funcionarios/pagina">Funcionários</a></li>
         <li><a href="/itens/relatorio-pdf">Relatórios</a></li>
+		<li><a href="/vendas/pagina">Vendas</a></li>
       </ul>
     </nav>
   </header>
@@ -179,6 +180,12 @@
       <p>Cadastrar e gerenciar funcionários da farmácia.</p>
       <button onclick="window.location.href=landingLinks.funcionarios">Cadastrar Funcionário</button>
     </div>
+	<div class="option">
+      <img src="https://www.triersistemas.com.br/blog/wp-content/uploads/2016/10/Aumente-as-vendas-da-sua-farm%C3%A1cia-com-essas-dicas-matadoras-679x385.png" alt="vendas">
+      <h2>Vendas</h2>
+      <p>Cadastrar e gerar relatórios de vendas da farmácia.</p>
+      <button onclick="window.location.href=landingLinks.vendas">Cadastrar Vendas</button>
+    </div>
   </section>
 
   <footer>
@@ -190,7 +197,8 @@
     const landingLinks = {
       produtos: '/produtos/pagina',
       relatorios: '/itens/relatorio-pdf',
-      funcionarios: '/funcionarios/pagina'
+      funcionarios: '/funcionarios/pagina',
+	  vendas: 'vendas/pagina'
     };
 
     // Caso precise atualizar os links, basta alterar os valores neste objeto.
