@@ -1,58 +1,84 @@
 package com.farmacia.pharma_manager.backend.fornecedor;
 
+import com.farmacia.pharma_manager.backend.endereco.Endereco;
+import com.farmacia.pharma_manager.backend.endereco.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("/api/fornecedores")
+@Controller
+@RequestMapping("/fornecedores")
 public class FornecedorController {
 
-    private final FornecedorService fornecedorService;
+    @Autowired
+    private FornecedorService fornecedorService;
 
     @Autowired
-    public FornecedorController(FornecedorService fornecedorService) {
-        this.fornecedorService = fornecedorService;
-    }
+    private EnderecoService enderecoService;
 
-    // Endpoint para cadastrar um novo fornecedor
+    // Criar um novo Fornecedor
     @PostMapping
-    public Fornecedor cadastrarFornecedor(@RequestBody Fornecedor fornecedor) {
-        return fornecedorService.cadastrarFornecedor(fornecedor);
+    public ResponseEntity<Fornecedor> criarFornecedor(@RequestBody Fornecedor fornecedor) {
+        Optional<Endereco> enderecoOptional = enderecoService.buscarPorId(fornecedor.getEndereco().getIdEndereco());
+
+        if (!enderecoOptional.isPresent()) {
+            return ResponseEntity.notFound().build(); // Retorna 404 se o Endereco não existir
+        }
+
+        fornecedor.setEndereco(enderecoOptional.get());
+        Fornecedor fornecedorSalvo = fornecedorService.salvar(fornecedor);
+        return ResponseEntity.status(HttpStatus.CREATED).body(fornecedorSalvo);
     }
 
-    // Endpoint para consultar um fornecedor por CNPJ
-    @GetMapping("/cnpj/{cnpj}")
-    public Optional<Fornecedor> consultarFornecedorPorCnpj(@PathVariable String cnpj) {
-        return fornecedorService.consultarFornecedorPorCnpj(cnpj);
-    }
-
-    // Endpoint para consultar um fornecedor por nome
-    @GetMapping("/nome/{nome}")
-    public Optional<Fornecedor> consultarFornecedorPorNome(@PathVariable String nome) {
-        return fornecedorService.consultarFornecedorPorNome(nome);
-    }
-
-    // Endpoint para listar todos os fornecedores
+    // Obter todos os Fornecedores
     @GetMapping
-    public List<Fornecedor> listarFornecedores() {
-        return fornecedorService.listarFornecedores();
+    public List<Fornecedor> listarTodos() {
+        return fornecedorService.listarTodos();
     }
 
-    // Endpoint para alterar dados de um fornecedor
+    // Obter um Fornecedor por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Fornecedor> buscarPorId(@PathVariable Integer id) {
+        Optional<Fornecedor> fornecedor = fornecedorService.buscarPorId(id);
+        return fornecedor.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Atualizar um Fornecedor existente
     @PutMapping("/{id}")
-    public Fornecedor alterarFornecedor(
-            @PathVariable Integer id,
-            @RequestBody Fornecedor fornecedor) {
-        return fornecedorService.alterarFornecedor(id, fornecedor);
+    public ResponseEntity<Fornecedor> atualizarFornecedor(@PathVariable Integer id, @RequestBody Fornecedor fornecedor) {
+        Optional<Fornecedor> fornecedorExistente = fornecedorService.buscarPorId(id);
+
+        if (!fornecedorExistente.isPresent()) {
+            return ResponseEntity.notFound().build(); // Retorna 404 se o Fornecedor não for encontrado
+        }
+
+        Optional<Endereco> enderecoOptional = enderecoService.buscarPorId(fornecedor.getEndereco().getIdEndereco());
+        if (!enderecoOptional.isPresent()) {
+            return ResponseEntity.notFound().build(); // Retorna 404 se o Endereco não existir
+        }
+
+        fornecedor.setIdFornecedor(id);
+        fornecedor.setEndereco(enderecoOptional.get());
+        Fornecedor fornecedorAtualizado = fornecedorService.atualizar(fornecedor);
+
+        return ResponseEntity.ok(fornecedorAtualizado);
     }
 
-    // Endpoint para remover um fornecedor
+    // Deletar um Fornecedor
     @DeleteMapping("/{id}")
-    public String removerFornecedor(@PathVariable Integer id) {
-        boolean isRemoved = fornecedorService.removerFornecedor(id);
-        return isRemoved ? "Fornecedor removido com sucesso" : "Fornecedor não encontrado";
+    public ResponseEntity<Void> deletarFornecedor(@PathVariable Integer id) {
+        Optional<Fornecedor> fornecedor = fornecedorService.buscarPorId(id);
+
+        if (!fornecedor.isPresent()) {
+            return ResponseEntity.notFound().build(); // Retorna 404 se o Fornecedor não for encontrado
+        }
+
+        fornecedorService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }

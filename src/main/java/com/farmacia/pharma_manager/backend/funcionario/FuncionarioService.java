@@ -1,5 +1,7 @@
 package com.farmacia.pharma_manager.backend.funcionario;
 
+import com.farmacia.pharma_manager.backend.gerente.Gerente;
+import com.farmacia.pharma_manager.backend.gerente.GerenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,49 +11,51 @@ import java.util.Optional;
 @Service
 public class FuncionarioService {
 
-    private final FuncionarioRepository funcionarioRepository;
+  @Autowired
+  private FuncionarioRepository funcionarioRepository;
 
-    @Autowired
-    public FuncionarioService(FuncionarioRepository funcionarioRepository) {
-        this.funcionarioRepository = funcionarioRepository;
+  @Autowired
+  private GerenteRepository gerenteRepository;
+
+
+  // Salvar um novo Funcionario
+  public Funcionario saveFuncionario(Funcionario funcionario) {
+    return funcionarioRepository.save(funcionario);
+  }
+
+  // Buscar todos os Funcionarios
+  public List<Funcionario> getAllFuncionarios() {
+    return funcionarioRepository.findAll();
+  }
+
+  // Buscar Funcionario por ID
+  public Optional<Funcionario> getFuncionarioById(Integer id) {
+    return funcionarioRepository.findById(id);
+  }
+
+  // Atualizar Funcionario
+  public Funcionario updateFuncionario(Integer id, Funcionario funcionario) {
+    funcionario.setId(id);
+    return funcionarioRepository.save(funcionario);
+  }
+
+  // Deletar Funcionario
+  public void deleteFuncionario(Integer id) {
+    funcionarioRepository.deleteById(id);
+  }
+
+  // Associar supervisor (Gerente)
+  public Funcionario setSupervisor(Integer funcionarioId, Integer supervisorId) {
+    Optional<Funcionario> funcionarioOptional = funcionarioRepository.findById(funcionarioId);
+    Optional<Gerente> gerenteOptional = gerenteRepository.findById(supervisorId);
+
+    if (funcionarioOptional.isPresent() && gerenteOptional.isPresent()) {
+      Funcionario funcionario = funcionarioOptional.get();
+      Gerente gerente = gerenteOptional.get();
+      funcionario.setSupervisor(gerente);
+      return funcionarioRepository.save(funcionario);
     }
 
-    // Método para salvar um novo funcionário
-    public Funcionario salvarFuncionario(Funcionario funcionario) {
-        return funcionarioRepository.save(funcionario);
-    }
-
-    // Método para atualizar um funcionário existente
-    public Funcionario atualizarFuncionario(Funcionario funcionario) {
-        if (funcionario.getId() == null) {
-            throw new IllegalArgumentException("Funcionario não pode ser atualizado sem um ID válido.");
-        }
-        return funcionarioRepository.save(funcionario);
-    }
-
-    // Método para buscar um funcionário pelo ID
-    public Optional<Funcionario> buscarFuncionarioPorId(Long id) {
-        return funcionarioRepository.findById(id);
-    }
-
-    // Método para buscar um funcionário pelo CPF
-    public Optional<Funcionario> buscarFuncionarioPorCpf(String cpf) {
-        return funcionarioRepository.findByCpf(cpf);
-    }
-
-    // Método para listar todos os funcionários
-    public List<Funcionario> listarFuncionarios() {
-        return funcionarioRepository.findAll();
-    }
-
-    // Método para deletar um funcionário por ID
-      // deletar um Gerente pelo ID
-    public void deletarFuncionario(Long id) {
-    if (funcionarioRepository.existsById(id)) {
-        funcionarioRepository.deleteById(id);
-    } else {
-        throw new IllegalArgumentException("Funcionario com ID " + id + " não encontrado.");
-        }
-    }
-
+    return null;  // Caso algum dos dados nao seja encontrado
+  }
 }

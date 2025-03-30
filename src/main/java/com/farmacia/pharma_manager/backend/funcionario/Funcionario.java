@@ -1,7 +1,11 @@
 package com.farmacia.pharma_manager.backend.funcionario;
 
+import com.farmacia.pharma_manager.backend.cargo.Cargo;
+import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import com.farmacia.pharma_manager.backend.gerente.Gerente;
+
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -10,41 +14,50 @@ public abstract class Funcionario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idFuncionario")
-    private Integer id;
+    private Integer idFuncionario;
 
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(name = "telefone")
+    @Column(name = "telefone", nullable = false)
     private String telefone;
 
     @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
 
-    @Column(name = "cargo", nullable = false)
-    private String cargo;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idCargo", nullable = false)
+    private Cargo cargo;
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idEndereco", nullable = false)
+    private Endereco endereco;
+
+    // Supervisor desse funcionario
     @ManyToOne
-    @JoinColumn(name = "idGerente")
-    private Gerente gerente;
+    @JoinColumn(name = "idGerente", nullable = true)
+	  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Gerente supervisor;
 
 
-    public Funcionario(String nome, String telefone, String cpf, String cargo) {
+    public Funcionario(String nome, String telefone, String cpf, Cargo cargo, Endereco endereco) {
         this.nome = nome;
         this.telefone = telefone;
         this.cpf = cpf;
         this.cargo = cargo;
+        this.endereco = endereco;
     }
 
     public Funcionario() {}
 
+    // Getters e Setters
 
     public Integer getId() {
-        return id;
+        return idFuncionario;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.idFuncionario = id;
     }
 
     public String getNome() {
@@ -71,17 +84,23 @@ public abstract class Funcionario {
         this.cpf = cpf;
     }
 
-    public String getCargo() {
+    public Cargo getCargo() {
         return cargo;
     }
 
-    public void setCargo(String cargo) {
+    public void setCargo(Cargo cargo) {
         this.cargo = cargo;
     }
 
-
-    @Override
-    public String toString() {
-        return "Funcionario [Nome=" + nome + ", Telefone=" + telefone + ", CPF=" + cpf + ", Cargo=" + cargo + "]";
+    public Endereco getEndereco() {
+        return endereco;
     }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public Gerente getSupervisor() { return supervisor; }
+
+    public void setSupervisor(Gerente supervisor) { this.supervisor = supervisor; }
 }

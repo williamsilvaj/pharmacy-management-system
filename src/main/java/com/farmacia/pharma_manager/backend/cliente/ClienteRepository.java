@@ -1,8 +1,15 @@
 package com.farmacia.pharma_manager.backend.cliente;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
-public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+import java.util.Optional;
+import java.util.List;
+
+@Repository
+public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
     Optional<Cliente> findByCpf(String cpf);
+    Optional<Cliente> findByEmail(String email);
+    Optional<Cliente> findByTelefone(String telefone);
+	List<Cliente> findByNomeContainingIgnoreCaseOrderByNomeAsc(String nome);
 }

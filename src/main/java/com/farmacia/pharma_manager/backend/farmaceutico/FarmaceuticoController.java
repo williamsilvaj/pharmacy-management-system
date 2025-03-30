@@ -9,46 +9,49 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/farmaceuticos")
+@RequestMapping("/farmaceuticos")
 public class FarmaceuticoController {
 
-    private final FarmaceuticoService farmaceuticoService;
+  @Autowired
+  private FarmaceuticoService farmaceuticoService;
 
-    @Autowired
-    public FarmaceuticoController(FarmaceuticoService farmaceuticoService) {
-        this.farmaceuticoService = farmaceuticoService;
+  @PostMapping
+  public ResponseEntity<Farmaceutico> criarFarmaceutico(@RequestBody Farmaceutico farmaceutico) {
+    Farmaceutico novoFarmaceutico = farmaceuticoService.criarFarmaceutico(farmaceutico);
+    return new ResponseEntity<>(novoFarmaceutico, HttpStatus.CREATED);
+  }
+
+  @GetMapping
+  public List<Farmaceutico> obterTodosFarmaceuticos() {
+    return farmaceuticoService.obterTodosFarmaceuticos();
+  }
+  
+  @GetMapping("/busca/{termo}")
+    public ResponseEntity<List<Farmaceutico>> buscarPorNomeOuCrf(@PathVariable String termo) {
+		List<Farmaceutico> farmaceuticos = farmaceuticoService.buscarPorNomeOuCrf(termo);
+        return ResponseEntity.ok(farmaceuticos);
     }
 
-    // criar ou atualizar um Farmaceutico
-    @PostMapping
-    public ResponseEntity<Farmaceutico> saveOrUpdateFarmaceutico(@RequestBody Farmaceutico farmaceutico) {
-        Farmaceutico savedFarmaceutico = farmaceuticoService.saveOrUpdateFarmaceutico(farmaceutico);
-        return new ResponseEntity<>(savedFarmaceutico, HttpStatus.CREATED);
-    }
+  @GetMapping("/{id}")
+  public ResponseEntity<Farmaceutico> obterFarmaceuticoPorId(@PathVariable Integer id) {
+    Optional<Farmaceutico> farmaceutico = farmaceuticoService.obterFarmaceuticoPorId(id);
+    return farmaceutico.map(ResponseEntity::ok)
+      .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+  }
 
-    //  listar todos os Farmaceuticos
-    @GetMapping
-    public ResponseEntity<List<Farmaceutico>> getAllFarmaceuticos() {
-        List<Farmaceutico> farmaceuticos = farmaceuticoService.getAllFarmaceuticos();
-        return new ResponseEntity<>(farmaceuticos, HttpStatus.OK);
+  @PutMapping("/{id}")
+  public ResponseEntity<Farmaceutico> atualizarFarmaceutico(@PathVariable Integer id, @RequestBody Farmaceutico farmaceutico) {
+    try {
+      Farmaceutico farmaceuticoAtualizado = farmaceuticoService.atualizarFarmaceutico(id, farmaceutico);
+      return new ResponseEntity<>(farmaceuticoAtualizado, HttpStatus.OK);
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+  }
 
-    // buscar um Farmaceutico pelo ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Farmaceutico> getFarmaceuticoById(@PathVariable Integer id) {
-        Optional<Farmaceutico> farmaceutico = farmaceuticoService.getFarmaceuticoById(id);
-        return farmaceutico.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    // deletar um Farmaceutico pelo ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFarmaceutico(@PathVariable Integer id) {
-        Optional<Farmaceutico> farmaceutico = farmaceuticoService.getFarmaceuticoById(id);
-        if (farmaceutico.isPresent()) {
-            farmaceuticoService.deleteFarmaceutico(id);
-            return ResponseEntity.noContent().build();  // encontrado
-        } else {
-            return ResponseEntity.notFound().build();  //não encontrado
-        }
-    }
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deletarFarmaceutico(@PathVariable Integer id) {
+    farmaceuticoService.deletarFarmaceutico(id);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
 }

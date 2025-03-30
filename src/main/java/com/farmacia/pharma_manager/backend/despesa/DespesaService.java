@@ -1,35 +1,47 @@
-package com.farmacia.pharma_manager.backend.despesa;
+  package com.farmacia.pharma_manager.backend.despesa;
 
-import com.farmacia.pharma_manager.backend.despesa.Despesa;
-import com.farmacia.pharma_manager.backend.despesa.DespesaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+  import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+  import java.util.List;
+  import java.util.Optional;
 
-@Service
-public class DespesaService {
+  @Service
+  public class DespesaService {
 
-  private final DespesaRepository despesaRepository;
+      private final DespesaRepository despesaRepository;
 
-  public DespesaService(DespesaRepository despesaRepository) {
-    this.despesaRepository = despesaRepository;
+      public DespesaService(DespesaRepository despesaRepository) {
+          this.despesaRepository = despesaRepository;
+      }
+
+    public List<Despesa> listarTodas() {
+      try {
+        return despesaRepository.findAll();
+      } catch (Exception e) {
+        e.printStackTrace();
+        throw new RuntimeException("Erro ao buscar despesas", e);
+      }
+    }
+
+      public Optional<Despesa> buscarPorId(Integer id) {
+          return despesaRepository.findById(id);
+      }
+
+      public Despesa salvar(Despesa despesa) {
+          return despesaRepository.save(despesa);
+      }
+
+      public Despesa atualizar(Integer id, Despesa despesaAtualizada) {
+          return despesaRepository.findById(id).map(despesa -> {
+              despesa.setDescricao(despesaAtualizada.getDescricao());
+              despesa.setData(despesaAtualizada.getData());
+              despesa.setValor(despesaAtualizada.getValor());
+              despesa.setGerente(despesaAtualizada.getGerente());
+              return despesaRepository.save(despesa);
+          }).orElseThrow(() -> new RuntimeException("Despesa não encontrada"));
+      }
+
+      public void deletar(Integer id) {
+          despesaRepository.deleteById(id);
+      }
   }
-
-  public Despesa saveOrUpdateDespesa(Despesa despesa) {
-    return despesaRepository.save(despesa);
-  }
-
-  public List<Despesa> getAllDespesas() {
-    return despesaRepository.findAll();
-  }
-
-  public Optional<Despesa> getDespesaById(Integer id) {
-    return despesaRepository.findById(id);
-  }
-
-  public void deleteDespesa(Integer id) {
-    despesaRepository.deleteById(id);
-  }
-}

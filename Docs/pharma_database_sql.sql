@@ -4,6 +4,13 @@
 CREATE SCHEMA pharmabd DEFAULT CHARACTER SET utf8;
 
 
+-- Google Docs with the SQL code: https://docs.google.com/document/d/1OWprbhl9NUqkN31fnFTh3jOwb9HmJSusQdX7yXSN5s4/edit?tab=t.0
+
+-- -----------------------------------------------------
+-- Schema pharmabd
+-- -----------------------------------------------------
+CREATE SCHEMA pharmabd DEFAULT CHARACTER SET utf8;
+
 -- -----------------------------------------------------
 -- Table pharmabd.cargo
 -- -----------------------------------------------------
@@ -13,27 +20,6 @@ CREATE TABLE pharmabd.cargo (
   dataContratacao DATE NOT NULL,
   salario DOUBLE NOT NULL,
   PRIMARY KEY (idCargo)
-);
-
--- -----------------------------------------------------
--- Table pharmabd.gerente
--- -----------------------------------------------------
-CREATE TABLE pharmabd.gerente (
-  idGerente INT NOT NULL AUTO_INCREMENT,
-  nivel VARCHAR(45) NOT NULL,
-  funcionariosSupervisionados VARCHAR(255) NOT NULL,
-  PRIMARY KEY (idGerente)
-);
-
--- -----------------------------------------------------
--- Table pharmabd.farmaceutico
--- -----------------------------------------------------
-CREATE TABLE pharmabd.farmaceutico (
-  idFarmaceutico INT NOT NULL AUTO_INCREMENT,
-  turno VARCHAR(45) NOT NULL,
-  crf VARCHAR(45) NOT NULL,
-  cargaHoraria FLOAT NOT NULL,
-  PRIMARY KEY (idFarmaceutico)
 );
 
 -- -----------------------------------------------------
@@ -59,8 +45,6 @@ CREATE TABLE pharmabd.funcionario (
   telefone VARCHAR(45) NOT NULL,
   cpf VARCHAR(11) NOT NULL,
   idCargo INT NOT NULL,
-  idGerente INT NULL,
-  idFarmaceutico INT NULL,
   idEndereco INT NOT NULL,
   PRIMARY KEY (idFuncionario),
   UNIQUE (cpf),
@@ -69,21 +53,43 @@ CREATE TABLE pharmabd.funcionario (
     REFERENCES pharmabd.cargo (idCargo)
     ON DELETE NO ACTION
     ON UPDATE CASCADE,
-  CONSTRAINT fk_Funcionario_Gerente
-    FOREIGN KEY (idGerente)
-    REFERENCES pharmabd.gerente (idGerente)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_Funcionario_Farmaceutico
-    FOREIGN KEY (idFarmaceutico)
-    REFERENCES pharmabd.farmaceutico (idFarmaceutico)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT fk_Funcionario_Endereco
     FOREIGN KEY (idEndereco)
     REFERENCES pharmabd.endereco (idEndereco)
     ON DELETE NO ACTION
     ON UPDATE CASCADE
+);
+
+
+-- -----------------------------------------------------
+-- Table pharmabd.gerente
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.gerente (
+  idFuncionario INT PRIMARY KEY,
+  funcionariosSupervisionados VARCHAR(255) NULL,
+  FOREIGN KEY (idFuncionario) REFERENCES pharmabd.funcionario(idFuncionario) ON DELETE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Adiciona fk_Gerente em pharmabd.funcionario
+-- -----------------------------------------------------
+ALTER TABLE pharmabd.funcionario
+ADD COLUMN idGerente INT NULL,
+ADD CONSTRAINT fk_Funcionario_Gerente
+    FOREIGN KEY (idGerente)
+    REFERENCES pharmabd.gerente (idFuncionario)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE;
+
+-- -----------------------------------------------------
+-- Table pharmabd.farmaceutico
+-- -----------------------------------------------------
+CREATE TABLE pharmabd.farmaceutico (
+  idFuncionario INT PRIMARY KEY,
+  turno VARCHAR(45) NOT NULL,
+  crf VARCHAR(45) NOT NULL,
+  cargaHoraria FLOAT NOT NULL,
+  FOREIGN KEY (idFuncionario) REFERENCES pharmabd.funcionario(idFuncionario) ON DELETE CASCADE
 );
 
 -- -----------------------------------------------------
@@ -98,7 +104,7 @@ CREATE TABLE pharmabd.despesa (
   PRIMARY KEY (idDespesa),
   CONSTRAINT fk_Despesa_Gerente
     FOREIGN KEY (idGerente)
-    REFERENCES pharmabd.gerente (idGerente)
+    REFERENCES pharmabd.gerente (idFuncionario)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 );
@@ -129,7 +135,6 @@ CREATE TABLE pharmabd.cliente (
 -- -----------------------------------------------------
 CREATE TABLE pharmabd.venda (
   idVenda INT NOT NULL AUTO_INCREMENT,
-  nomeProduto VARCHAR(45) NOT NULL,
   quantidade INT NOT NULL,
   valor DOUBLE NOT NULL,
   data DATE NOT NULL,
@@ -138,7 +143,7 @@ CREATE TABLE pharmabd.venda (
   PRIMARY KEY (idVenda),
   CONSTRAINT fk_Venda_Farmaceutico
     FOREIGN KEY (idFarmaceutico)
-    REFERENCES pharmabd.farmaceutico (idFarmaceutico)
+    REFERENCES pharmabd.farmaceutico (idFuncionario)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_Venda_Cliente

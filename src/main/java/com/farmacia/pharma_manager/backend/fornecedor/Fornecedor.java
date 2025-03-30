@@ -1,5 +1,6 @@
 package com.farmacia.pharma_manager.backend.fornecedor;
 
+import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,37 +10,31 @@ public class Fornecedor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idFornecedor")
-    private Integer id;
+    private Integer idFornecedor;
 
-    @Column(name = "nome", nullable = false)
+    @Column(name = "nome")
     private String nome;
 
-    @Column(name = "cnpj", nullable = false, unique = true)
+    @Column(name = "cnpj")
     private String cnpj;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "status")
-    private boolean status; 
+    private Integer status;
 
-    // Construtores
-    public Fornecedor() {}
+    @OneToOne
+    @JoinColumn(name = "idEndereco", referencedColumnName = "idEndereco")
+    private Endereco endereco;
 
-    public Fornecedor(String nome, String cnpj, String email, boolean status) {
-        this.nome = nome;
-        this.cnpj = cnpj;
-        this.email = email;
-        this.status = status;
+    // Getters e Setters
+    public Integer getIdFornecedor() {
+        return idFornecedor;
     }
 
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdFornecedor(Integer idFornecedor) {
+        this.idFornecedor = idFornecedor;
     }
 
     public String getNome() {
@@ -66,16 +61,19 @@ public class Fornecedor {
         this.email = email;
     }
 
-    public boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Fornecedor [id=" + id + ", nome=" + nome + ", cnpj=" + cnpj + ", email=" + email + ", status=" + (status ? "Ativo" : "Inativo") + "]";
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 }

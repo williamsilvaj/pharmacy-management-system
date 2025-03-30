@@ -1,17 +1,18 @@
 package com.farmacia.pharma_manager;
 
-import javax.swing.*;
-
-import com.farmacia.pharma_manager.frontend.TelaPrincipal;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 
 @SpringBootApplication
 public class PharmaManagerApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(PharmaManagerApplication.class, args);
+    Dotenv dotenv = Dotenv.load();
+    dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
 
-    SwingUtilities.invokeLater(TelaPrincipal::new);
+
+    SpringApplication.run(PharmaManagerApplication.class, args);
   }
 }

@@ -4,48 +4,41 @@ import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "cliente")
+@Table(name = "cliente", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "cpf"),
+    @UniqueConstraint(columnNames = "email"),
+    @UniqueConstraint(columnNames = "telefone")
+})
 public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idCliente")
-    private Integer id;
+    private Integer idCliente;
 
-    @Column(name = "nome", nullable = false)
+    @Column(nullable = false, length = 45)
     private String nome;
 
-    @Column(name = "cpf", nullable = false, unique = true)
+    @Column(nullable = false, length = 11, unique = true)
     private String cpf;
 
-    @Column(name = "email", nullable = false)
+    @Column(nullable = false, length = 45, unique = true)
     private String email;
 
-    @Column(name = "telefone", nullable = false)
+    @Column(nullable = false, length = 45, unique = true)
     private String telefone;
 
     @ManyToOne
-    @JoinColumn(name = "idEndereco")
+    @JoinColumn(name = "idEndereco", nullable = false)
     private Endereco endereco;
 
-    // Construtor
-    public Cliente(String nome, String cpf, String email, String telefone, Endereco endereco) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.email = email;
-        this.telefone = telefone;
-        this.endereco = endereco;
-    }
-
-    public Cliente() {}
-
     // Getters e Setters
-    public Integer getId() {
-        return id;
+    public Integer getIdCliente() {
+        return idCliente;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
     }
 
     public String getNome() {
@@ -86,10 +79,5 @@ public class Cliente {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
-    }
-
-    @Override
-    public String toString() {
-        return "Cliente [Nome=" + nome + ", CPF=" + cpf + ", Email=" + email + ", Telefone=" + telefone + ", Endereço=" + endereco + "]";
     }
 }

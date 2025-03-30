@@ -1,30 +1,35 @@
 package com.farmacia.pharma_manager.backend.farmaceutico;
+
+import com.farmacia.pharma_manager.backend.cargo.Cargo;
+import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
+@PrimaryKeyJoinColumn(name = "idFuncionario")
 @Table(name = "farmaceutico")
-public class Farmaceutico extends Funcionario  {
+public class Farmaceutico extends Funcionario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idFarmaceutico")
+	  @Column(name = "idFuncionario", insertable = false, updatable = false)
     private Integer id;
 
-    @Column(name = "turno")
+    @Column(name = "turno", nullable = false, length = 45)
     private String turno;
 
-    @Column(name = "crf")
+    @Column(name = "crf", nullable = false, length = 45)
     private String crf;
 
-    @Column(name = "cargaHoraria")
-    private float cargaHoraria;
+    @Column(name = "cargaHoraria", nullable = false)
+    private Float cargaHoraria;
 
-    // Construtor
-    public Farmaceutico (String nome, String telefone, String cpf, String cargo, String turno, String crf, float cargaHoraria) {
-        super(nome, telefone, cpf, cargo);
+    @OneToOne
+    @JoinColumn(name = "idFuncionario", referencedColumnName = "idFuncionario", insertable = false, updatable = false)
+    private Funcionario funcionario;
+
+
+    public Farmaceutico(String nome, String telefone, String cpf, Cargo cargo, Endereco endereco, String turno, String crf, Float cargaHoraria) {
+        super(nome, telefone, cpf, cargo, endereco);
         this.turno = turno;
         this.crf = crf;
         this.cargaHoraria = cargaHoraria;
@@ -49,21 +54,11 @@ public class Farmaceutico extends Funcionario  {
         this.crf = crf;
     }
 
-    public float getCargaHoraria() {
+    public Float getCargaHoraria() {
         return cargaHoraria;
     }
 
-    public void setCargaHoraria(float cargaHoraria) {
+    public void setCargaHoraria(Float cargaHoraria) {
         this.cargaHoraria = cargaHoraria;
-    }
-
-    // Método para exibir as informações do Farmacêutico
-    @Override
-    public String toString() {
-        return "Farmacêutico{" +
-                "turno='" + turno + '\'' +
-                ", crf='" + crf + '\'' +
-                ", cargaHoraria=" + cargaHoraria +
-                '}';
     }
 }
