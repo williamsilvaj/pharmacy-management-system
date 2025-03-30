@@ -50,5 +50,3 @@ mvn checkstyle:check
 
 ### Eclipse:
 1. Instale o plugin **EditorConfig Eclipse Plugin**.
-
----
