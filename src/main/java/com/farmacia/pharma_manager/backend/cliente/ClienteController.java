@@ -1,6 +1,7 @@
 package com.farmacia.pharma_manager.backend.cliente;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import java.util.List;

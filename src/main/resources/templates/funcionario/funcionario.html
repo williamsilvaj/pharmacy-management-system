@@ -28,6 +28,10 @@
       <th>Telefone</th>
       <th>CPF</th>
       <th>Cargo</th>
+      <th>Turno</th>
+      <th>CRF</th>
+      <th>Carga Horária</th>
+      <th>Subordinados</th>
       <th>Ações</th>
     </tr>
     </thead>
@@ -46,7 +50,7 @@
       <input type="hidden" id="funcionarioId">
       <label>Nome: <input type="text" id="funcionarioNome" required></label>
       <label>Telefone: <input type="text" id="funcionarioTelefone" required></label>
-      <label>CPF: <input type="text" id="funcionarioCpf" required></label>
+      <label>CPF: <input type="text" id="funcionarioCpf" required></label><br>
       <label>Endereço:</label>
       <div id="enderecoFields">
         <label>Rua: <input type="text" id="rua" required></label><br>
@@ -59,10 +63,14 @@
       <input type="hidden" id="cargo" name="cargo" required readonly><br>
 
       <label>Tipo:</label>
-      <input type="radio" id="tipoFarmaceutico" name="tipo" value="Farmaceutico" checked>
+      <input type="radio" id="tipoFarmaceutico" name="tipo" value="Farmacêutico" checked>
       <label for="tipoFarmaceutico">Farmacêutico</label>
       <input type="radio" id="tipoGerente" name="tipo" value="Gerente">
       <label for="tipoGerente">Gerente</label><br>
+
+      <label>Salário: <input type="number" step="0.01" id="salario" required></label><br>
+
+      <label>Data de Contratação: <input type="date" id="dataContratacao" required></label><br>
 
       <div id="farmaceuticoFields">
         <label for="turno">Turno:</label>

@@ -16,43 +16,23 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
-    /**
-     * Metodo para redirecionar para a página de produtos.
-     */
     @GetMapping("/pagina")
     public String redirecionarParaProdutoPage() {
-        return "produto/produto";  // Nome do arquivo produto.html na pasta resources/templates
+        return "produto/produto";
     }
 
-    /**
-     * Endpoint para criar um novo produto.
-     *
-     * @param produto Produto a ser criado.
-     * @return O produto criado.
-     */
     @PostMapping
     public ResponseEntity<Produto> criarProduto(@RequestBody Produto produto) {
         Produto novoProduto = produtoService.criarProduto(produto);
         return new ResponseEntity<>(novoProduto, HttpStatus.CREATED);
     }
 
-    /**
-     * Endpoint para listar todos os produtos.
-     *
-     * @return Lista de produtos.
-     */
     @GetMapping
     public ResponseEntity<List<Produto>> listarProdutos() {
         List<Produto> produtos = produtoService.listarProdutos();
         return new ResponseEntity<>(produtos, HttpStatus.OK);
     }
 
-    /**
-     * Endpoint para obter um produto pelo ID.
-     *
-     * @param id ID do produto.
-     * @return O produto encontrado.
-     */
     @GetMapping("/{id}")
     public ResponseEntity<Produto> obterProdutoPorId(@PathVariable Integer id) {
         Optional<Produto> produto = produtoService.obterProdutoPorId(id);
@@ -60,13 +40,6 @@ public class ProdutoController {
                       .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    /**
-     * Endpoint para atualizar um produto existente.
-     *
-     * @param id      ID do produto a ser atualizado.
-     * @param produto Produto com as novas informações.
-     * @return O produto atualizado.
-     */
     @PutMapping("/{id}")
     public ResponseEntity<Produto> atualizarProduto(@PathVariable Integer id, @RequestBody Produto produto) {
         Produto produtoAtualizado = produtoService.atualizarProduto(id, produto);
@@ -76,12 +49,6 @@ public class ProdutoController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    /**
-     * Endpoint para deletar um produto pelo ID.
-     *
-     * @param id ID do produto a ser deletado.
-     * @return Status de sucesso ou erro.
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarProduto(@PathVariable Integer id) {
         if (produtoService.deletarProduto(id)) {
@@ -89,8 +56,8 @@ public class ProdutoController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-	
-	@GetMapping("/busca/{termo}")
+
+    @GetMapping("/busca/{termo}")
     public ResponseEntity<List<Produto>> buscarPorNome(@PathVariable String termo) {
         List<Produto> produtos = produtoService.buscarPorNome(termo);
         return ResponseEntity.ok(produtos);
