@@ -20,9 +20,16 @@
 
   <main>
     <h2>Gerenciamento de Produtos</h2>
-    <!-- Botão de Voltar -->
+    <!-- Botões de navegação -->
     <button id="backBtn" onclick="window.history.back()">Voltar</button>
     <button id="addProductBtn">Adicionar Produto</button>
+
+    <!-- Campo de busca -->
+    <div>
+      <label for="searchInput">Pesquisar Produto:</label>
+      <input type="text" id="searchInput" placeholder="Pesquisar por nome ou código...">
+    </div>
+
     <table id="productTable">
       <thead>
         <tr>
