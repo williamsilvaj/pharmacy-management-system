@@ -22,9 +22,9 @@
       <url>https://repo.maven.apache.org/maven2</url>
     </repository>
     <repository>
-        <id>itext</id>
-        <name>iText Repository - releases</name>
-        <url>https://repo.itextsupport.com/releases</url>
+      <id>itext</id>
+      <name>iText Repository - releases</name>
+      <url>https://repo.itextsupport.com/releases</url>
     </repository>
   </repositories>
 
@@ -90,11 +90,6 @@
       <type>pom</type>
     </dependency>
 
-    <repository>
-      <id>itext</id>
-      <name>iText Repository - releases</name>
-      <url>https://repo.itextsupport.com/releases</url>
-    </repository>
 
 
     <dependency>
