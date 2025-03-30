@@ -2,6 +2,8 @@ package com.farmacia.pharma_manager.backend.cargo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +14,7 @@ public class CargoService {
   @Autowired
   private CargoRepository cargoRepository;
 
-  public Cargo criarCargo(String titulo, Date dataContratacao, Double salario) {
+  public Cargo criarCargo(String titulo, LocalDate dataContratacao, Double salario) {
     Cargo cargo = new Cargo(titulo, dataContratacao, salario);
     return cargoRepository.save(cargo);
   }

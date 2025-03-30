@@ -25,7 +25,7 @@ public abstract class Funcionario {
     @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idCargo", nullable = false)
     private Cargo cargo;
 
@@ -36,7 +36,7 @@ public abstract class Funcionario {
     // Supervisor desse funcionario
     @ManyToOne
     @JoinColumn(name = "idGerente", nullable = true)
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Gerente supervisor;
 
 

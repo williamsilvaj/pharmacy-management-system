@@ -10,10 +10,10 @@ import jakarta.persistence.*;
 @PrimaryKeyJoinColumn(name = "idFuncionario")
 @Table(name = "farmaceutico")
 public class Farmaceutico extends Funcionario {
-	
-	@Column(name = "idFuncionario", insertable = false, updatable = false)
-    private Integer id; // Campo adicional apenas para leitura
-	
+
+	  @Column(name = "idFuncionario", insertable = false, updatable = false)
+    private Integer id;
+
     @Column(name = "turno", nullable = false, length = 45)
     private String turno;
 
@@ -29,7 +29,7 @@ public class Farmaceutico extends Funcionario {
 
 
     public Farmaceutico(String nome, String telefone, String cpf, Cargo cargo, Endereco endereco, String turno, String crf, Float cargaHoraria) {
-        super(nome, telefone, cpf, cargo, endereco);  // Chama o construtor da classe pai (Funcionario)
+        super(nome, telefone, cpf, cargo, endereco);
         this.turno = turno;
         this.crf = crf;
         this.cargaHoraria = cargaHoraria;

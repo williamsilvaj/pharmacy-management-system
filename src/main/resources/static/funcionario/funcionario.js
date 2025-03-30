@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Função para mostrar ou ocultar campos específicos com base no tipo
   function toggleGerenteFields() {
     const tipoFuncionario = document.querySelector('input[name="tipo"]:checked').value;
-    const idCargo = document.getElementById("cargo");
+    const cargo = document.getElementById("cargo");
 
     const farmaceuticoFields = document.getElementById("farmaceuticoFields");
     const gerenteFields = document.getElementById("gerenteFields");
@@ -17,11 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (tipoFuncionario === "Gerente") {
       farmaceuticoFields.style.display = "none";
       gerenteFields.style.display = "block";
-      idCargo.value = 1;
+      cargo.value = "Gerente";
     } else {
       farmaceuticoFields.style.display = "block";
       gerenteFields.style.display = "none";
-      idCargo.value = 2;
+      cargo.value = "Farmacêutico";
     }
   }
 
@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function carregarFuncionarios() {
     const response = await fetch("/funcionarios");
     const funcionarios = await response.json();
+    console.log(funcionarios);
 
     tableBody.innerHTML = ""; // Limpar tabela antes de atualizar
     funcionarios.forEach(funcionario => {
@@ -37,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td>${funcionario.nome}</td>
                 <td>${funcionario.telefone}</td>
                 <td>${funcionario.cpf}</td>
-                <td>${funcionario.cargo}</td>
+                <td>${funcionario.cargo.titulo}</td>
                 <td>
                     <button onclick="editarFuncionario(${funcionario.idFuncionario})">Editar</button>
                     <button onclick="deletarFuncionario(${funcionario.idFuncionario})">Excluir</button>
@@ -86,12 +87,18 @@ document.addEventListener("DOMContentLoaded", () => {
         estado: document.getElementById("estado").value,
         cep: document.getElementById("cep").value,
       },
-      cargo: Number(document.getElementById("cargo").value), // Farmacêutico ou Gerente
+      cargo: {
+        titulo: document.getElementById("cargo").value,
+        dataContratacao: document.getElementById("dataContratacao").value,
+        salario: document.getElementById("salario").value
+      },
     };
+
+    console.log(funcionario);
 
 
     // Definindo o endpoint dependendo do tipo de funcionário
-    const endpoint = funcionario.tipo === "Farmaceutico" ? "/farmaceuticos" : "/gerentes";
+    const endpoint = funcionario.cargo.titulo === "Farmacêutico" ? "/farmaceuticos" : "/gerentes";
 
     console.log('endpoint: ', endpoint);
     console.log(JSON.stringify(funcionario));

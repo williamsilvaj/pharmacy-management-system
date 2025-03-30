@@ -1,7 +1,8 @@
 package com.farmacia.pharma_manager.backend.cargo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "cargo")
@@ -16,14 +17,14 @@ public class Cargo {
     private String titulo;
 
     @Column(name = "dataContratacao")
-    @Temporal(TemporalType.DATE)
-    private Date dataContratacao;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dataContratacao;
 
     @Column(name = "salario")
     private Double salario;
 
     // Construtor
-    public Cargo(String titulo, Date dataContratacao, Double salario) {
+    public Cargo(String titulo, LocalDate dataContratacao, Double salario) {
 
         if (titulo == null || titulo.isEmpty()) {
             throw new IllegalArgumentException("Título do cargo não pode ser vazio.");
@@ -52,11 +53,11 @@ public class Cargo {
         this.titulo = titulo;
     }
 
-    public Date getDataContratacao() {
+    public LocalDate getDataContratacao() {
         return dataContratacao;
     }
 
-    public void setDataContratacao(Date dataContratacao) {
+    public void setDataContratacao(LocalDate dataContratacao) {
         this.dataContratacao = dataContratacao;
     }
 
