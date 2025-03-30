@@ -1,86 +1,157 @@
+/* Estilos gerais */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
+  background-color: #f4f4f9;
 }
 
 nav {
-  background: #007bff;
+  background-color: #007BFF;
   color: white;
   padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
+}
+
+nav h1 {
+  margin: 0;
 }
 
 nav ul {
   list-style: none;
   padding: 0;
-  margin: 0;
-  display: flex;
 }
 
 nav ul li {
+  display: inline;
   margin: 0 10px;
 }
 
-nav ul li a {
+nav a {
   color: white;
   text-decoration: none;
 }
 
+/* Estilo do corpo principal */
 main {
   padding: 20px;
 }
 
+h2 {
+  color: #333;
+  font-size: 1.8rem;
+}
+
+/* Botões */
+button {
+  background-color: #007BFF;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Estilos da caixa de pesquisa */
+#searchInput {
+  padding: 10px;
+  margin-top: 15px;
+  width: 300px;
+  border: 2px solid #007BFF;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+#searchInput:focus {
+  border-color: #0056b3;
+  outline: none;
+}
+
+/* Estilo da tabela */
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
-table, th, td {
+th, td {
+  padding: 12px;
+  text-align: left;
   border: 1px solid #ddd;
 }
 
-th, td {
-  padding: 10px;
-  text-align: left;
-}
-
 th {
-  background: #007bff;
-  color: white;
+  background-color: #f4f4f9;
+  color: #007BFF;
 }
 
+td {
+  background-color: white;
+}
+
+td button {
+  background-color: #28a745;
+  margin-right: 5px;
+}
+
+td button:nth-child(2) {
+  background-color: #dc3545;
+}
+
+td button:hover {
+  opacity: 0.8;
+}
+
+/* Modal */
 .modal {
   display: none;
   position: fixed;
+  z-index: 1;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   justify-content: center;
   align-items: center;
-  z-index: 1000;
 }
 
 .modal-content {
-  background: white;
+  background-color: white;
   padding: 20px;
   border-radius: 5px;
-  width: 80%;
-  max-width: 600px;
+  width: 400px;
 }
 
 .close {
-  float: right;
-  font-size: 20px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  right: 10px;
+  top: 5px;
   cursor: pointer;
 }
 
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Formulário */
 .form-group {
   margin-bottom: 15px;
 }
@@ -93,23 +164,11 @@ th {
 .form-group input {
   width: 100%;
   padding: 8px;
-  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
-}
-
-button {
-  padding: 8px 15px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #0056b3;
 }

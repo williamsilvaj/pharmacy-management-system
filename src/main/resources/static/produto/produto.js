@@ -4,14 +4,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeModal = document.querySelector(".close");
   const form = document.getElementById("productForm");
   const tableBody = document.getElementById("productTableBody");
+  const searchInput = document.getElementById("searchInput");
+
+  let allProducts = []; // Armazenar todos os produtos
 
   // Função para carregar e exibir os produtos na tabela
   async function loadProducts() {
     const response = await fetch("/produtos");
     const produtos = await response.json();
-    tableBody.innerHTML = ""; // Limpa a tabela antes de atualizar
+    allProducts = produtos; // Armazenar todos os produtos
+    displayProducts(produtos); // Exibir todos os produtos
+  }
 
-    produtos.forEach(produto => {
+  // Função para exibir produtos na tabela
+  function displayProducts(products) {
+    tableBody.innerHTML = ""; // Limpa a tabela antes de atualizar
+    products.forEach(produto => {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${produto.nome}</td>
@@ -88,6 +96,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     modal.style.display = "flex";
   };
+
+  // Função para pesquisar produtos
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    const filteredProducts = allProducts.filter(produto => {
+      return (
+        produto.nome.toLowerCase().includes(query) ||
+        produto.codigo.toString().includes(query)
+      );
+    });
+    displayProducts(filteredProducts);
+  });
 
   // Carrega os produtos ao iniciar a página
   loadProducts();
