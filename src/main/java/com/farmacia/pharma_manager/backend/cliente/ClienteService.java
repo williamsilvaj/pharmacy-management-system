@@ -33,7 +33,7 @@ public class ClienteService {
     public Optional<Cliente> buscarPorTelefone(String telefone) {
         return clienteRepository.findByTelefone(telefone);
     }
-	
+
 	public List<Cliente> buscarPorNome(String nome) {
 		return clienteRepository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
 	}
@@ -49,7 +49,14 @@ public class ClienteService {
             cliente.setEmail(clienteAtualizado.getEmail());
             cliente.setTelefone(clienteAtualizado.getTelefone());
             cliente.setEndereco(clienteAtualizado.getEndereco());
-            return clienteRepository.save(cliente);
+          if (clienteRepository.existsByCpf(cliente.getCpf())) {
+            throw new IllegalArgumentException("Já existe um cliente cadastrado com este CPF.");
+            }
+          if (clienteRepository.existsByEmail(cliente.getEmail())) {
+            throw new IllegalArgumentException("Este e-mail já está registrado.");
+            }
+          return clienteRepository.save(cliente);
+
         }).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
     }
 

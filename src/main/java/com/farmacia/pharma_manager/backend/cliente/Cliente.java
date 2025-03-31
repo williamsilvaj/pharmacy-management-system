@@ -28,7 +28,8 @@ public class Cliente {
     @Column(nullable = false, length = 45, unique = true)
     private String telefone;
 
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idEndereco", nullable = false)
     private Endereco endereco;
 
@@ -80,4 +81,5 @@ public class Cliente {
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
+
 }
