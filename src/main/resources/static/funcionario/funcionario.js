@@ -6,6 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const tableBody = document.getElementById("funcionarioTableBody");
 
 
+  // Fechar o modal
+  closeModal.addEventListener("click", () => {
+    modal.style.display = "none";
+    // Resetando o campo do ID do funcionário ao fechar o modal
+    document.getElementById("funcionarioId").value = ""; // Limpar o ID
+  });
+
   // Função para mostrar ou ocultar campos específicos com base no tipo
   function toggleGerenteFields() {
     const tipoFuncionario = document.querySelector('input[name="tipo"]:checked').value;
@@ -58,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
   // Exibir o modal
   openModal.addEventListener("click", () => {
     modal.style.display = "flex";
@@ -70,13 +76,14 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.style.display = "none";
   });
 
-
   // Chama a função para definir a visibilidade dos campos ao carregar a página
   toggleGerenteFields();
 
   // Lógica de envio do formulário
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    const funcionarioId = document.getElementById("funcionarioId").value; // Pega o ID do funcionário, se existir
 
     // Obtendo os valores dos campos do formulário
     const funcionario = {
@@ -103,37 +110,53 @@ document.addEventListener("DOMContentLoaded", () => {
     // Definindo o endpoint dependendo do tipo de funcionário
     const endpoint = funcionario.cargo.titulo === "Farmacêutico" ? "/farmaceuticos" : "/gerentes";
 
-    if (endpoint === "/farmaceuticos" ) {
+    if (funcionario.cargo.titulo === "Farmacêutico") {
       funcionarioFinal = {
         ...funcionario,
         turno: document.getElementById("turno").value,
         crf: document.getElementById("crf").value,
         cargaHoraria: Number(document.getElementById("cargaHoraria").value),
       };
-    }
-    else {
+    } else {
+      const supervisoresInput = document.getElementById("funcionariosSupervisionados").value.trim();
       funcionarioFinal = {
         ...funcionario,
-        funcionariosSupervisionados: document.getElementById("funcionariosSupervisionados").value,
+        funcionariosSupervisionados: supervisoresInput
+          ? supervisoresInput.split(",").map(id => ({ id: parseInt(id) }))
+          : []
       };
     }
 
-    console.log(typeof funcionarioFinal);
     console.log(funcionarioFinal);
 
-    console.log(JSON.stringify(funcionarioFinal));
-    // Enviando os dados para o backend
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(funcionarioFinal),
-    });
+    if (funcionarioId) {
+      // Se houver ID, significa que estamos atualizando um funcionário, então usamos o método PUT
+      const response = await fetch(`/funcionarios/${funcionarioId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(funcionarioFinal),
+      });
 
-    if (response.ok) {
-      modal.style.display = "none";
-      carregarFuncionarios(); // Atualiza a tabela sem precisar recarregar a página
+      if (response.ok) {
+        modal.style.display = "none";
+        carregarFuncionarios(); // Atualiza a tabela após a edição
+      } else {
+        alert("Erro ao atualizar funcionário");
+      }
     } else {
-      alert("Erro ao cadastrar funcionário");
+      // Caso contrário, estamos criando um novo funcionário com o método POST
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(funcionarioFinal),
+      });
+
+      if (response.ok) {
+        modal.style.display = "none";
+        carregarFuncionarios(); // Atualiza a tabela após a criação
+      } else {
+        alert("Erro ao cadastrar funcionário");
+      }
     }
   });
 
@@ -141,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.deletarFuncionario = async (id) => {
     const response = await fetch(`/funcionarios/${id}`, { method: "DELETE" });
     if (response.ok) {
-      carregarFuncionarios();
+      await carregarFuncionarios();
     }
   };
 
@@ -150,6 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const response = await fetch(`/funcionarios/${id}`);
     const funcionario = await response.json();
 
+    // Preencher os campos do formulário com os dados do funcionário
     document.getElementById("funcionarioNome").value = funcionario.nome;
     document.getElementById("funcionarioTelefone").value = funcionario.telefone;
     document.getElementById("funcionarioCpf").value = funcionario.cpf;
@@ -159,62 +183,25 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("cidade").value = funcionario.endereco.cidade;
     document.getElementById("estado").value = funcionario.endereco.estado;
     document.getElementById("cep").value = funcionario.endereco.cep;
+    document.getElementById("cargo").value = funcionario.cargo.titulo;
+    document.getElementById("dataContratacao").value = funcionario.cargo.dataContratacao;
+    document.getElementById("salario").value = funcionario.cargo.salario;
 
-    // Preenche os campos de tipo
-    document.getElementById("cep").value = funcionario.endereco.cep;
-    document.querySelector(`input[name="tipo"][value="${funcionario.tipo}"]`).checked = true;
+    // Preencher o campo oculto com o ID
+    document.getElementById("funcionarioId").value = funcionario.id;
+
+    // Seleciona e marca o input correto com base no cargo
+    if (cargo === "Gerente") {
+      document.querySelector('input[name="tipo"][value="Gerente"]').checked = true;
+    } else {
+      document.querySelector('input[name="tipo"][value="Farmacêutico"]').checked = true;
+    }
 
     // Exibe o modal
     modal.style.display = "flex";
 
     // Chama a função para ajustar os campos dependendo do tipo selecionado
     toggleGerenteFields();
-
-    form.onsubmit = async (e) => {
-      e.preventDefault();
-
-      // Atualiza os dados do funcionário conforme os novos valores do formulário
-      const updatedFuncionario = {
-        nome: document.getElementById("funcionarioNome").value,
-        telefone: document.getElementById("funcionarioTelefone").value,
-        cpf: document.getElementById("funcionarioCpf").value,
-        endereco: {
-          rua: document.getElementById("rua").value,
-          numero: document.getElementById("numero").value,
-          bairro: document.getElementById("bairro").value,
-          cidade: document.getElementById("cidade").value,
-          estado: document.getElementById("estado").value,
-          cep: document.getElementById("cep").value
-        },
-      };
-
-      // Endpoint e método de envio
-      let funcionarioFinal;
-      const endpoint = updatedFuncionario.tipo === "Farmaceutico" ? `/farmaceuticos/${id}` : `/gerentes/${id}`;
-      if (endpoint === `/farmaceuticos/${id}`) {
-        funcionarioFinal = {
-          ...funcionario,
-          turno: document.getElementById("turno").value,
-          crf: document.getElementById("crf").value,
-          cargaHoraria: Number(document.getElementById("cargaHoraria").value),
-        };
-      }
-      else {
-        funcionarioFinal = {
-          ...funcionario,
-          funcionariosSupervisionados: document.getElementById("funcionariosSupervisionados").value,
-        };
-      }
-
-      await fetch(endpoint, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(funcionarioFinal),
-      });
-
-      modal.style.display = "none";
-      carregarFuncionarios(); // Atualiza a tabela sem precisar recarregar a página
-    };
   };
 
   // Função para resetar o formulário

@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (response.ok) {
       modal.style.display = "none";
-      carregarClientes(); // Atualiza a tabela sem precisar recarregar a página
+      await carregarClientes(); // Atualiza a tabela sem precisar recarregar a página
     } else {
       alert("Erro ao cadastrar cliente");
     }
@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function carregarClientes() {
     const response = await fetch("/clientes");
     const clientes = await response.json();
+    console.log(clientes);
 
     tableBody.innerHTML = ""; // Limpar tabela antes de atualizar
     clientes.forEach(cliente => {
@@ -65,8 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${cliente.email}</td>
         <td>${cliente.cpf}</td>
         <td>
-          <button onclick="editarCliente(${cliente.id})">Editar</button>
-          <button onclick="deletarCliente(${cliente.id})">Excluir</button>
+          <button onclick="editarCliente(${cliente.idCliente})">Editar</button>
+          <button onclick="deletarCliente(${cliente.idCliente})">Excluir</button>
         </td>
       `;
       tableBody.appendChild(row);
@@ -77,13 +78,15 @@ document.addEventListener("DOMContentLoaded", () => {
   window.deletarCliente = async (id) => {
     const response = await fetch(`/clientes/${id}`, { method: "DELETE" });
     if (response.ok) {
-      carregarClientes();
+      await carregarClientes();
     }
   };
 
   // Função para editar cliente
   window.editarCliente = async (id) => {
+    console.log(id);
     const response = await fetch(`/clientes/${id}`);
+    console.log(response);
     const cliente = await response.json();
 
     document.getElementById("clienteNome").value = cliente.nome;
@@ -108,16 +111,18 @@ document.addEventListener("DOMContentLoaded", () => {
         nome: document.getElementById("clienteNome").value,
         telefone: document.getElementById("clienteTelefone").value,
         cpf: document.getElementById("clienteCpf").value,
+        email: document.getElementById("clienteEmail").value,
         endereco: {
           rua: document.getElementById("rua").value,
           numero: document.getElementById("numero").value,
           bairro: document.getElementById("bairro").value,
           cidade: document.getElementById("cidade").value,
           estado: document.getElementById("estado").value,
-          cep: document.getElementById("cep").value
+          cep: document.getElementById("cep").value,
         }
       };
-
+      console.log('NOVO: ');
+      console.log(updatedCliente);
       await fetch(`/clientes/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -125,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       modal.style.display = "none";
-      carregarClientes(); // Atualiza a tabela sem precisar recarregar a página
+      await carregarClientes(); // Atualiza a tabela sem precisar recarregar a página
     };
   };
 

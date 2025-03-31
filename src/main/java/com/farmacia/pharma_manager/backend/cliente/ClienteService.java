@@ -49,12 +49,7 @@ public class ClienteService {
             cliente.setEmail(clienteAtualizado.getEmail());
             cliente.setTelefone(clienteAtualizado.getTelefone());
             cliente.setEndereco(clienteAtualizado.getEndereco());
-          if (clienteRepository.existsByCpf(cliente.getCpf())) {
-            throw new IllegalArgumentException("Já existe um cliente cadastrado com este CPF.");
-            }
-          if (clienteRepository.existsByEmail(cliente.getEmail())) {
-            throw new IllegalArgumentException("Este e-mail já está registrado.");
-            }
+
           return clienteRepository.save(cliente);
 
         }).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));

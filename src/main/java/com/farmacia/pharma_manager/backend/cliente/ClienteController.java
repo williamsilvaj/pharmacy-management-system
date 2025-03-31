@@ -1,5 +1,7 @@
 package com.farmacia.pharma_manager.backend.cliente;
 
+import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -7,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@CrossOrigin("*")
 @RequestMapping("/clientes")
 public class ClienteController {
 
@@ -23,8 +24,9 @@ public class ClienteController {
   }
 
   @GetMapping
-  public List<Cliente> listarTodos() {
-    return clienteService.listarTodos();
+  public ResponseEntity<List<Cliente>> listarTodos() {
+    List<Cliente> clientes = clienteService.listarTodos();
+    return ResponseEntity.ok(clientes);
   }
 
   @GetMapping("/{id}")
@@ -46,16 +48,20 @@ public class ClienteController {
   }
 
   @PostMapping
-  public Cliente criar(@RequestBody Cliente cliente) {
-    return clienteService.salvar(cliente);
+  public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
+    Cliente savedCliente = clienteService.salvar(cliente);
+    return ResponseEntity.status(HttpStatus.CREATED).body(savedCliente);
   }
 
 
   @PutMapping("/{id}")
-  public ResponseEntity<Cliente> atualizar(@PathVariable Integer id, @RequestBody Cliente cliente) {
-    try {
-      return ResponseEntity.ok(clienteService.atualizar(id, cliente));
-    } catch (RuntimeException e) {
+  public ResponseEntity<Cliente> atualizarCliente(@PathVariable Integer id, @RequestBody Cliente cliente) {
+    Optional<Cliente> clienteExistente = clienteService.buscarPorId(id);
+    if (clienteExistente.isPresent()) {
+      cliente.setIdCliente(id);
+      clienteService.salvar(cliente);
+      return ResponseEntity.ok(cliente);
+    } else {
       return ResponseEntity.notFound().build();
     }
   }
