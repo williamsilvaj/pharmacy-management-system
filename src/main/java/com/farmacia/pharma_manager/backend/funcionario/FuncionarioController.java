@@ -1,5 +1,9 @@
 package com.farmacia.pharma_manager.backend.funcionario;
 
+import com.farmacia.pharma_manager.backend.farmaceutico.Farmaceutico;
+import com.farmacia.pharma_manager.backend.gerente.Gerente;
+import com.farmacia.pharma_manager.backend.gerente.GerenteService;
+import com.farmacia.pharma_manager.backend.farmaceutico.FarmaceuticoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.http.HttpStatus;
@@ -15,6 +19,12 @@ public class FuncionarioController {
 
     @Autowired
     private FuncionarioService funcionarioService;
+
+    @Autowired
+    private GerenteService gerenteService;  // Injeção do serviço de Gerente
+
+    @Autowired
+    private FarmaceuticoService farmaceuticoService;  // Caso tenha o serviço do Farmaceutico
 
     @GetMapping("/pagina")
     public String redirecionarParaFuncionarioPage() {
@@ -45,12 +55,21 @@ public class FuncionarioController {
 
     // Endpoint para atualizar um funcionário existente
     @PutMapping("/{id}")
-    public ResponseEntity<Funcionario> updateFuncionario(@PathVariable("id") Integer id, @RequestBody Funcionario funcionario) {
-        Funcionario updatedFuncionario = funcionarioService.updateFuncionario(id, funcionario);
-        return ResponseEntity.ok(updatedFuncionario);
+    public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable Integer id, @RequestBody Funcionario funcionario) {
+      if (funcionario instanceof Gerente) {
+        Gerente gerenteAtualizado = gerenteService.atualizarGerente(id, (Gerente) funcionario);
+        return ResponseEntity.ok(gerenteAtualizado);
+      } else if (funcionario instanceof Farmaceutico) {
+        Farmaceutico farmaceuticoAtualizado = farmaceuticoService.atualizarFarmaceutico(id, (Farmaceutico) funcionario);
+        return ResponseEntity.ok(farmaceuticoAtualizado);
+      }
+
+      // Se o tipo não for Gerente nem Farmaceutico, retornar erro 400
+      return ResponseEntity.badRequest().build();
     }
 
-    // Endpoint para deletar um funcionário
+
+  // Endpoint para deletar um funcionário
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFuncionario(@PathVariable("id") Integer id) {
         funcionarioService.deleteFuncionario(id);

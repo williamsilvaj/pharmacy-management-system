@@ -113,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (funcionario.cargo.titulo === "Farmacêutico") {
       funcionarioFinal = {
         ...funcionario,
+        tipo: "farmaceutico",
         turno: document.getElementById("turno").value,
         crf: document.getElementById("crf").value,
         cargaHoraria: Number(document.getElementById("cargaHoraria").value),
@@ -121,6 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const supervisoresInput = document.getElementById("funcionariosSupervisionados").value.trim();
       funcionarioFinal = {
         ...funcionario,
+        tipo: "gerente",
         funcionariosSupervisionados: supervisoresInput
           ? supervisoresInput.split(",").map(id => ({ id: parseInt(id) }))
           : []
@@ -139,7 +141,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (response.ok) {
         modal.style.display = "none";
-        carregarFuncionarios(); // Atualiza a tabela após a edição
+        document.getElementById("funcionarioId").value = "";
+        carregarFuncionarios();
       } else {
         alert("Erro ao atualizar funcionário");
       }
@@ -153,7 +156,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (response.ok) {
         modal.style.display = "none";
-        carregarFuncionarios(); // Atualiza a tabela após a criação
+        document.getElementById("funcionarioId").value = "";
+        carregarFuncionarios();
       } else {
         alert("Erro ao cadastrar funcionário");
       }
@@ -164,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.deletarFuncionario = async (id) => {
     const response = await fetch(`/funcionarios/${id}`, { method: "DELETE" });
     if (response.ok) {
+      document.getElementById("funcionarioId").value = "";
       await carregarFuncionarios();
     }
   };
@@ -192,8 +197,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Seleciona e marca o input correto com base no cargo
     if (cargo === "Gerente") {
+      document.getElementById("funcionariosSupervisionados").value = funcionario.funcionariosSupervisionados;
       document.querySelector('input[name="tipo"][value="Gerente"]').checked = true;
     } else {
+      document.getElementById("turno").value = funcionario.turno;
+      document.getElementById("crf").value = funcionario.crf;
+      document.getElementById("cargaHoraria").value = funcionario.cargaHoraria;
       document.querySelector('input[name="tipo"][value="Farmacêutico"]').checked = true;
     }
 

@@ -2,11 +2,19 @@ package com.farmacia.pharma_manager.backend.funcionario;
 
 import com.farmacia.pharma_manager.backend.cargo.Cargo;
 import com.farmacia.pharma_manager.backend.endereco.Endereco;
+import com.farmacia.pharma_manager.backend.farmaceutico.Farmaceutico;
 import com.farmacia.pharma_manager.backend.gerente.Gerente;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo")
+@JsonSubTypes({
+  @JsonSubTypes.Type(value = Gerente.class, name = "gerente"),
+  @JsonSubTypes.Type(value = Farmaceutico.class, name = "farmaceutico")
+})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Funcionario {
