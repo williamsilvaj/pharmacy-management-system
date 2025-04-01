@@ -38,18 +38,21 @@ document.addEventListener("DOMContentLoaded", () => {
   // Exibir modal para adicionar produto
   openModal.addEventListener("click", () => {
     modal.style.display = "flex";
+    form.reset(); // Limpa o formulário ao abrir o modal
+    document.getElementById("productId").value = ""; // Remove o ID do produto ao abrir o modal
   });
 
   // Fechar o modal
   closeModal.addEventListener("click", () => {
     modal.style.display = "none";
     form.reset();
+    document.getElementById("productId").value = ""; // Remove o ID ao fechar o modal
   });
 
   // Submissão do formulário (adicionar ou editar produto)
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const id = document.getElementById("productId").value;
+    const id = document.getElementById("productId").value.trim(); // Verificação para garantir que id está vazio ao adicionar
     const produto = {
       nome: document.getElementById("productName").value,
       codigo: document.getElementById("productCode").value,
@@ -59,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let method = "POST";
     let url = "/produtos";
-    if (id) {
+    if (id) { // Se id existir, usamos PUT para editar
       method = "PUT";
       url = `/produtos/${id}`;
     }
