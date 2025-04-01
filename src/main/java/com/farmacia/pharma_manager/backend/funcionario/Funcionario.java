@@ -35,8 +35,7 @@ public abstract class Funcionario {
 
     // Supervisor desse funcionario
     @ManyToOne
-    @JoinColumn(name = "idGerente", nullable = true)
-	  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JoinColumn(name = "idSupervisor", referencedColumnName = "idFuncionario", nullable = true)
     private Gerente supervisor;
 
 

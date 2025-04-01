@@ -3,8 +3,10 @@ package com.farmacia.pharma_manager.backend.item;
 import com.farmacia.pharma_manager.backend.produto.Produto;
 import com.farmacia.pharma_manager.backend.venda.Venda;
 import com.farmacia.pharma_manager.backend.estoque.Estoque;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -18,23 +20,28 @@ public class Item {
     @Column(nullable = false)
     private Double valor;
 
-    @Temporal(TemporalType.DATE)
+    @Column(nullable = true)
+    private Integer quantidade;
+
     @Column(nullable = false)
-    private Date dataVencimento;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dataVencimento;
 
     @ManyToOne
     @JoinColumn(name = "idProduto", nullable = false)
     private Produto produto;
 
     @ManyToOne
-    @JoinColumn(name = "Venda_idVenda")
+    @JoinColumn(name = "idVenda", nullable = true)
     private Venda venda;
 
     @ManyToOne
-    @JoinColumn(name = "idEstoque")
+    @JoinColumn(name = "idEstoque", nullable = true)
     private Estoque estoque;
 
     // Getters and Setters
+    public Integer getQuantidade() { return quantidade; }
+    public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
     public Integer getIdItem() {
         return idItem;
     }
@@ -47,10 +54,10 @@ public class Item {
     public void setValor(Double valor) {
         this.valor = valor;
     }
-    public Date getDataVencimento() {
+    public LocalDate getDataVencimento() {
         return dataVencimento;
     }
-    public void setDataVencimento(Date dataVencimento) {
+    public void setDataVencimento(LocalDate dataVencimento) {
         this.dataVencimento = dataVencimento;
     }
     public Produto getProduto() {

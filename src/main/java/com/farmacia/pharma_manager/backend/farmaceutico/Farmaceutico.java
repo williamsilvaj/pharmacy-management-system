@@ -11,9 +11,6 @@ import jakarta.persistence.*;
 @Table(name = "farmaceutico")
 public class Farmaceutico extends Funcionario {
 
-	  @Column(name = "idFuncionario", insertable = false, updatable = false)
-    private Integer id;
-
     @Column(name = "turno", nullable = false, length = 45)
     private String turno;
 
@@ -22,10 +19,6 @@ public class Farmaceutico extends Funcionario {
 
     @Column(name = "cargaHoraria", nullable = false)
     private Float cargaHoraria;
-
-    @OneToOne
-    @JoinColumn(name = "idFuncionario", referencedColumnName = "idFuncionario", insertable = false, updatable = false)
-    private Funcionario funcionario;
 
 
     public Farmaceutico(String nome, String telefone, String cpf, Cargo cargo, Endereco endereco, String turno, String crf, Float cargaHoraria) {

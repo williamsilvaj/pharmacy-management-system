@@ -1,13 +1,12 @@
 package com.farmacia.pharma_manager.backend.estoque;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
-
+import com.farmacia.pharma_manager.backend.item.Item;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name = "estoque")
@@ -16,8 +15,17 @@ public class Estoque {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEstoque;
+
+    @Column(nullable = false)
     private Integer quantidade;
-    private Date dataEntrada;
+
+    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dataEntrada;
+
+    @OneToMany(mappedBy = "estoque", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Item> itens = new ArrayList<>();
+
 
     // Getters and Setters
     public Integer getIdEstoque() {
@@ -36,11 +44,11 @@ public class Estoque {
         this.quantidade = quantidade;
     }
 
-    public Date getDataEntrada() {
+    public LocalDate getDataEntrada() {
         return dataEntrada;
     }
 
-    public void setDataEntrada(Date dataEntrada) {
+    public void setDataEntrada(LocalDate dataEntrada) {
         this.dataEntrada = dataEntrada;
     }
 }

@@ -40,6 +40,7 @@ CREATE TABLE pharmabd.funcionario (
   telefone VARCHAR(45) NOT NULL,
   cpf VARCHAR(11) NOT NULL,
   idCargo INT NOT NULL,
+  idSupervisor INT,
   idEndereco INT NOT NULL,
   PRIMARY KEY (idFuncionario),
   UNIQUE (cpf),
@@ -51,6 +52,11 @@ CREATE TABLE pharmabd.funcionario (
   CONSTRAINT fk_Funcionario_Endereco
     FOREIGN KEY (idEndereco)
     REFERENCES pharmabd.endereco (idEndereco)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_Funcionario_Supervisor
+    FOREIGN KEY (idSupervisor)
+    REFERENCES pharmabd.gerente (idFuncionario)
     ON DELETE NO ACTION
     ON UPDATE CASCADE
 );
@@ -65,16 +71,6 @@ CREATE TABLE pharmabd.gerente (
   FOREIGN KEY (idFuncionario) REFERENCES pharmabd.funcionario(idFuncionario) ON DELETE CASCADE
 );
 
--- -----------------------------------------------------
--- Adiciona fk_Gerente em pharmabd.funcionario
--- -----------------------------------------------------
-ALTER TABLE pharmabd.funcionario
-ADD COLUMN idGerente INT NULL,
-ADD CONSTRAINT fk_Funcionario_Gerente
-    FOREIGN KEY (idGerente)
-    REFERENCES pharmabd.gerente (idFuncionario)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE;
 
 -- -----------------------------------------------------
 -- Table pharmabd.farmaceutico
@@ -97,9 +93,9 @@ CREATE TABLE pharmabd.despesa (
   valor DOUBLE NOT NULL,
   idGerente INT NOT NULL,
   PRIMARY KEY (idDespesa),
-  CONSTRAINT fk_Despesa_Gerente
+  CONSTRAINT fk_Despesa_Funcionario
     FOREIGN KEY (idGerente)
-    REFERENCES pharmabd.gerente (idFuncionario)
+    REFERENCES pharmabd.funcionario (idFuncionario)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 );
@@ -130,7 +126,6 @@ CREATE TABLE pharmabd.cliente (
 -- -----------------------------------------------------
 CREATE TABLE pharmabd.venda (
   idVenda INT NOT NULL AUTO_INCREMENT,
-  quantidade INT NOT NULL,
   valor DOUBLE NOT NULL,
   data DATE NOT NULL,
   idFarmaceutico INT NOT NULL,
@@ -177,9 +172,10 @@ CREATE TABLE pharmabd.estoque (
 CREATE TABLE pharmabd.item (
   idItem INT NOT NULL AUTO_INCREMENT,
   valor DOUBLE NOT NULL,
+  quantidade INT NULL,
   dataVencimento DATE NOT NULL,
   idProduto INT NOT NULL,
-  Venda_idVenda INT NULL,
+  idVenda INT NULL,
   idEstoque INT NULL,
   PRIMARY KEY (idItem),
   CONSTRAINT fk_Item_Produto

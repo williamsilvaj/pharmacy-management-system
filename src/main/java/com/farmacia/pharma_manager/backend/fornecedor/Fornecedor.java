@@ -24,8 +24,8 @@ public class Fornecedor {
     @Column(name = "status")
     private Integer status;
 
-    @OneToOne
-    @JoinColumn(name = "idEndereco", referencedColumnName = "idEndereco")
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idEndereco", nullable = false)
     private Endereco endereco;
 
     // Getters e Setters

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const cancelSaleBtn = document.getElementById("cancelSaleBtn");
     const confirmSaleBtn = document.getElementById("confirmSaleBtn");
     const salesHistoryBody = document.getElementById("salesHistoryBody");
-    
+
     // Modais
     const clientModal = document.getElementById("clientModal");
     const pharmacistModal = document.getElementById("pharmacistModal");
@@ -18,60 +18,60 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedClient = null;
     let selectedPharmacist = null;
     let saleItems = [];
-    
+
     // Inicialização
     loadSalesHistory();
-    
+
     // Event Listeners
     newSaleBtn.addEventListener("click", () => {
         saleForm.style.display = "block";
         resetSaleForm();
     });
-    
+
     cancelSaleBtn.addEventListener("click", () => {
         saleForm.style.display = "none";
     });
-    
+
     confirmSaleBtn.addEventListener("click", confirmSale);
-    
+
     // Busca de clientes
     document.getElementById("searchClientBtn").addEventListener("click", () => {
         clientModal.style.display = "flex";
         searchClients();
     });
-    
+
     document.getElementById("clientModalSearch").addEventListener("input", searchClients);
-    
+
     // Busca de farmacêuticos
     document.getElementById("searchPharmacistBtn").addEventListener("click", () => {
         pharmacistModal.style.display = "flex";
         searchPharmacists();
     });
-    
+
     document.getElementById("pharmacistModalSearch").addEventListener("input", searchPharmacists);
-    
+
     // Busca de produtos
     document.getElementById("searchProductBtn").addEventListener("click", () => {
         productModal.style.display = "flex";
         searchProducts();
     });
-    
+
     document.getElementById("productModalSearch").addEventListener("input", searchProducts);
-	
+
 	//Relatorio de Vendas
 	document.getElementById('generateReportBtn').addEventListener('click', () => {
     document.getElementById('reportModal').style.display = 'flex';
 	});
 	document.getElementById('confirmGenerateReport').addEventListener('click', generateSalesReport);
 
-    
+
     // Fechar modais
     document.querySelectorAll(".close").forEach(closeBtn => {
         closeBtn.addEventListener("click", function() {
             this.closest(".modal").style.display = "none";
         });
     });
-    
+
     // Funções
     function resetSaleForm() {
         selectedClient = null;
@@ -82,15 +82,15 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("saleItemsBody").innerHTML = "";
         updateTotals();
     }
-    
+
     async function searchClients() {
         const searchTerm = document.getElementById("clientModalSearch").value;
         const response = await fetch(`/clientes/nome/${encodeURIComponent(searchTerm)}`);
         const clients = await response.json();
-        
+
         const resultsContainer = document.getElementById("clientModalResults");
         resultsContainer.innerHTML = "";
-        
+
         clients.forEach(client => {
             const clientElement = document.createElement("div");
             clientElement.textContent = `${client.nome} (${client.cpf})`;
@@ -106,15 +106,15 @@ document.addEventListener("DOMContentLoaded", () => {
             resultsContainer.appendChild(clientElement);
         });
     }
-    
+
     async function searchPharmacists() {
         const searchTerm = document.getElementById("pharmacistModalSearch").value;
         const response = await fetch(`/farmaceuticos/busca/${encodeURIComponent(searchTerm)}`);
         const pharmacists = await response.json();
-        
+
         const resultsContainer = document.getElementById("pharmacistModalResults");
         resultsContainer.innerHTML = "";
-        
+
         pharmacists.forEach(pharmacist => {
             const pharmacistElement = document.createElement("div");
             pharmacistElement.textContent = `${pharmacist.nome} (CRF: ${pharmacist.crf})`;
@@ -130,15 +130,15 @@ document.addEventListener("DOMContentLoaded", () => {
             resultsContainer.appendChild(pharmacistElement);
         });
     }
-    
+
     async function searchProducts() {
         const searchTerm = document.getElementById("productModalSearch").value;
         const response = await fetch(`/produtos/busca/${encodeURIComponent(searchTerm)}`);
         const products = await response.json();
-        
+
         const resultsContainer = document.getElementById("productModalResults");
         resultsContainer.innerHTML = "";
-        
+
         products.forEach(product => {
             const productElement = document.createElement("div");
             productElement.innerHTML = `
@@ -153,48 +153,48 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (!disponibilidadeResponse.ok) {
                         throw new Error("Erro ao verificar estoque");
                     }
-                    
+
                     const { quantidadeDisponivel } = await disponibilidadeResponse.json();
-                    
+
                     // Verificar itens já adicionados para este produto
                     const alreadyAdded = saleItems.filter(item => item.product.idProduto === product.idProduto)
                                                 .reduce((sum, item) => sum + item.quantity, 0);
-                    
+
                     const available = quantidadeDisponivel - alreadyAdded;
-                    
+
                     if (available <= 0) {
                         alert(`Não há mais unidades disponíveis deste produto no estoque`);
                         return;
                     }
-                    
+
                     // Pedir quantidade desejada com limite máximo
                     const quantity = prompt(`Quantidade desejada de ${product.nome} (Disponível: ${available}):`, "1");
                     if (!quantity || isNaN(quantity) || parseInt(quantity) <= 0) {
                         alert("Quantidade inválida");
                         return;
                     }
-                    
+
                     const desiredQuantity = parseInt(quantity);
-                    
+
                     if (desiredQuantity > available) {
                         alert(`Quantidade solicitada (${desiredQuantity}) excede o disponível (${available})`);
                         return;
                     }
-                    
+
                     // Buscar os itens disponíveis
                     const itemsResponse = await fetch(`/itens/disponiveis/${product.idProduto}?limit=${desiredQuantity}`);
                     const availableItems = await itemsResponse.json();
-                    
+
                     if (availableItems.length < desiredQuantity) {
                         alert(`Quantidade indisponível no momento. Disponível agora: ${availableItems.length}`);
                         return;
                     }
-                    
+
                     // Adicionar itens à venda
                     for (const item of availableItems) {
                         addItemToSale(product, item);
                     }
-                    
+
                     productModal.style.display = "none";
                 } catch (error) {
                     console.error("Erro:", error);
@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function addItemToSale(product, item) {
         // Verifica se já existe um item com o mesmo produto
         const existingItem = saleItems.find(i => i.product.idProduto === product.idProduto);
-        
+
         if (existingItem) {
             // Se já existe, apenas incrementa a quantidade
             existingItem.quantity += 1;
@@ -222,15 +222,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 quantity: 1
             });
         }
-        
+
         updateSaleItemsTable();
         updateTotals();
     }
-    
+
     function updateSaleItemsTable() {
         const tableBody = document.getElementById("saleItemsBody");
         tableBody.innerHTML = "";
-        
+
         saleItems.forEach((saleItem, index) => {
             const row = document.createElement("tr");
             row.innerHTML = `
@@ -242,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
             tableBody.appendChild(row);
         });
-        
+
         // Adicionar event listeners para os botões de remover
         document.querySelectorAll(".remove-item-btn").forEach(button => {
             button.addEventListener("click", (e) => {
@@ -253,16 +253,16 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
-        
-    
+
+
     function updateTotals() {
         const totalQuantity = saleItems.reduce((sum, item) => sum + item.quantity, 0);
         const totalValue = saleItems.reduce((sum, item) => sum + (item.item.valor * item.quantity), 0);
-        
+
         document.getElementById("totalQuantity").textContent = totalQuantity;
         document.getElementById("totalValue").textContent = totalValue.toFixed(2);
     }
-    
+
     async function confirmSale() {
     if (!selectedClient || !selectedPharmacist || saleItems.length === 0) {
         alert("Selecione cliente, farmacêutico e pelo menos um produto");
@@ -275,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
         itens: saleItems.map(item => ({
             idProduto: item.product.idProduto,
             quantidade: item.quantity
-        }))
+        })),
     };
 
     try {
@@ -297,13 +297,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		saleForm.style.display = "none";
         resetSaleForm();
         loadSalesHistory();
-        
+
     } catch (error) {
         console.error("Erro na venda:", error);
         alert(`Erro: ${error.message}`);
     }
 }
-    
+
     // Adicione esta função para desfazer venda
 	window.undoSale = async (saleId) => {
 		if (confirm("Tem certeza que deseja desfazer esta venda?\nEsta ação não pode ser desfeita.")) {
@@ -329,9 +329,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	async function loadSalesHistory() {
 		const response = await fetch("/vendas");
 		const sales = await response.json();
-		
+
 		salesHistoryBody.innerHTML = "";
-		
+
 		sales.forEach(sale => {
 			const row = document.createElement("tr");
 			row.innerHTML = `
@@ -348,7 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			salesHistoryBody.appendChild(row);
 		});
 	}
-    
+
     window.viewSaleDetails = async (saleId) => {
 		try {
 			// Busca os dados da venda
@@ -364,13 +364,13 @@ document.addEventListener("DOMContentLoaded", () => {
 			// Formata os detalhes dos itens
 			let itemsDetails = "Nenhum item encontrado";
 			if (itens && itens.length > 0) {
-				itemsDetails = itens.map(item => 
+				itemsDetails = itens.map(item =>
 					`- ${item.produto.nome} (R$ ${item.valor.toFixed(2)})`
 				).join("\n");
 			}
 
 			// Exibe os detalhes
-			alert(`Detalhes da Venda #${venda.idVenda}	
+			alert(`Detalhes da Venda #${venda.idVenda}
 Itens:\n${itemsDetails}`);
 
 		} catch (error) {
@@ -378,11 +378,11 @@ Itens:\n${itemsDetails}`);
 			alert(`Erro ao carregar detalhes: ${error.message}`);
 		}
 	};
-	
+
 	async function generateSalesReport() {
 		const startDate = document.getElementById('reportStartDate').value;
 		const endDate = document.getElementById('reportEndDate').value;
-		
+
 		if (!startDate || !endDate) {
 			alert('Selecione ambas as datas');
 			return;
@@ -390,7 +390,7 @@ Itens:\n${itemsDetails}`);
 
 		try {
 			const response = await fetch(`/vendas/relatorio?dataInicio=${startDate}&dataFim=${endDate}`);
-			
+
 			if (!response.ok) {
 				const error = await response.text();
 				throw new Error(error || 'Erro ao gerar relatório');
@@ -404,7 +404,7 @@ Itens:\n${itemsDetails}`);
 			a.download = `relatorio_vendas_${startDate}_a_${endDate}.pdf`;
 			a.click();
 			window.URL.revokeObjectURL(url);
-			
+
 			document.getElementById('reportModal').style.display = 'none';
 		} catch (error) {
 			alert(`Erro: ${error.message}`);

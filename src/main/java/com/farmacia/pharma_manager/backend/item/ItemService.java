@@ -85,10 +85,10 @@ public List<Item> listarItensPorDataEntrada(LocalDate dataInicio, LocalDate data
         List<Item> itens = itemRepository.findAll();
         for (Item item : itens) {
             String nomeProduto = item.getProduto().getNome();
-            Integer quantidade = item.getEstoque().getQuantidade(); // Vamos assumir que o estoque tem uma quantidade
+            Integer quantidade = item.getEstoque().getQuantidade();
             Double valor = item.getValor();
-            Date dataVencimento = item.getDataVencimento();
-            Date dataEntradaEstoque = item.getEstoque().getDataEntrada(); // Suposição: o Estoque tem uma data de entrada
+            LocalDate dataVencimento = item.getDataVencimento();
+            LocalDate dataEntradaEstoque = item.getEstoque().getDataEntrada();
 
             RelatorioEstoqueDTO dto = new RelatorioEstoqueDTO(nomeProduto, quantidade, valor, dataVencimento, dataEntradaEstoque);
             relatorio.add(dto);

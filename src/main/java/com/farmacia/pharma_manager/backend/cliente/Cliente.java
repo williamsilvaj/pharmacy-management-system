@@ -22,12 +22,11 @@ public class Cliente {
     @Column(nullable = false, length = 11, unique = true)
     private String cpf;
 
-    @Column(nullable = false, length = 45, unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false, length = 45, unique = true)
     private String telefone;
-
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idEndereco", nullable = false)

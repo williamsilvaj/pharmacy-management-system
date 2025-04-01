@@ -2,8 +2,12 @@ package com.farmacia.pharma_manager.backend.venda;
 
 import com.farmacia.pharma_manager.backend.cliente.Cliente;
 import com.farmacia.pharma_manager.backend.farmaceutico.Farmaceutico;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.farmacia.pharma_manager.backend.item.Item;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "venda")
@@ -13,8 +17,14 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idVenda;
 
+    @Column(nullable = false)
     private Integer quantidade;
+
+    @Column(nullable = false)
     private Double valor;
+
+    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate data;
 
     @ManyToOne
@@ -24,6 +34,9 @@ public class Venda {
     @ManyToOne
     @JoinColumn(name = "idCliente", referencedColumnName = "idCliente")
     private Cliente cliente;
+
+    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Item> itens = new ArrayList<>();
 
     // Getters e Setters
 
