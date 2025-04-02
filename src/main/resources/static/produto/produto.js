@@ -6,19 +6,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const tableBody = document.getElementById("productTableBody");
   const searchInput = document.getElementById("searchInput");
 
-  let allProducts = []; // Armazenar todos os produtos
+  let allProducts = [];
 
-  // Função para carregar e exibir os produtos na tabela
   async function loadProducts() {
     const response = await fetch("/produtos");
     const produtos = await response.json();
-    allProducts = produtos; // Armazenar todos os produtos
-    displayProducts(produtos); // Exibir todos os produtos
+    allProducts = produtos;
+    displayProducts(produtos);
   }
 
-  // Função para exibir produtos na tabela
   function displayProducts(products) {
-    tableBody.innerHTML = ""; // Limpa a tabela antes de atualizar
+    tableBody.innerHTML = "";
     products.forEach(produto => {
       const row = document.createElement("tr");
       row.innerHTML = `
@@ -35,24 +33,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Exibir modal para adicionar produto
+  // Abrir modal para adicionar um novo produto
   openModal.addEventListener("click", () => {
     modal.style.display = "flex";
-    form.reset(); // Limpa o formulário ao abrir o modal
-    document.getElementById("productId").value = ""; // Remove o ID do produto ao abrir o modal
+    form.reset();
+    document.getElementById("productId").value = ""; // Garantindo que o ID está vazio
   });
 
-  // Fechar o modal
   closeModal.addEventListener("click", () => {
     modal.style.display = "none";
     form.reset();
-    document.getElementById("productId").value = ""; // Remove o ID ao fechar o modal
+    document.getElementById("productId").value = "";
   });
 
-  // Submissão do formulário (adicionar ou editar produto)
+  // Submissão do formulário (distinguir POST e PUT corretamente)
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const id = document.getElementById("productId").value.trim(); // Verificação para garantir que id está vazio ao adicionar
+
+    const id = document.getElementById("productId").value.trim();
     const produto = {
       nome: document.getElementById("productName").value,
       codigo: document.getElementById("productCode").value,
@@ -60,25 +58,28 @@ document.addEventListener("DOMContentLoaded", () => {
       concentracao: document.getElementById("productConcentration").value
     };
 
-    let method = "POST";
-    let url = "/produtos";
-    if (id) { // Se id existir, usamos PUT para editar
-      method = "PUT";
-      url = `/produtos/${id}`;
+    if (id) {
+      // Se ID existir, é uma edição (PUT)
+      await fetch(`/produtos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(produto)
+      });
+    } else {
+      // Se ID não existir, é um novo cadastro (POST)
+      await fetch("/produtos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(produto)
+      });
     }
-
-    await fetch(url, {
-      method: method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(produto)
-    });
 
     modal.style.display = "none";
     form.reset();
+    document.getElementById("productId").value = ""; // Resetando ID
     loadProducts();
   });
 
-  // Função para excluir produto
   window.deleteProduct = async (id) => {
     if (confirm("Tem certeza que deseja excluir este produto?")) {
       await fetch(`/produtos/${id}`, { method: "DELETE" });
@@ -86,7 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Função para editar produto (carregar dados no formulário)
   window.editProduct = async (id) => {
     const response = await fetch(`/produtos/${id}`);
     const produto = await response.json();
@@ -100,7 +100,6 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.style.display = "flex";
   };
 
-  // Função para pesquisar produtos
   searchInput.addEventListener("input", () => {
     const query = searchInput.value.toLowerCase();
     const filteredProducts = allProducts.filter(produto => {
@@ -112,6 +111,5 @@ document.addEventListener("DOMContentLoaded", () => {
     displayProducts(filteredProducts);
   });
 
-  // Carrega os produtos ao iniciar a página
   loadProducts();
 });
