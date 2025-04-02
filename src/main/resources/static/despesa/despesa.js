@@ -74,7 +74,10 @@ document.addEventListener("DOMContentLoaded", () => {
         descricao: document.getElementById("expenseDescription").value,
         valor: parseFloat(document.getElementById("expenseValue").value),
         data: document.getElementById("expenseDate").value,
-        gerente: { id: Number(idGerente) },
+        gerente: {
+          id: Number(idGerente),
+          tipo: "gerente",
+        },
       };
 
       await fetch("/despesas", {
@@ -121,7 +124,10 @@ document.addEventListener("DOMContentLoaded", () => {
         descricao: document.getElementById("expenseDescription").value,
         valor: parseFloat(document.getElementById("expenseValue").value),
         data: document.getElementById("expenseDate").value,
-        gerente: { id: Number(document.getElementById("expenseManager").value) }
+        gerente: {
+          id: Number(document.getElementById("expenseManager").value),
+          tipo: "gerente",
+        }
       };
 
       console.log(despesaAtualizada);
