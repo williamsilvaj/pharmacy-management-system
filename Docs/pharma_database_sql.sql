@@ -71,6 +71,12 @@ CREATE TABLE pharmabd.gerente (
   FOREIGN KEY (idFuncionario) REFERENCES pharmabd.funcionario(idFuncionario) ON DELETE CASCADE
 );
 
+-- Adicionar a FK Gerente na tabela Funcionario
+ALTER TABLE pharmabd.funcionario
+  ADD CONSTRAINT fk_Funcionario_Supervisor
+    FOREIGN KEY (idSupervisor) REFERENCES pharmabd.gerente(idFuncionario)
+      ON DELETE NO ACTION
+      ON UPDATE CASCADE;
 
 -- -----------------------------------------------------
 -- Table pharmabd.farmaceutico
