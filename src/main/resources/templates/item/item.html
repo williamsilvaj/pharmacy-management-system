@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciamento de Itens</title>
+  <link rel="stylesheet" href="/item/item.css">
+  <script src="/item/item.js" defer></script>
+</head>
+<body>
+  <nav>
+    <h1>Pharma Manager</h1>
+    <ul>
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/produtos/pagina">Produtos</a></li>
+      <li><a href="/clientes/pagina">Clientes</a></li>
+      <li><a href="/vendas/pagina">Vendas</a></li>
+      <li><a href="/item/pagina">Itens</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h2>Gerenciamento de Itens</h2>
+    <button id="backBtn" onclick="window.history.back()">Voltar</button>
+    <button id="addItemBtn">Adicionar Item</button>
+
+    <!-- Campo de busca de itens -->
+    <div>
+      <label for="searchInput">Pesquisar Item:</label>
+      <input type="text" id="searchInput" placeholder="Pesquisar por produto ou estoque...">
+    </div>
+
+    <table id="itemTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Valor</th>
+          <th>Data Vencimento</th>
+          <th>Produto</th>
+          <th>Estoque (Qtd/Data Entrada)</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="itemTableBody">
+        <!-- Itens serão carregados aqui -->
+      </tbody>
+    </table>
+  </main>
+
+  <!-- Modal para cadastro/edição de item -->
+  <div id="itemModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeItemModal">&times;</span>
+      <h3>Adicionar Item</h3>
+      <form id="itemForm">
+        <input type="hidden" id="itemId">
+        <div class="form-group">
+          <label>Valor:</label>
+          <input type="number" step="0.01" id="itemValor" required>
+        </div>
+        <div class="form-group">
+          <label>Data de Vencimento:</label>
+          <input type="date" id="itemDataVencimento" required>
+        </div>
+        <div class="form-group">
+          <label>Produto:</label>
+          <!-- Campo para exibir o nome do produto selecionado -->
+          <input type="text" id="produtoSelecionadoNome" placeholder="Nenhum produto selecionado" readonly required>
+          <!-- Campo hidden para armazenar o id do produto -->
+          <input type="hidden" id="itemProdutoId" required>
+          <button type="button" id="openProdutoModalBtn">Selecionar Produto</button>
+        </div>
+        <!-- Campos para criação do estoque -->
+        <div class="form-group">
+          <label>Quantidade em Estoque:</label>
+          <input type="number" id="estoqueQuantidade" required>
+        </div>
+        <div class="form-group">
+          <label>Data de Entrada no Estoque:</label>
+          <input type="date" id="estoqueDataEntrada" required>
+        </div>
+        <div class="form-actions">
+          <button type="submit" id="saveItemBtn">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para seleção de produto -->
+  <div id="produtoModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeProdutoModal">&times;</span>
+      <h3>Selecione um Produto</h3>
+      <div class="form-group">
+        <label for="produtoSearchInput">Pesquisar por nome ou código:</label>
+        <input type="text" id="produtoSearchInput" placeholder="Digite nome ou código">
+      </div>
+      <table id="produtoTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Código</th>
+            <th>Fabricante</th>
+          </tr>
+        </thead>
+        <tbody id="produtoTableBody">
+          <!-- Produtos serão listados aqui -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

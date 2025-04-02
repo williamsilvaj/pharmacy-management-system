@@ -149,6 +149,7 @@
         <li><a href="/funcionarios/pagina">Funcionários</a></li>
         <li><a href="/itens/relatorio-pdf">Relatórios</a></li>
         <li><a href="/vendas/pagina">Vendas</a></li>
+        <li><a href="/itens/pagina">Vendas</a></li>
       </ul>
     </nav>
   </header>
@@ -192,6 +193,13 @@
       <p>Cadastrar e gerenciar clientes da farmácia.</p>
       <button onclick="window.location.href=landingLinks.clientes">Cadastrar Clientes</button>
     </div>
+    </div>
+        <div class="option">
+      <img src="https://images.unsplash.com/photo-1642055514517-7b52288890ec?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Itens">
+      <h2>Itens</h2>
+      <p>Cadastrar e gerenciar itens da farmácia.</p>
+      <button onclick="window.location.href=landingLinks.item">Cadastrar Itens</button>
+    </div>
   </section>
 
   <footer>
@@ -207,6 +215,7 @@
       vendas: '/vendas/pagina',
       clientes: 'clientes/pagina',
       fornecedores: 'fornecedores/pagina',
+      item: 'itens/pagina'
     };
 
     // Caso precise atualizar os links, basta alterar os valores neste objeto.
