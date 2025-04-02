@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function carregarFornecedores() {
     const response = await fetch("/fornecedores");
     const fornecedores = await response.json();
+    console.log(fornecedores)
 
     tableBody.innerHTML = ""; // Limpar tabela antes de atualizar
     fornecedores.forEach(fornecedor => {
@@ -16,8 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
       row.innerHTML = `
                 <td>${fornecedor.nome}</td>
                 <td>${fornecedor.cnpj}</td>
+                <td>${fornecedor.email}</td>
                 <td>${fornecedor.telefone}</td>
-                <td>${fornecedor.endereco.rua}, ${fornecedor.endereco.numero}, ${fornecedor.endereco.bairro}</td>
+                <td>${fornecedor.endereco.rua}, ${fornecedor.endereco.numero},
+${fornecedor.endereco.bairro}, ${fornecedor.endereco.cidade}, ${fornecedor.endereco.estado}, ${fornecedor.endereco.cep}</td>
                 <td>
                     <button onclick="editarFornecedor(${fornecedor.idFornecedor})">Editar</button>
                     <button onclick="deletarFornecedor(${fornecedor.idFornecedor})">Excluir</button>
@@ -25,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
       tableBody.appendChild(row);
     });
+
   }
 
   // Exibir o modal
@@ -46,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const fornecedor = {
       nome: document.getElementById("fornecedorNome").value,
       cnpj: document.getElementById("fornecedorCnpj").value,
+      email: document.getElementById("fornecedorEmail").value,
       telefone: document.getElementById("fornecedorTelefone").value,
       endereco: {
         rua: document.getElementById("rua").value,
@@ -54,39 +59,62 @@ document.addEventListener("DOMContentLoaded", () => {
         cidade: document.getElementById("cidade").value,
         estado: document.getElementById("estado").value,
         cep: document.getElementById("cep").value,
-      }
+      },
     };
 
-    // Enviando os dados para o backend
-    const response = await fetch("/fornecedores", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(fornecedor),
-    });
+    let fornecedorFinal = fornecedor
 
-    if (response.ok) {
-      modal.style.display = "none";
-      carregarFornecedores(); // Atualiza a tabela sem precisar recarregar a página
+    console.log(fornecedorFinal);
+
+    if (fornecedorId) {
+      const response = await fetch(`/fornecedores/${fornecedores}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(fornecedorFinal),
+      });
+
+      if (response.ok) {
+        modal.style.display = "none";
+        document.getElementById("fornecedorId").value = "";
+        carregarFornecedores();
+      } else {
+        alert("Erro ao atualizar fornecedor");
+      }
     } else {
-      alert("Erro ao cadastrar fornecedor");
+      // Enviando os dados para o backend
+      const response = await fetch("/fornecedores", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(fornecedorFinal),
+      });
+
+      if (response.ok) {
+        modal.style.display = "none";
+        document.getElementById("fornecedorId").value = "";
+        carregarFornecedores(); // Atualiza a tabela sem precisar recarregar a página
+      } else {
+        alert("Erro ao cadastrar fornecedor");
+      }
     }
   });
 
   // Função para excluir fornecedor
   window.deletarFornecedor = async (id) => {
-    const response = await fetch(`/fornecedores/${id}`, { method: "DELETE" });
+    const response = await fetch(`/fornecedores/${id}`, {method: "DELETE"});
     if (response.ok) {
-      carregarFornecedores();
+      document.getElementById("fornecedorId").value = "";
+      await carregarFornecedores();
     }
   };
 
-  // Função para editar fornecedor
+    // Função para editar fornecedor
   window.editarFornecedor = async (id) => {
     const response = await fetch(`/fornecedores/${id}`);
     const fornecedor = await response.json();
 
     document.getElementById("fornecedorNome").value = fornecedor.nome;
     document.getElementById("fornecedorCnpj").value = fornecedor.cnpj;
+    document.getElementById("fornecedorEmail").value = fornecedor.email;
     document.getElementById("fornecedorTelefone").value = fornecedor.telefone;
     document.getElementById("rua").value = fornecedor.endereco.rua;
     document.getElementById("numero").value = fornecedor.endereco.numero;
@@ -98,40 +126,41 @@ document.addEventListener("DOMContentLoaded", () => {
     // Exibe o modal
     modal.style.display = "flex";
 
-    form.onsubmit = async (e) => {
-      e.preventDefault();
+     form.onsubmit = async (e) => {
+       e.preventDefault();
 
-      // Atualiza os dados do fornecedor conforme os novos valores do formulário
-      const updatedFornecedor = {
-        nome: document.getElementById("fornecedorNome").value,
-        cnpj: document.getElementById("fornecedorCnpj").value,
-        telefone: document.getElementById("fornecedorTelefone").value,
-        endereco: {
-          rua: document.getElementById("rua").value,
-          numero: document.getElementById("numero").value,
-          bairro: document.getElementById("bairro").value,
-          cidade: document.getElementById("cidade").value,
-          estado: document.getElementById("estado").value,
-          cep: document.getElementById("cep").value
-        }
-      };
+       // Atualiza os dados do fornecedor conforme os novos valores do formulário
+       const updatedFornecedor = {
+         nome: document.getElementById("fornecedorNome").value,
+         cnpj: document.getElementById("fornecedorCnpj").value,
+         email: document.getElementById("fornecedorEmail").value,
+         telefone: document.getElementById("fornecedorTelefone").value,
+         endereco: {
+           rua: document.getElementById("rua").value,
+           numero: document.getElementById("numero").value,
+           bairro: document.getElementById("bairro").value,
+           cidade: document.getElementById("cidade").value,
+           estado: document.getElementById("estado").value,
+           cep: document.getElementById("cep").value
+         }
+       };
 
-      // Endpoint e método de envio
-      await fetch(`/fornecedores/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedFornecedor),
-      });
+       // Endpoint e método de envio
+       await fetch(`/fornecedores/${id}`, {
+         method: "PUT",
+         headers: {"Content-Type": "application/json"},
+         body: JSON.stringify(updatedFornecedor),
+       });
 
-      modal.style.display = "none";
-      carregarFornecedores(); // Atualiza a tabela sem precisar recarregar a página
+    modal.style.display = "none";
+    carregarFornecedores(); // Atualiza a tabela sem precisar recarregar a página
     };
   };
 
-  // Função para resetar o formulário
-  function resetForm() {
-    form.reset();
-  }
+    // Função para resetar o formulário
+    function resetForm() {
+      form.reset();
+    }
 
-  carregarFornecedores(); // Carrega os fornecedores ao iniciar a página
-});
+    carregarFornecedores(); // Carrega os fornecedores ao iniciar a página
+  });
