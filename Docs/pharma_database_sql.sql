@@ -40,7 +40,6 @@ CREATE TABLE pharmabd.funcionario (
   telefone VARCHAR(45) NOT NULL,
   cpf VARCHAR(11) NOT NULL,
   idCargo INT NOT NULL,
-  idSupervisor INT,
   idEndereco INT NOT NULL,
   PRIMARY KEY (idFuncionario),
   UNIQUE (cpf),
@@ -68,6 +67,7 @@ CREATE TABLE pharmabd.gerente (
 
 -- Adicionar a FK Supervisor na tabela Funcionario
 ALTER TABLE pharmabd.funcionario
+  ADD COLUMN idSupervisor INT NULL,
   ADD CONSTRAINT fk_Funcionario_Supervisor
     FOREIGN KEY (idSupervisor) REFERENCES pharmabd.gerente(idFuncionario)
       ON DELETE NO ACTION
@@ -185,7 +185,7 @@ CREATE TABLE pharmabd.item (
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT fk_Item_Venda
-    FOREIGN KEY (Venda_idVenda)
+    FOREIGN KEY (idVenda)
     REFERENCES pharmabd.venda (idVenda)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
