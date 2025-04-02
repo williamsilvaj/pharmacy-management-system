@@ -13,7 +13,7 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
     @Query("SELECT COALESCE(SUM(e.quantidade), 0) FROM Item i JOIN Estoque e ON i.estoque.idEstoque = e.idEstoque WHERE i.produto.idProduto = :idProduto")
-    int countByProdutoIdProdutoAndVendaIsNull(Integer idProduto);
+  int somarQuantidadeNoEstoque(@Param("idProduto") Integer idProduto);
 
     @Query("SELECT i FROM Item i WHERE i.produto.idProduto = :idProduto AND i.venda IS NULL ORDER BY i.dataVencimento ASC")
     List<Item> findByProdutoIdProdutoAndVendaIsNull(Integer idProduto);

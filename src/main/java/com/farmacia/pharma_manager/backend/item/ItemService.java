@@ -64,7 +64,7 @@ public List<Item> listarItensPorDataEntrada(LocalDate dataInicio, LocalDate data
     return itemRepository.findByEstoqueDataEntradaBetween(dataInicio, dataFim);
 }
     public int countItensDisponiveisPorProduto(Integer idProduto) {
-        return itemRepository.countByProdutoIdProdutoAndVendaIsNull(idProduto);
+        return itemRepository.somarQuantidadeNoEstoque(idProduto);
     }
 
     public List<Item> listarItensDisponiveisPorProduto(Integer idProduto) {

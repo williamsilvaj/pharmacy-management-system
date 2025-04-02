@@ -53,7 +53,7 @@ public class VendaService {
 
 		// Verifica estoque para todos os produtos antes de processar
 		for (Map.Entry<Integer, Integer> entry : quantidadesPorProduto.entrySet()) {
-			int disponivel = itemRepository.countByProdutoIdProdutoAndVendaIsNull(entry.getKey());
+			int disponivel = itemRepository.somarQuantidadeNoEstoque(entry.getKey());
 			if (disponivel < entry.getValue()) {
 				throw new RuntimeException("Estoque insuficiente para produto: " + entry.getKey());
 			}
