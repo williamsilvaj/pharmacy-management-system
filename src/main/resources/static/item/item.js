@@ -179,6 +179,10 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       // Se for atualização, mantém a lógica anterior
       try {
+        // adicionado o id do estoque.
+        itemData.estoque = {
+          idEstoque: allItems.find(item => item.idItem === parseInt(id)).estoque.idEstoque
+        };
         await fetch(`/itens/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

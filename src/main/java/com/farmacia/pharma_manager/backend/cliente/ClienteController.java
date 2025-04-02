@@ -1,6 +1,8 @@
 package com.farmacia.pharma_manager.backend.cliente;
 
 
+import com.farmacia.pharma_manager.backend.endereco.EnderecoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,7 +14,10 @@ import java.util.Optional;
 @RequestMapping("/clientes")
 public class ClienteController {
 
+  @Autowired
   private final ClienteService clienteService;
+  @Autowired
+    private EnderecoService enderecoService;
 
   public ClienteController(ClienteService clienteService) {
     this.clienteService = clienteService;

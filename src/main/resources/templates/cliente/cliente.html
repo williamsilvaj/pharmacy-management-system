@@ -3,64 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Cliente</title>
+  <title>Gerenciamento de Clientes</title>
   <link rel="stylesheet" href="/cliente/cliente.css">
   <script src="/cliente/cliente.js" defer></script>
 </head>
 <body>
-<nav>
-  <h1>Pharma Manager</h1>
-  <ul>
-    <li><a href="#">Home</a></li>
-    <li><a href="#">Funcionários</a></li>
-    <li><a href="#">Clientes</a></li>
-    <li><a href="#">Produtos</a></li>
-    <li><a href="#">Vendas</a></li>
-  </ul>
-</nav>
+  <nav>
+    <h1>Pharma Manager</h1>
+    <ul>
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/produtos/pagina">Produtos</a></li>
+      <li><a href="/clientes/pagina">Clientes</a></li>
+      <li><a href="/vendas/pagina">Vendas</a></li>
+    </ul>
+  </nav>
 
-<main>
-  <h2>Cadastro de Cliente</h2>
-  <button id="addClienteBtn">Adicionar Cliente</button>
-  <table>
-    <thead>
-    <tr>
-      <th>Nome</th>
-      <th>Telefone</th>
-      <th>Email</th>
-      <th>CPF</th>
-      <th>Ações</th>
-    </tr>
-    </thead>
-    <tbody id="clienteTableBody">
-    <!-- Clientes serão inseridos aqui -->
-    </tbody>
-  </table>
-</main>
+  <main>
+    <h2>Gerenciamento de Clientes</h2>
+    <button id="backBtn" onclick="window.history.back()">Voltar</button>
+    <button id="addClientBtn">Adicionar Cliente</button>
 
-<!-- Modal de Adicionar Cliente -->
-<div id="clienteModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h3>Adicionar Cliente</h3>
-    <form id="clienteForm">
-      <input type="hidden" id="clienteId">
-      <label>Nome: <input type="text" id="clienteNome" required></label><br>
-      <label>Telefone: <input type="text" id="clienteTelefone" required></label><br>
-      <label>Email: <input type="text" id="clienteEmail" required></label><br>
-      <label>CPF: <input type="text" id="clienteCpf" required></label><br>
-      <label>Endereço:</label>
-      <div id="enderecoFields">
-        <label>Rua: <input type="text" id="rua" required></label><br>
-        <label>Número: <input type="text" id="numero" required></label><br>
-        <label>Bairro: <input type="text" id="bairro" required></label><br>
-        <label>Cidade: <input type="text" id="cidade" required></label><br>
-        <label>Estado: <input type="text" id="estado" required></label><br>
-        <label>CEP: <input type="text" id="cep" required></label><br>
-      </div>
-      <button type="submit">Salvar</button>
-    </form>
+    <!-- Campo de busca -->
+    <div>
+      <label for="searchInput">Pesquisar Cliente:</label>
+      <input type="text" id="searchInput" placeholder="Pesquisar por nome, CPF ou email...">
+    </div>
+
+    <table id="clientTable">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Email</th>
+          <th>Telefone</th>
+          <th>Endereço</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="clientTableBody">
+        <!-- Clientes serão inseridos aqui -->
+      </tbody>
+    </table>
+  </main>
+
+  <!-- Modal para cadastro/edição de cliente -->
+  <div id="clientModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeClientModal">&times;</span>
+      <h3>Adicionar Cliente</h3>
+      <form id="clientForm">
+        <input type="hidden" id="clientId">
+        <!-- Campo oculto para o idEndereco -->
+        <input type="hidden" id="enderecoId">
+        <div class="form-group">
+          <label>Nome:</label>
+          <input type="text" id="clientName" required>
+        </div>
+        <div class="form-group">
+          <label>CPF:</label>
+          <input type="text" id="clientCpf" required>
+        </div>
+        <div class="form-group">
+          <label>Email:</label>
+          <input type="email" id="clientEmail" required>
+        </div>
+        <div class="form-group">
+          <label>Telefone:</label>
+          <input type="text" id="clientPhone" required>
+        </div>
+        <fieldset>
+          <legend>Endereço</legend>
+          <div class="form-group">
+            <label>Rua:</label>
+            <input type="text" id="enderecoRua" required>
+          </div>
+          <div class="form-group">
+            <label>Número:</label>
+            <input type="text" id="enderecoNumero" required>
+          </div>
+          <div class="form-group">
+            <label>Bairro:</label>
+            <input type="text" id="enderecoBairro" required>
+          </div>
+          <div class="form-group">
+            <label>Cidade:</label>
+            <input type="text" id="enderecoCidade" required>
+          </div>
+          <div class="form-group">
+            <label>Estado:</label>
+            <input type="text" id="enderecoEstado" required>
+          </div>
+          <div class="form-group">
+            <label>CEP:</label>
+            <input type="text" id="enderecoCep" required>
+          </div>
+        </fieldset>
+        <div class="form-actions">
+          <button type="submit" id="saveClientBtn">Salvar</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 </body>
 </html>
