@@ -1,12 +1,12 @@
 package com.farmacia.pharma_manager.backend.fornecedor;
 
+import com.farmacia.pharma_manager.backend.cliente.Cliente;
 import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import com.farmacia.pharma_manager.backend.endereco.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,28 +19,34 @@ public class FornecedorController {
     @Autowired
     private FornecedorService fornecedorService;
 
-    @Autowired
-    private EnderecoService enderecoService;
+//    @Autowired
+//    private EnderecoService enderecoService;
 
   @GetMapping("/pagina")
   public String redirecionarParaFornecedorPage() {
     return "fornecedor/fornecedor";
   }
 
+  @PostMapping
+  public ResponseEntity<Fornecedor> createFornecedor(@RequestBody Fornecedor fornecedor) {
+    Fornecedor savedFornecedor = fornecedorService.salvar(fornecedor);
+    return ResponseEntity.status(HttpStatus.CREATED).body(savedFornecedor);
+  }
+
 
   // Criar um novo Fornecedor
-    @PostMapping
-    public ResponseEntity<Fornecedor> criarFornecedor(@RequestBody Fornecedor fornecedor) {
-        Optional<Endereco> enderecoOptional = enderecoService.buscarPorId(fornecedor.getEndereco().getIdEndereco());
-
-        if (!enderecoOptional.isPresent()) {
-            return ResponseEntity.notFound().build(); // Retorna 404 se o Endereco não existir
-        }
-
-        fornecedor.setEndereco(enderecoOptional.get());
-        Fornecedor fornecedorSalvo = fornecedorService.salvar(fornecedor);
-        return ResponseEntity.status(HttpStatus.CREATED).body(fornecedorSalvo);
-    }
+//    @PostMapping
+//    public ResponseEntity<Fornecedor> criarFornecedor(@RequestBody Fornecedor fornecedor) {
+//        Optional<Endereco> enderecoOptional = enderecoService.buscarPorId(fornecedor.getEndereco().getIdEndereco());
+//
+//        if (!enderecoOptional.isPresent()) {
+//            return ResponseEntity.notFound().build(); // Retorna 404 se o Endereco não existir
+//        }
+//
+//        fornecedor.setEndereco(enderecoOptional.get());
+//        Fornecedor fornecedorSalvo = fornecedorService.salvar(fornecedor);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(fornecedorSalvo);
+//    }
 
     // Obter todos os Fornecedores
     @GetMapping
@@ -64,14 +70,7 @@ public class FornecedorController {
             return ResponseEntity.notFound().build(); // Retorna 404 se o Fornecedor não for encontrado
         }
 
-        Optional<Endereco> enderecoOptional = enderecoService.buscarPorId(fornecedor.getEndereco().getIdEndereco());
-        if (!enderecoOptional.isPresent()) {
-            return ResponseEntity.notFound().build(); // Retorna 404 se o Endereco não existir
-        }
-
-        fornecedor.setIdFornecedor(id);
-        fornecedor.setEndereco(enderecoOptional.get());
-        Fornecedor fornecedorAtualizado = fornecedorService.atualizar(fornecedor);
+      Fornecedor fornecedorAtualizado = fornecedorService.atualizar(fornecedor);
 
         return ResponseEntity.ok(fornecedorAtualizado);
     }

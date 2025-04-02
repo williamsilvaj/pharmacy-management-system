@@ -1,6 +1,6 @@
 package com.farmacia.pharma_manager.backend.cliente;
 
-import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
+//import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

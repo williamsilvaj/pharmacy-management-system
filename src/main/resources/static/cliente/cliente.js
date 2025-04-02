@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
 
     // Obtendo os valores dos campos do formulário
+    const id = document.getElementById("clienteId").value;
     const cliente = {
       nome: document.getElementById("clienteNome").value,
       telefone: document.getElementById("clienteTelefone").value,
@@ -35,6 +36,14 @@ document.addEventListener("DOMContentLoaded", () => {
         cep: document.getElementById("cep").value,
       }
     };
+      let method = "POST";
+      let url = "/clientes";
+      if (id) {
+        method = "PUT";
+        url = `/clientes/${id}`;
+      }
+
+
 
     // Enviando os dados para o backend
     const response = await fetch("/clientes", {

@@ -27,6 +27,12 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
+     @GetMapping("/pagina")
+    public String redirecionarParaItemPage() {
+        return "item/item";
+    }
+
+
         @GetMapping("/relatorio-pdf")
     public ResponseEntity<byte[]> gerarRelatorioPdf() {
         byte[] pdfBytes = itemService.gerarRelatorioEstoquePdf();

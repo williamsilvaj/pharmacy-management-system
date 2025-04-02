@@ -148,15 +148,14 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     }
 
-    console.log(funcionarioFinal);
+      console.log(funcionarioFinal);
 
     if (funcionarioId) {
-      // Se houver ID, significa que estamos atualizando um funcionário, então usamos o método PUT
-      const response = await fetch(`/funcionarios/${funcionarioId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(funcionarioFinal),
-      });
+       const response = await fetch(`/funcionarios/${funcionarioId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(funcionarioFinal),
+       });
 
       if (response.ok) {
         modal.style.display = "none";
