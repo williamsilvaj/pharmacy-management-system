@@ -13,7 +13,7 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
     @Query("SELECT COALESCE(SUM(e.quantidade), 0) FROM Item i JOIN Estoque e ON i.estoque.idEstoque = e.idEstoque WHERE i.produto.idProduto = :idProduto")
-  int somarQuantidadeNoEstoque(@Param("idProduto") Integer idProduto);
+    int somarQuantidadeNoEstoque(@Param("idProduto") Integer idProduto);
 
     @Query("SELECT i FROM Item i WHERE i.produto.idProduto = :idProduto AND i.venda IS NULL ORDER BY i.dataVencimento ASC")
     List<Item> findByProdutoIdProdutoAndVendaIsNull(Integer idProduto);
@@ -22,7 +22,10 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
     List<Item> findByProdutoIdProdutoAndVendaIsNull(Integer idProduto, Pageable pageable);
 
 	@Query("SELECT i FROM Item i WHERE i.venda.idVenda = :idVenda")
-	List<Item> findByVendaIdVenda(@Param("idVenda") Integer idVenda);
+    List<Item> findByVendaIdVenda(@Param("idVenda") Integer idVenda);
+  
+  @Query("SELECT i FROM Item i LEFT JOIN FETCH i.estoque")
+  List<Item> findAllWithEstoque();
 
   // Adicione esta consulta ao repositório
 @Query("SELECT i FROM Item i WHERE i.estoque.dataEntrada BETWEEN :dataInicio AND :dataFim")

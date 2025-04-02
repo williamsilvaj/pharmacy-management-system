@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch("/itens");
       const items = await response.json();
       allItems = items;
+      console.log(items)
       displayItems(items);
     } catch (error) {
       console.error("Erro ao carregar itens:", error);
@@ -38,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function displayItems(items) {
     tableBody.innerHTML = "";
     items.forEach(item => {
+      console.log(item);
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${item.idItem}</td>
@@ -177,7 +179,14 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Erro ao salvar item:", error);
       }
     } else {
-      // Se for atualização, mantém a lógica anterior
+      // Se for atualização, inclui os dados do estoque se existirem
+      if (estoqueQuantidadeInput.value && estoqueDataEntradaInput.value) {
+        itemData.estoque = {
+          quantidade: parseInt(estoqueQuantidadeInput.value),
+          dataEntrada: estoqueDataEntradaInput.value
+        };
+      }
+
       try {
         await fetch(`/itens/${id}`, {
           method: "PUT",

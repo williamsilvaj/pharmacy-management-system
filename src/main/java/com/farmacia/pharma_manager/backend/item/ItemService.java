@@ -34,7 +34,7 @@ public class ItemService {
     }
 
     public List<Item> listarItens() {
-        return itemRepository.findAll();
+        return itemRepository.findAllWithEstoque();
     }
 
     public Optional<Item> obterItemPorId(Integer id) {
