@@ -43,7 +43,7 @@ public abstract class Funcionario {
 
     // Supervisor desse funcionario
     @ManyToOne
-    @JoinColumn(name = "idSupervisor", referencedColumnName = "idFuncionario", nullable = true)
+    @JoinColumn(name = "idSupervisor", nullable = true)
     private Gerente supervisor;
 
 
@@ -110,4 +110,17 @@ public abstract class Funcionario {
     public Gerente getSupervisor() { return supervisor; }
 
     public void setSupervisor(Gerente supervisor) { this.supervisor = supervisor; }
+
+  public Integer getIdSupervisor() {
+    return (supervisor != null) ? supervisor.getId() : null;
+  }
+
+  public void setIdSupervisor(Integer idSupervisor) {
+    if (idSupervisor == null || idSupervisor == 0) {
+      this.supervisor = null; // Remove o supervisor
+    } else {
+      this.supervisor = new Gerente();
+      this.supervisor.setId(idSupervisor);
+    }
+  }
 }

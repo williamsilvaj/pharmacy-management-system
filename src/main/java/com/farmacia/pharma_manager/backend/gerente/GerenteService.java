@@ -32,7 +32,6 @@ public class GerenteService {
             gerente.setCpf(gerenteAtualizado.getCpf());
             gerente.setCargo(gerenteAtualizado.getCargo());
             gerente.setEndereco(gerenteAtualizado.getEndereco());
-            gerente.setFuncionariosSupervisionados(gerenteAtualizado.getFuncionariosSupervisionados());
             return gerenteRepository.save(gerente);
         } else {
             throw new IllegalArgumentException("Gerente não encontrado para o id: " + id);

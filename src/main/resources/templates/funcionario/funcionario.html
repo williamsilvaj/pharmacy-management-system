@@ -31,7 +31,7 @@
       <th>Turno</th>
       <th>CRF</th>
       <th>Carga Horária</th>
-      <th>Subordinados</th>
+      <th>Supervisor</th>
       <th>Ações</th>
     </tr>
     </thead>
@@ -49,8 +49,12 @@
     <form id="funcionarioForm">
       <input type="hidden" id="funcionarioId">
       <label>Nome: <input type="text" id="funcionarioNome" required></label>
-      <label>Telefone: <input type="text" id="funcionarioTelefone" required></label>
-      <label>CPF: <input type="text" id="funcionarioCpf" required></label><br>
+      <label>Telefone: <input type="text" id="funcionarioTelefone" required></label><br>
+      <label>CPF: <input type="text" id="funcionarioCpf" required></label>
+      <label for="supervisor">Supervisor:</label>
+      <select id="supervisor">
+        <option value="-1">Nenhum</option>
+      </select>
       <label>Endereço:</label>
       <div id="enderecoFields">
         <label>Rua: <input type="text" id="rua" required></label><br>
@@ -84,8 +88,6 @@
       </div>
 
       <div id="gerenteFields" style="display: none;">
-        <label for="funcionariosSupervisionados">Funcionários Supervisionados (IDs separados por vírgula):</label>
-        <input type="text" id="funcionariosSupervisionados" name="funcionariosSupervisionados"><br>
       </div>
 
       <button type="submit">Salvar</button>

@@ -19,7 +19,15 @@ public class FuncionarioService {
 
 
   // Salvar um novo Funcionario
+//  public Funcionario saveFuncionario(Funcionario funcionario) {
+//    return funcionarioRepository.save(funcionario);
+//  }
   public Funcionario saveFuncionario(Funcionario funcionario) {
+    if (funcionario.getSupervisor() != null) {
+      Optional<Gerente> supervisorOpt = gerenteRepository.findById(funcionario.getIdSupervisor());
+      supervisorOpt.ifPresent(funcionario::setSupervisor);
+    }
+
     return funcionarioRepository.save(funcionario);
   }
 
@@ -34,10 +42,29 @@ public class FuncionarioService {
   }
 
   // Atualizar Funcionario
-  public Funcionario updateFuncionario(Integer id, Funcionario funcionario) {
-    funcionario.setId(id);
-    return funcionarioRepository.save(funcionario);
+  public Funcionario updateFuncionario(Integer id, Funcionario novoFuncionario) {
+    return funcionarioRepository.findById(id).map(funcionario -> {
+      funcionario.setNome(novoFuncionario.getNome());
+      funcionario.setTelefone(novoFuncionario.getTelefone());
+      funcionario.setCpf(novoFuncionario.getCpf());
+      funcionario.setEndereco(novoFuncionario.getEndereco());
+      funcionario.setCargo(novoFuncionario.getCargo());
+
+      // Permitir remoção do supervisor
+      if (novoFuncionario.getIdSupervisor() == null || novoFuncionario.getIdSupervisor() == 0) {
+        funcionario.setSupervisor(null);
+      } else {
+        Optional<Gerente> supervisorOpt = gerenteRepository.findById(novoFuncionario.getIdSupervisor());
+        funcionario.setSupervisor(supervisorOpt.orElse(null));
+      }
+
+      return funcionarioRepository.save(funcionario);
+    }).orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
   }
+//  public Funcionario updateFuncionario(Integer id, Funcionario funcionario) {
+//    funcionario.setId(id);
+//    return funcionarioRepository.save(funcionario);
+//  }
 
   // Deletar Funcionario
   public void deleteFuncionario(Integer id) {

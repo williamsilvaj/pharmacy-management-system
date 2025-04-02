@@ -2,6 +2,7 @@ package com.farmacia.pharma_manager.backend.funcionario;
 
 import com.farmacia.pharma_manager.backend.farmaceutico.Farmaceutico;
 import com.farmacia.pharma_manager.backend.gerente.Gerente;
+import com.farmacia.pharma_manager.backend.gerente.GerenteRepository;
 import com.farmacia.pharma_manager.backend.gerente.GerenteService;
 import com.farmacia.pharma_manager.backend.farmaceutico.FarmaceuticoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ public class FuncionarioController {
 
     @Autowired
     private FuncionarioService funcionarioService;
+
+    @Autowired
+    private FuncionarioRepository funcionarioRepository;
+    @Autowired
+    private GerenteRepository gerenteRepository;
 
     @Autowired
     private GerenteService gerenteService;  // Injeção do serviço de Gerente
@@ -55,18 +61,54 @@ public class FuncionarioController {
 
     // Endpoint para atualizar um funcionário existente
     @PutMapping("/{id}")
-    public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable Integer id, @RequestBody Funcionario funcionario) {
-      if (funcionario instanceof Gerente) {
-        Gerente gerenteAtualizado = gerenteService.atualizarGerente(id, (Gerente) funcionario);
-        return ResponseEntity.ok(gerenteAtualizado);
-      } else if (funcionario instanceof Farmaceutico) {
-        Farmaceutico farmaceuticoAtualizado = farmaceuticoService.atualizarFarmaceutico(id, (Farmaceutico) funcionario);
-        return ResponseEntity.ok(farmaceuticoAtualizado);
+    public ResponseEntity<Funcionario> updateFuncionario(
+      @PathVariable Integer id,
+      @RequestBody Funcionario funcionarioAtualizado) {
+
+      Optional<Funcionario> funcionarioOptional = funcionarioRepository.findById(id);
+      if (funcionarioOptional.isEmpty()) {
+        return ResponseEntity.notFound().build();
       }
 
-      // Se o tipo não for Gerente nem Farmaceutico, retornar erro 400
-      return ResponseEntity.badRequest().build();
+      Funcionario funcionarioExistente = funcionarioOptional.get();
+
+      // Atualiza os dados do funcionário
+      funcionarioExistente.setNome(funcionarioAtualizado.getNome());
+      funcionarioExistente.setTelefone(funcionarioAtualizado.getTelefone());
+      funcionarioExistente.setCpf(funcionarioAtualizado.getCpf());
+      funcionarioExistente.setEndereco(funcionarioAtualizado.getEndereco());
+      funcionarioExistente.setCargo(funcionarioAtualizado.getCargo());
+
+      // Atualiza os dados específicos de farmacêutico, se for o caso
+      if (funcionarioExistente instanceof Farmaceutico) {
+        ((Farmaceutico) funcionarioExistente).setTurno(((Farmaceutico) funcionarioAtualizado).getTurno());
+        ((Farmaceutico) funcionarioExistente).setCrf(((Farmaceutico) funcionarioAtualizado).getCrf());
+        ((Farmaceutico) funcionarioExistente).setCargaHoraria(((Farmaceutico) funcionarioAtualizado).getCargaHoraria());
+      }
+
+      // Atualiza o supervisor
+      if (funcionarioAtualizado.getIdSupervisor() == null) {
+        funcionarioExistente.setSupervisor(null);
+      } else {
+        Optional<Gerente> supervisorOptional = gerenteRepository.findById(funcionarioAtualizado.getIdSupervisor());
+        funcionarioExistente.setSupervisor(supervisorOptional.orElse(null));
+      }
+
+      Funcionario funcionarioAtualizadoFinal = funcionarioRepository.save(funcionarioExistente);
+      return ResponseEntity.ok(funcionarioAtualizadoFinal);
     }
+//    public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable Integer id, @RequestBody Funcionario funcionario) {
+//      if (funcionario instanceof Gerente) {
+//        Gerente gerenteAtualizado = gerenteService.atualizarGerente(id, (Gerente) funcionario);
+//        return ResponseEntity.ok(gerenteAtualizado);
+//      } else if (funcionario instanceof Farmaceutico) {
+//        Farmaceutico farmaceuticoAtualizado = farmaceuticoService.atualizarFarmaceutico(id, (Farmaceutico) funcionario);
+//        return ResponseEntity.ok(farmaceuticoAtualizado);
+//      }
+//
+//      // Se o tipo não for Gerente nem Farmaceutico, retornar erro 400
+//      return ResponseEntity.badRequest().build();
+//    }
 
 
   // Endpoint para deletar um funcionário
@@ -77,9 +119,22 @@ public class FuncionarioController {
     }
 
     // Endpoint para associar um supervisor a um funcionário
-    @PutMapping("/{funcionarioId}/supervisor/{supervisorId}")
-    public ResponseEntity<Funcionario> setSupervisor(@PathVariable("funcionarioId") Integer funcionarioId, @PathVariable("supervisorId") Integer supervisorId) {
-        Funcionario updatedFuncionario = funcionarioService.setSupervisor(funcionarioId, supervisorId);
-        return updatedFuncionario != null ? ResponseEntity.ok(updatedFuncionario) : ResponseEntity.notFound().build();
+    @PostMapping("/gerente/{id}/subordinados")
+    public ResponseEntity<?> adicionarSubordinados(@PathVariable int id, @RequestBody List<Integer> subordinadosIds) {
+      Optional<Gerente> gerenteOpt = funcionarioRepository.findById(id).map(f -> (Gerente) f);
+
+      if (gerenteOpt.isPresent()) {
+        Gerente gerente = gerenteOpt.get();
+        List<Funcionario> subordinados = funcionarioRepository.findAllById(subordinadosIds);
+
+        for (Funcionario sub : subordinados) {
+          sub.setSupervisor(gerente); // Define o gerente como supervisor
+          funcionarioRepository.save(sub); // Salva a atualização no banco
+        }
+
+        return ResponseEntity.ok("Subordinados adicionados com sucesso.");
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Gerente não encontrado.");
+      }
     }
 }

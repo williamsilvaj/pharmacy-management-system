@@ -12,23 +12,10 @@ import java.util.List;
 @Table(name = "gerente")
 public class Gerente extends Funcionario {
 
-    @OneToMany(mappedBy = "supervisor", fetch = FetchType.LAZY)
-    private List<Funcionario> funcionariosSupervisionados;
-
-
-    public Gerente(String nome, String telefone, String cpf, Cargo cargo, Endereco endereco, List<Funcionario> funcionariosSupervisionados) {
+    public Gerente(String nome, String telefone, String cpf, Cargo cargo, Endereco endereco) {
         super(nome, telefone, cpf, cargo, endereco);
-        this.funcionariosSupervisionados = funcionariosSupervisionados;
     }
 
     public Gerente() {}
 
-    // Getters and Setters
-    public List<Funcionario> getFuncionariosSupervisionados() {
-        return funcionariosSupervisionados;
-    }
-
-    public void setFuncionariosSupervisionados(List<Funcionario> funcionariosSupervisionados) {
-        this.funcionariosSupervisionados = funcionariosSupervisionados;
-    }
 }

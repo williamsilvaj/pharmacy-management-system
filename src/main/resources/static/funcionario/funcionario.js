@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("funcionarioForm");
   const tableBody = document.getElementById("funcionarioTableBody");
 
-
   // Fechar o modal
   closeModal.addEventListener("click", () => {
     modal.style.display = "none";
@@ -14,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Função para mostrar ou ocultar campos específicos com base no tipo
-  function toggleGerenteFields() {
+  async function toggleGerenteFields() {
     const tipoFuncionario = document.querySelector('input[name="tipo"]:checked').value;
     const cargo = document.getElementById("cargo");
 
@@ -29,34 +28,54 @@ document.addEventListener("DOMContentLoaded", () => {
       farmaceuticoFields.style.display = "block";
       gerenteFields.style.display = "none";
       cargo.value = "Farmacêutico";
+      await carregarSupervisores();
     }
   }
 
-  // Função para exibir funcionários na tabela
-  async function carregarFuncionarios() {
-    const response = await fetch("/funcionarios");
-    const funcionarios = await response.json();
-    console.log(funcionarios);
+  // Supervisor
+  async function carregarSupervisores() {
+    const response = await fetch("/gerentes");
+    const gerentes = await response.json();
+    console.log(gerentes);
 
-    tableBody.innerHTML = ""; // Limpar tabela antes de atualizar
-    funcionarios.forEach(funcionario => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-                <td>${funcionario.nome}</td>
-                <td>${funcionario.telefone}</td>
-                <td>${funcionario.cpf}</td>
-                <td>${funcionario.cargo.titulo}</td>
-                <td>${funcionario.turno ?? "-"}</td>
-                <td>${funcionario.crf ?? "-"}</td>
-                <td>${funcionario.cargaHoraria ?? "-"}</td>
-                <td>${funcionario.funcionariosSupervisionados ?? "-"}</td>
-                <td>
-                    <button onclick="editarFuncionario(${funcionario.id}, '${funcionario.cargo.titulo}')">Editar</button>
-                    <button onclick="deletarFuncionario(${funcionario.id})">Excluir</button>
-                </td>
-            `;
-      tableBody.appendChild(row);
+    const selectSupervisor = document.getElementById("supervisor");
+    selectSupervisor.innerHTML = '<option value="">Nenhum</option>'; // Opção padrão
+
+    gerentes.forEach(gerente => {
+      const option = document.createElement("option");
+      option.value = gerente.id;
+      option.textContent = `${gerente.nome} (ID: ${gerente.id})`;
+      selectSupervisor.appendChild(option);
     });
+  }
+
+
+  // Função para exibir funcionários na tabela
+    async function carregarFuncionarios() {
+      const response = await fetch("/funcionarios");
+      const funcionarios = await response.json();
+      console.log(funcionarios);
+
+      tableBody.innerHTML = ""; // Limpar tabela antes de atualizar
+      funcionarios.forEach(funcionario => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+        <td>${funcionario.nome}</td>
+        <td>${funcionario.telefone}</td>
+        <td>${funcionario.cpf}</td>
+        <td>${funcionario.cargo.titulo}</td>
+        <td>${funcionario.turno ?? "-"}</td>
+        <td>${funcionario.crf ?? "-"}</td>
+        <td>${funcionario.cargaHoraria ?? "-"}</td>
+        <td>${funcionario.idSupervisor ? `ID: ${funcionario.idSupervisor}` : "-"}</td>
+        <td>
+          <button onclick="editarFuncionario(${funcionario.id}, '${funcionario.cargo.titulo}', ${funcionario.idSupervisor})">Editar</button>
+          <button onclick="deletarFuncionario(${funcionario.id})">Excluir</button>
+        </td>
+      `;
+        tableBody.appendChild(row);
+      });
+
 
     // Adiciona um listener para garantir que os campos mudem quando o tipo for alterado
     const tipoInputs = document.querySelectorAll('input[name="tipo"]');
@@ -83,7 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const funcionarioId = document.getElementById("funcionarioId").value; // Pega o ID do funcionário, se existir
+    const funcionarioId = document.getElementById("funcionarioId").value;
+    const idSupervisor = parseInt(document.getElementById("supervisor").value, 10) || null;
+
 
     // Obtendo os valores dos campos do formulário
     const funcionario = {
@@ -103,7 +124,9 @@ document.addEventListener("DOMContentLoaded", () => {
         dataContratacao: document.getElementById("dataContratacao").value,
         salario: document.getElementById("salario").value,
       },
+      idSupervisor: idSupervisor === -1 ? null : idSupervisor,
     };
+
 
     let funcionarioFinal = funcionario;
 
@@ -119,13 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
         cargaHoraria: Number(document.getElementById("cargaHoraria").value),
       };
     } else {
-      const supervisoresInput = document.getElementById("funcionariosSupervisionados").value.trim();
       funcionarioFinal = {
         ...funcionario,
         tipo: "gerente",
-        funcionariosSupervisionados: supervisoresInput
-          ? supervisoresInput.split(",").map(id => ({ id: parseInt(id) }))
-          : []
       };
     }
 
@@ -191,13 +210,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("cargo").value = funcionario.cargo.titulo;
     document.getElementById("dataContratacao").value = funcionario.cargo.dataContratacao;
     document.getElementById("salario").value = funcionario.cargo.salario;
+    document.getElementById("supervisor").value = funcionario.idSupervisor || "";
 
     // Preencher o campo oculto com o ID
     document.getElementById("funcionarioId").value = funcionario.id;
 
     // Seleciona e marca o input correto com base no cargo
     if (cargo === "Gerente") {
-      document.getElementById("funcionariosSupervisionados").value = funcionario.funcionariosSupervisionados;
       document.querySelector('input[name="tipo"][value="Gerente"]').checked = true;
     } else {
       document.getElementById("turno").value = funcionario.turno;
