@@ -17,11 +17,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Lógica de envio do formulário
+  // Lógica de envio do formulário
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     // Obtendo os valores dos campos do formulário
-    const id = document.getElementById("clienteId").value;
+    const clienteId = document.getElementById("clienteId").value.trim();
     const cliente = {
       nome: document.getElementById("clienteNome").value,
       telefone: document.getElementById("clienteTelefone").value,
@@ -36,18 +37,24 @@ document.addEventListener("DOMContentLoaded", () => {
         cep: document.getElementById("cep").value,
       }
     };
-      let method = "POST";
-      let url = "/clientes";
-      if (id) {
-        method = "PUT";
-        url = `/clientes/${id}`;
-      }
 
+    // Verifique se campos obrigatórios estão preenchidos
+    if (!cliente.endereco.bairro || !cliente.endereco.rua || !cliente.endereco.numero || !cliente.endereco.cidade || !cliente.endereco.estado || !cliente.endereco.cep) {
+      alert("Preencha todos os campos obrigatórios, incluindo bairro, rua, número, cidade, estado e CEP.");
+      return; // Impede o envio do formulário se campos obrigatórios estiverem vazios
+    }
 
+    let method = "POST";
+    let url = "/clientes";  // A URL de criação de clientes
+
+    if (clienteId) { // Se clienteId existir, usamos PUT para editar
+      method = "PUT";
+      url = `/clientes/${clienteId}`; // Certifique-se de que o ID está sendo passado corretamente
+    }
 
     // Enviando os dados para o backend
-    const response = await fetch("/clientes", {
-      method: "POST",
+    const response = await fetch(url, {
+      method: method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(cliente),
     });
@@ -56,9 +63,11 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.style.display = "none";
       await carregarClientes(); // Atualiza a tabela sem precisar recarregar a página
     } else {
-      alert("Erro ao cadastrar cliente");
+      alert("Erro ao cadastrar ou atualizar cliente");
     }
   });
+
+
 
   // Função para carregar clientes na tabela
   async function carregarClientes() {
@@ -95,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
   window.editarCliente = async (id) => {
     console.log(id);
     const response = await fetch(`/clientes/${id}`);
-    console.log(response);
     const cliente = await response.json();
 
     document.getElementById("clienteNome").value = cliente.nome;
@@ -109,38 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("estado").value = cliente.endereco.estado;
     document.getElementById("cep").value = cliente.endereco.cep;
 
+    // Preencher o campo clienteId com o ID correto
+    document.getElementById("clienteId").value = cliente.idCliente;  // Garantir que o campo ID seja preenchido
+
     // Exibe o modal
     modal.style.display = "flex";
-
-    form.onsubmit = async (e) => {
-      e.preventDefault();
-
-      // Atualiza os dados do cliente conforme os novos valores do formulário
-      const updatedCliente = {
-        nome: document.getElementById("clienteNome").value,
-        telefone: document.getElementById("clienteTelefone").value,
-        cpf: document.getElementById("clienteCpf").value,
-        email: document.getElementById("clienteEmail").value,
-        endereco: {
-          rua: document.getElementById("rua").value,
-          numero: document.getElementById("numero").value,
-          bairro: document.getElementById("bairro").value,
-          cidade: document.getElementById("cidade").value,
-          estado: document.getElementById("estado").value,
-          cep: document.getElementById("cep").value,
-        }
-      };
-      console.log('NOVO: ');
-      console.log(updatedCliente);
-      await fetch(`/clientes/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedCliente),
-      });
-
-      modal.style.display = "none";
-      await carregarClientes(); // Atualiza a tabela sem precisar recarregar a página
-    };
   };
 
   // Função para resetar o formulário
@@ -150,4 +131,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
   carregarClientes(); // Carrega os clientes ao iniciar a página
 });
-

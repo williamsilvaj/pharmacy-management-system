@@ -184,6 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Função para excluir funcionário
   window.deletarFuncionario = async (id) => {
+    console.log(id);
     const response = await fetch(`/funcionarios/${id}`, { method: "DELETE" });
     if (response.ok) {
       document.getElementById("funcionarioId").value = "";
@@ -193,6 +194,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Função para editar funcionário
   window.editarFuncionario = async (id, cargo) => {
+    console.log("ID do fornecedor (editar):", id); // Adicionando o log para verificar o ID
+
+    if (!id) {
+      console.error("ID do fornecedor não encontrado!");
+      return; // Impede o código de continuar se o ID não for válido
+    }
     const response = await fetch(`/funcionarios/${id}`);
     const funcionario = await response.json();
 

@@ -26,13 +26,20 @@
     <tr>
       <th>Nome</th>
       <th>CNPJ</th>
-      <th>Telefone</th>
+      <th>Email</th>
       <th>Endereço</th>
       <th>Ações</th>
     </tr>
     </thead>
     <tbody id="fornecedorTableBody">
     <!-- Fornecedores serão inseridos aqui -->
+<!--    <td>-->
+<!--      <a class="btn btn-primary"th:href="@{alterar/{id}(id=$(fornecedores.id))">-->
+<!--        <i class="fas fa-edit"></i>Editar</a>-->
+<!--      <a class="btn btn-danger"th:href="@{excluir/{id}(id=$(fornecedores.id))">-->
+<!--        <i class="fas fa-edit"></i>Excluir</a>-->
+
+<!--    </td>-->
     </tbody>
   </table>
 </main>
@@ -47,7 +54,6 @@
       <label>Nome: <input type="text" id="fornecedorNome" required></label>
       <label>CNPJ: <input type="text" id="fornecedorCnpj" required></label>
       <label>Email: <input type="text" id="fornecedorEmail" required></label>
-      <label>Telefone: <input type="text" id="fornecedorTelefone" required></label>
       <label>Endereço:</label>
       <div id="enderecoFields">
         <label>Rua: <input type="text" id="rua" required></label><br>

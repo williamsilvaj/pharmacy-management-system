@@ -2,6 +2,7 @@ package com.farmacia.pharma_manager.backend.cliente;
 
 import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "cliente", uniqueConstraints = {
@@ -19,6 +20,7 @@ public class Cliente {
     @Column(nullable = false, length = 45)
     private String nome;
 
+
     @Column(nullable = false, length = 11, unique = true)
     private String cpf;
 
@@ -29,7 +31,7 @@ public class Cliente {
     private String telefone;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "idEndereco", nullable = false)
+    @JoinColumn(name = "idEndereco")//, nullable = false
     private Endereco endereco;
 
     // Getters e Setters

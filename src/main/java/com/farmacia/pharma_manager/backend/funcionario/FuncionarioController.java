@@ -97,18 +97,18 @@ public class FuncionarioController {
       Funcionario funcionarioAtualizadoFinal = funcionarioRepository.save(funcionarioExistente);
       return ResponseEntity.ok(funcionarioAtualizadoFinal);
     }
-//    public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable Integer id, @RequestBody Funcionario funcionario) {
-//      if (funcionario instanceof Gerente) {
-//        Gerente gerenteAtualizado = gerenteService.atualizarGerente(id, (Gerente) funcionario);
-//        return ResponseEntity.ok(gerenteAtualizado);
-//      } else if (funcionario instanceof Farmaceutico) {
-//        Farmaceutico farmaceuticoAtualizado = farmaceuticoService.atualizarFarmaceutico(id, (Farmaceutico) funcionario);
-//        return ResponseEntity.ok(farmaceuticoAtualizado);
-//      }
-//
-//      // Se o tipo não for Gerente nem Farmaceutico, retornar erro 400
-//      return ResponseEntity.badRequest().build();
-//    }
+    public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable Integer id, @RequestBody Funcionario funcionario) {
+      if (funcionario instanceof Gerente) {
+        Gerente gerenteAtualizado = gerenteService.atualizarGerente(id, (Gerente) funcionario);
+        return ResponseEntity.ok(gerenteAtualizado);
+      } else if (funcionario instanceof Farmaceutico) {
+        Farmaceutico farmaceuticoAtualizado = farmaceuticoService.atualizarFarmaceutico(id, (Farmaceutico) funcionario);
+        return ResponseEntity.ok(farmaceuticoAtualizado);
+      }
+
+      // Se o tipo não for Gerente nem Farmaceutico, retornar erro 400
+      return ResponseEntity.badRequest().build();
+    }
 
 
   // Endpoint para deletar um funcionário
