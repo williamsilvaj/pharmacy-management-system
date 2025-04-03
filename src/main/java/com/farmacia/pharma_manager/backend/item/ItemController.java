@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import com.farmacia.pharma_manager.backend.estoque.Estoque;
+import com.farmacia.pharma_manager.backend.estoque.EstoqueRepository;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +29,12 @@ public class ItemController {
 
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
+    private EstoqueRepository estoqueRepository;
 
      @GetMapping("/pagina")
     public String redirecionarParaItemPage() {
@@ -63,12 +72,35 @@ public class ItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Item> atualizarItem(@PathVariable Integer id, @RequestBody Item item) {
-        Item itemAtualizado = itemService.atualizarItem(id, item);
-        if(itemAtualizado != null) {
-            return new ResponseEntity<>(itemAtualizado, HttpStatus.OK);
+    public ResponseEntity<Item> atualizarItem(@PathVariable Integer id, @RequestBody Item itemDetails) {
+        Optional<Item> itemOptional = itemRepository.findById(id);
+    if (!itemOptional.isPresent()) {
+        return ResponseEntity.notFound().build();
+    }
+
+    Item item = itemOptional.get();
+    item.setValor(itemDetails.getValor());
+    item.setDataVencimento(itemDetails.getDataVencimento());
+    item.setProduto(itemDetails.getProduto());
+
+    // Se o estoque foi enviado, buscar ou salvar antes de associar ao item
+    if (itemDetails.getEstoque() != null) {
+        Estoque estoque = itemDetails.getEstoque();
+        
+        // Verifica se o estoque já existe no banco de dados
+        if (estoque.getIdEstoque() != null) {
+            estoque = estoqueRepository.findById(estoque.getIdEstoque()).orElseThrow(() -> 
+                new RuntimeException("Estoque não encontrado"));
+        } else {
+            // Se for um novo estoque, salva antes de associá-lo ao item
+            estoque = estoqueRepository.save(estoque);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        
+        item.setEstoque(estoque);
+    }
+
+    Item updatedItem = itemRepository.save(item);
+    return ResponseEntity.ok(updatedItem);
     }
 
     @DeleteMapping("/{id}")

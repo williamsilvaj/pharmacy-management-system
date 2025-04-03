@@ -1,143 +1,161 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById("clienteModal");
-  const openModal = document.getElementById("addClienteBtn");
-  const closeModal = document.querySelector(".close");
-  const form = document.getElementById("clienteForm");
-  const tableBody = document.getElementById("clienteTableBody");
+  const modal = document.getElementById("clientModal");
+  const openModal = document.getElementById("addClientBtn");
+  const closeModal = document.getElementById("closeClientModal");
+  const form = document.getElementById("clientForm");
+  const tableBody = document.getElementById("clientTableBody");
+  const searchInput = document.getElementById("searchInput");
 
-  // Exibir o modal
-  openModal.addEventListener("click", () => {
-    modal.style.display = "flex";
-    resetForm(); // Limpar formulário quando o modal é aberto
-  });
+  // Recupera o input oculto para o idEndereco
+  const enderecoIdInput = document.getElementById("enderecoId");
 
-  // Fechar o modal
-  closeModal.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
+  let allClients = [];
 
-  // Lógica de envio do formulário
-  // Lógica de envio do formulário
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    // Obtendo os valores dos campos do formulário
-    const clienteId = document.getElementById("clienteId").value.trim();
-    const cliente = {
-      nome: document.getElementById("clienteNome").value,
-      telefone: document.getElementById("clienteTelefone").value,
-      cpf: document.getElementById("clienteCpf").value,
-      email: document.getElementById("clienteEmail").value,
-      endereco: {
-        rua: document.getElementById("rua").value,
-        numero: document.getElementById("numero").value,
-        bairro: document.getElementById("bairro").value,
-        cidade: document.getElementById("cidade").value,
-        estado: document.getElementById("estado").value,
-        cep: document.getElementById("cep").value,
-      }
-    };
-
-    // Verifique se campos obrigatórios estão preenchidos
-    if (!cliente.endereco.bairro || !cliente.endereco.rua || !cliente.endereco.numero || !cliente.endereco.cidade || !cliente.endereco.estado || !cliente.endereco.cep) {
-      alert("Preencha todos os campos obrigatórios, incluindo bairro, rua, número, cidade, estado e CEP.");
-      return; // Impede o envio do formulário se campos obrigatórios estiverem vazios
+  async function loadClients() {
+    try {
+      const response = await fetch("/clientes");
+      const clients = await response.json();
+      allClients = clients;
+      displayClients(clients);
+    } catch (error) {
+      console.error("Erro ao carregar clientes:", error);
     }
+  }
 
-    let clienteFinal = cliente;
-    let method = "POST";
-    let url = "/clientes";  // A URL de criação de clientes
-
-    if (clienteId) { // Se clienteId existir, usamos PUT para editar
-      method = "PUT";
-      url = `/clientes/${clienteId}`; // Certifique-se de que o ID está sendo passado corretamente
-    }
-    console.log(clienteFinal);
-
-    // Enviando os dados para o backend
-    const response = await fetch(url, {
-      method: method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(clienteFinal),
-    });
-
-    if (response.ok) {
-      modal.style.display = "none";
-      document.getElementById("clienteId").value = "";
-      carregarClientes(); // Atualiza a tabela sem precisar recarregar a página
-    } else {
-      alert("Erro ao cadastrar ou atualizar cliente");
-    }
-  });
-
-
-
-  // Função para carregar clientes na tabela
-  async function carregarClientes() {
-    const response = await fetch("/clientes");
-    const clientes = await response.json();
-    console.log(clientes);
-
-    tableBody.innerHTML = ""; // Limpar tabela antes de atualizar
-    clientes.forEach(cliente => {
+  function displayClients(clients) {
+    tableBody.innerHTML = "";
+    clients.forEach(client => {
+      const endereco = client.endereco;
+      const enderecoStr = endereco ? `${endereco.rua}, ${endereco.numero} - ${endereco.bairro}, ${endereco.cidade}, ${endereco.estado} - CEP: ${endereco.cep}` : "";
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td>${cliente.nome}</td>
-        <td>${cliente.telefone}</td>
-        <td>${cliente.email}</td>
-        <td>${cliente.cpf}</td>
+        <td>${client.nome}</td>
+        <td>${client.cpf}</td>
+        <td>${client.email}</td>
+        <td>${client.telefone}</td>
+        <td>${enderecoStr}</td>
         <td>
-          <button onclick="editarCliente(${cliente.idCliente})">Editar</button>
-          <button onclick="deletarCliente(${cliente.idCliente})">Excluir</button>
+          <button onclick="editClient(${client.idCliente})">Editar</button>
+          <button onclick="deleteClient(${client.idCliente})">Excluir</button>
         </td>
       `;
       tableBody.appendChild(row);
     });
   }
 
-  // Função para excluir cliente
-  window.deletarCliente = async (id) => {
-    const response = await fetch(`/clientes/${id}`, { method: "DELETE" });
-    if (response.ok) {
-      await carregarClientes();
-    }
-  };
-
-  // Função para editar cliente
-  window.editarCliente = async (id) => {
-    console.log("ID do cliente (editar):", id); // Adicionando o log para verificar o ID
-
-    if (!id) {
-      console.error("ID do cliente não encontrado!");
-      return; // Impede o código de continuar se o ID não for válido
-    }
-
-
-    const response = await fetch(`/clientes/${id}`);
-    const cliente = await response.json();
-
-    document.getElementById("clienteNome").value = cliente.nome;
-    document.getElementById("clienteTelefone").value = cliente.telefone;
-    document.getElementById("clienteEmail").value = cliente.email;
-    document.getElementById("clienteCpf").value = cliente.cpf;
-    document.getElementById("rua").value = cliente.endereco.rua;
-    document.getElementById("numero").value = cliente.endereco.numero;
-    document.getElementById("bairro").value = cliente.endereco.bairro;
-    document.getElementById("cidade").value = cliente.endereco.cidade;
-    document.getElementById("estado").value = cliente.endereco.estado;
-    document.getElementById("cep").value = cliente.endereco.cep;
-
-    // Preencher o campo clienteId com o ID correto
-    document.getElementById("clienteId").value = cliente.idCliente;  // Garantir que o campo ID seja preenchido
-
-    // Exibe o modal
+  openModal.addEventListener("click", () => {
     modal.style.display = "flex";
+    form.reset();
+    // Limpa os campos de identificação do cliente e do endereço
+    document.getElementById("clientId").value = "";
+    enderecoIdInput.value = "";
+  });
+
+  closeModal.addEventListener("click", () => {
+    modal.style.display = "none";
+    form.reset();
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const id = document.getElementById("clientId").value.trim();
+    const client = {
+      nome: document.getElementById("clientName").value,
+      cpf: document.getElementById("clientCpf").value,
+      email: document.getElementById("clientEmail").value,
+      telefone: document.getElementById("clientPhone").value,
+      endereco: {
+        rua: document.getElementById("enderecoRua").value,
+        numero: document.getElementById("enderecoNumero").value,
+        bairro: document.getElementById("enderecoBairro").value,
+        cidade: document.getElementById("enderecoCidade").value,
+        estado: document.getElementById("enderecoEstado").value,
+        cep: document.getElementById("enderecoCep").value
+      }
+    };
+
+    // Verifica se o campo de idEndereco possui um valor e o adiciona ao objeto
+    const enderecoId = enderecoIdInput.value.trim();
+    if (enderecoId) {
+      client.endereco.idEndereco = parseInt(enderecoId);
+    }
+
+    if (id) {
+      // Atualização
+      try {
+        await fetch(`/clientes/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(client)
+        });
+      } catch (error) {
+        console.error("Erro ao atualizar cliente:", error);
+      }
+    } else {
+      // Criação
+      try {
+        await fetch("/clientes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(client)
+        });
+      } catch (error) {
+        console.error("Erro ao criar cliente:", error);
+      }
+    }
+
+    modal.style.display = "none";
+    form.reset();
+    loadClients();
+  });
+
+  window.deleteClient = async (id) => {
+    if (confirm("Tem certeza que deseja excluir este cliente?")) {
+      try {
+        await fetch(`/clientes/${id}`, { method: "DELETE" });
+        loadClients();
+      } catch (error) {
+        console.error("Erro ao excluir cliente:", error);
+      }
+    }
   };
 
-  // Função para resetar o formulário
-  function resetForm() {
-    form.reset();
-  }
+  window.editClient = async (id) => {
+    try {
+      const response = await fetch(`/clientes/${id}`);
+      const client = await response.json();
+      document.getElementById("clientId").value = client.idCliente;
+      document.getElementById("clientName").value = client.nome;
+      document.getElementById("clientCpf").value = client.cpf;
+      document.getElementById("clientEmail").value = client.email;
+      document.getElementById("clientPhone").value = client.telefone;
 
-  carregarClientes(); // Carrega os clientes ao iniciar a página
+      if (client.endereco) {
+        // Preenche o campo oculto do idEndereco se existir
+        enderecoIdInput.value = client.endereco.idEndereco ? client.endereco.idEndereco : "";
+        document.getElementById("enderecoRua").value = client.endereco.rua;
+        document.getElementById("enderecoNumero").value = client.endereco.numero;
+        document.getElementById("enderecoBairro").value = client.endereco.bairro;
+        document.getElementById("enderecoCidade").value = client.endereco.cidade;
+        document.getElementById("enderecoEstado").value = client.endereco.estado;
+        document.getElementById("enderecoCep").value = client.endereco.cep;
+      }
+      modal.style.display = "flex";
+    } catch (error) {
+      console.error("Erro ao buscar cliente:", error);
+    }
+  };
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    const filteredClients = allClients.filter(client => {
+      return client.nome.toLowerCase().includes(query) ||
+             client.cpf.includes(query) ||
+             client.email.toLowerCase().includes(query);
+    });
+    displayClients(filteredClients);
+  });
+
+  loadClients();
 });

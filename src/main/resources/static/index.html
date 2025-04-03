@@ -14,7 +14,6 @@
       font-family: Arial, sans-serif;
       background-color: #141b2b; /* Cor de fundo escura */
       line-height: 1.6;
-      color: white; /* Cor padrão do texto */
     }
     a {
       text-decoration: none;
@@ -70,18 +69,6 @@
     .hero-content p {
       font-size: 1.2em;
       margin-bottom: 20px;
-    }
-    .hero button {
-      padding: 10px 20px;
-      background: #007bff;
-      border: none;
-      border-radius: 5px;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .hero button:hover {
-      background: #0056b3; /* Tom mais escuro ao passar o mouse */
     }
 
     /* Landing Options */
@@ -177,66 +164,73 @@
   </div>
 </section>
 
-<section class="options">
-  <div class="option">
-    <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=1430&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Produtos">
-    <h2>Produtos</h2>
-    <p>Criar e gerenciar o cadastro de produtos.</p>
-    <button onclick="window.location.href=landingLinks.produtos">Criar Produto</button>
-  </div>
-  <div class="option">
-    <img src="https://plus.unsplash.com/premium_photo-1661766456250-bbde7dd079de?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGhhcm1hY3l8ZW58MHx8MHx8fDA%3D" alt="Vendas">
-    <h2>Vendas</h2>
-    <p>Realizar venda e gerar relatório de vendas.</p>
-    <button onclick="window.location.href=landingLinks.vendas">Criar Venda</button>
-  </div>
-  <div class="option">
-    <img src="https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=400&q=80" alt="Relatórios">
-    <h2>Relatórios</h2>
-    <p>Gerar relatórios detalhados dos itens.</p>
-    <button onclick="window.location.href=landingLinks.relatorios">Relatório de Produtos</button>
-  </div>
-  <div class="option">
-    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=400&q=80" alt="Funcionários">
-    <h2>Funcionários</h2>
-    <p>Cadastrar e gerenciar funcionários da farmácia.</p>
-    <button onclick="window.location.href=landingLinks.funcionarios">Cadastrar Funcionário</button>
-  </div>
-  <div class="option">
-    <img src="https://images.unsplash.com/photo-1581594693690-517d9a71e1f2?q=80&w=1450&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Clientes">
-    <h2>Clientes</h2>
-    <p>Cadastrar e gerenciar clientes da farmácia.</p>
-    <button onclick="window.location.href=landingLinks.clientes">Cadastrar Clientes</button>
-  </div>
-  <div class="option">
-    <img src="https://images.unsplash.com/photo-1642055514517-7b52288890ec?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Itens">
-    <h2>Itens</h2>
-    <p>Cadastrar e gerenciar itens da farmácia.</p>
-    <button onclick="window.location.href=landingLinks.item">Cadastrar Itens</button>
-  </div>
-  <div class="option">
-    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1450&auto=format&fit=crop" alt="Fornecedores">
-    <h2>Fornecedores</h2>
-    <p>Cadastrar e gerenciar fornecedores.</p>
-    <button onclick="window.location.href=landingLinks.fornecedores">Cadastrar Fornecedor</button>
-  </div>
-</section>
+  <section class="options">
+    <div class="option">
+      <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=1430&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Produtos">
+      <h2>Produtos</h2>
+      <p>Criar e gerenciar o cadastro de produtos.</p>
+      <button onclick="window.location.href=landingLinks.produtos">Criar Produto</button>
+    </div>
+    <div class="option">
+      <img src="https://plus.unsplash.com/premium_photo-1661766456250-bbde7dd079de?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGhhcm1hY3l8ZW58MHx8MHx8fDA%3D" alt="Vendas">
+      <h2>Vendas</h2>
+      <p>Realizar venda e gerar relatório de vendas.</p>
+      <button onclick="window.location.href=landingLinks.vendas">Criar Venda</button>
+    </div>
+    <div class="option">
+      <img src="https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=400&q=80" alt="Relatórios">
+      <h2>Relatórios</h2>
+      <p>Gerar relatórios detalhados dos itens.</p>
+      <button onclick="window.location.href=landingLinks.relatorios">Relatório de Produtos</button>
+    </div>
+    <div class="option">
+      <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=400&q=80" alt="Funcionários">
+      <h2>Funcionários</h2>
+      <p>Cadastrar e gerenciar funcionários da farmácia.</p>
+      <button onclick="window.location.href=landingLinks.funcionarios">Cadastrar Funcionário</button>
+    </div>
+        <div class="option">
+      <img src="https://images.unsplash.com/photo-1581594693690-517d9a71e1f2?q=80&w=1450&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Clientes">
+      <h2>Clientes</h2>
+      <p>Cadastrar e gerenciar clientes da farmácia.</p>
+      <button onclick="window.location.href=landingLinks.clientes">Cadastrar Clientes</button>
+    </div>
+    </div>
+    <div class="option">
+      <img src="https://images.unsplash.com/photo-1642055514517-7b52288890ec?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Itens">
+      <h2>Itens</h2>
+      <p>Cadastrar e gerenciar itens da farmácia.</p>
+      <button onclick="window.location.href=landingLinks.item">Cadastrar Itens</button>
+    </div>
 
-<footer>
-  <p>&copy; 2025 Pharma Manager. Todos os direitos reservados.</p>
-</footer>
+    <div class="option">
+      <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1450&auto=format&fit=crop"
+        alt="Fornecedores">
+      <h2>Fornecedores</h2>
+      <p>Cadastrar e gerenciar fornecedores.</p>
+      <button onclick="window.location.href=landingLinks.fornecedores">Cadastrar Fornecedor</button>
+    </div>
 
-<script>
-  const landingLinks = {
-    produtos: '/produtos/pagina',
-    relatorios: '/itens/relatorio-pdf',
-    funcionarios: '/funcionarios/pagina',
-    vendas: '/vendas/pagina',
-    clientes: 'clientes/pagina',
-    fornecedores: 'fornecedores/pagina',
-    item: 'itens/pagina',
-    fornecedores: '/fornecedores/pagina',
-  };
-</script>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Pharma Manager. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    // Módulo de configuração dos links da landing page
+    const landingLinks = {
+      produtos: '/produtos/pagina',
+      relatorios: '/itens/relatorio-pdf',
+      funcionarios: '/funcionarios/pagina',
+      vendas: '/vendas/pagina',
+      clientes: 'clientes/pagina',
+      fornecedores: 'fornecedores/pagina',
+      item: 'itens/pagina',
+      fornecedores: '/fornecedores/pagina',
+    };
+
+    // Caso precise atualizar os links, basta alterar os valores neste objeto.
+  </script>
 </body>
 </html>
