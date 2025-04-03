@@ -2,17 +2,18 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
+  background-color: #141b2b;
 }
 
 nav {
-  background: #007bff; /* Alterei para um verde, já que é comum associar a clientes com cor positiva */
+  background: linear-gradient(to right, #007bff, #00c6ff); /* Gradiente similar ao do header */
   color: white;
   padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 
 nav ul {
   list-style: none;
@@ -50,8 +51,9 @@ th, td {
 }
 
 th {
-  background: #007bff; /* Mesma cor do nav para consistência */
-  color: white;
+  background: linear-gradient(to right, #007bff, #00c6ff); /* Gradiente similar ao do header */
+
+  color: #ffffff;
 }
 
 td {
@@ -60,15 +62,43 @@ td {
 
 td button {
   background-color: #28a745;
+  color: #ffffff;
   margin-right: 5px;
 }
 
 td button:nth-child(2) {
   background-color: #dc3545;
+  color: #ffffff;
 }
 
 td button:hover {
   opacity: 0.8;
+}
+h2 {
+  color: white;  /* Definir a cor do título como branca */
+  font-size: 24px; /* Ajuste de tamanho de fonte, se necessário */
+  text-align: center; /* Centralizar o título */
+  margin-bottom: 20px; /* Espaçamento abaixo do título */
+}
+
+#addClienteBtn {
+  background-color: #28a745; /* Cor de fundo verde */
+  color: white;  /* Cor do texto branca */
+  padding: 10px 20px;  /* Espaçamento interno do botão */
+  border: none; /* Remover borda */
+  border-radius: 5px; /* Bordas arredondadas */
+  font-size: 16px; /* Tamanho da fonte */
+  cursor: pointer;  /* Alterar cursor para pointer */
+  transition: background-color 0.3s, transform 0.3s; /* Transição suave */
+}
+
+#addClienteBtn:hover {
+  background-color: #218838; /* Cor de fundo verde escuro ao passar o mouse */
+  transform: scale(1.05); /* Efeito de aumento suave */
+}
+
+#addClienteBtn:focus {
+  outline: none; /* Remover o contorno do foco */
 }
 
 .modal {
@@ -78,7 +108,7 @@ td button:hover {
   top: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.5);
   justify-content: center;
   align-items: center;
 }

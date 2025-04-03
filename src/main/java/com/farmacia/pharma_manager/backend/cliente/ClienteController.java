@@ -47,23 +47,46 @@ public class ClienteController {
     return ResponseEntity.ok(clientes);
   }
 
+//  @PostMapping
+//  public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
+//    Cliente savedCliente = clienteService.salvar(cliente);
+//    return ResponseEntity.status(HttpStatus.CREATED).body(savedCliente);
+//  }
   @PostMapping
   public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
+    if (cliente.getEndereco() == null || cliente.getEndereco().getBairro() == null || cliente.getEndereco().getBairro().isEmpty()) {
+      return ResponseEntity.badRequest().body(null); // Retorna erro 400 se o bairro estiver vazio
+    }
     Cliente savedCliente = clienteService.salvar(cliente);
     return ResponseEntity.status(HttpStatus.CREATED).body(savedCliente);
   }
 
 
+//  @PutMapping("/{id}")
+//  public ResponseEntity<Cliente> atualizarCliente(@PathVariable Integer id, @RequestBody Cliente cliente) {
+//    Optional<Cliente> clienteExistente = clienteService.buscarPorId(id);
+//    if (clienteExistente.isPresent()) {
+//      cliente.setIdCliente(id);
+//      clienteService.salvar(cliente);
+//      return ResponseEntity.ok(cliente);
+//    } else {
+//      return ResponseEntity.notFound().build();
+//    }
+//  }
   @PutMapping("/{id}")
   public ResponseEntity<Cliente> atualizarCliente(@PathVariable Integer id, @RequestBody Cliente cliente) {
     Optional<Cliente> clienteExistente = clienteService.buscarPorId(id);
-    if (clienteExistente.isPresent()) {
-      cliente.setIdCliente(id);
-      clienteService.salvar(cliente);
-      return ResponseEntity.ok(cliente);
-    } else {
-      return ResponseEntity.notFound().build();
+    if (!clienteExistente.isPresent()) {
+      return ResponseEntity.notFound().build(); // Retorna 404 se o cliente não for encontrado
     }
+
+    if (cliente.getEndereco() == null || cliente.getEndereco().getBairro() == null || cliente.getEndereco().getBairro().isEmpty()) {
+      return ResponseEntity.badRequest().body(null); // Retorna erro 400 se o bairro estiver vazio
+    }
+
+    cliente.setIdCliente(id);
+    clienteService.salvar(cliente);
+    return ResponseEntity.ok(cliente);
   }
 
   @DeleteMapping("/{id}")

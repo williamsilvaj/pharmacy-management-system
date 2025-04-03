@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return; // Impede o envio do formulário se campos obrigatórios estiverem vazios
     }
 
+    let clienteFinal = cliente;
     let method = "POST";
     let url = "/clientes";  // A URL de criação de clientes
 
@@ -51,17 +52,19 @@ document.addEventListener("DOMContentLoaded", () => {
       method = "PUT";
       url = `/clientes/${clienteId}`; // Certifique-se de que o ID está sendo passado corretamente
     }
+    console.log(clienteFinal);
 
     // Enviando os dados para o backend
     const response = await fetch(url, {
       method: method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(cliente),
+      body: JSON.stringify(clienteFinal),
     });
 
     if (response.ok) {
       modal.style.display = "none";
-      await carregarClientes(); // Atualiza a tabela sem precisar recarregar a página
+      document.getElementById("clienteId").value = "";
+      carregarClientes(); // Atualiza a tabela sem precisar recarregar a página
     } else {
       alert("Erro ao cadastrar ou atualizar cliente");
     }
@@ -102,7 +105,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Função para editar cliente
   window.editarCliente = async (id) => {
-    console.log(id);
+    console.log("ID do cliente (editar):", id); // Adicionando o log para verificar o ID
+
+    if (!id) {
+      console.error("ID do cliente não encontrado!");
+      return; // Impede o código de continuar se o ID não for válido
+    }
+
+
     const response = await fetch(`/clientes/${id}`);
     const cliente = await response.json();
 
