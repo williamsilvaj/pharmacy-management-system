@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "funcionario")
 public abstract class Funcionario {
 
     @Id
@@ -35,9 +36,10 @@ public abstract class Funcionario {
 
     // Supervisor desse funcionario
     @ManyToOne
-    @JoinColumn(name = "idGerente", nullable = true)
-	  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JoinColumn(name = "idGerente")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Gerente supervisor;
+
 
 
     public Funcionario(String nome, String telefone, String cpf, Cargo cargo, Endereco endereco) {

@@ -3,6 +3,9 @@ package com.farmacia.pharma_manager.backend.gerente;
 import com.farmacia.pharma_manager.backend.cargo.Cargo;
 import com.farmacia.pharma_manager.backend.endereco.Endereco;
 import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 
 import jakarta.persistence.*;
 import java.util.List;
@@ -13,7 +16,9 @@ import java.util.List;
 public class Gerente extends Funcionario {
 
     @OneToMany(mappedBy = "supervisor", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Funcionario> funcionariosSupervisionados;
+
 
 
     public Gerente(String nome, String telefone, String cpf, Cargo cargo, Endereco endereco, List<Funcionario> funcionariosSupervisionados) {

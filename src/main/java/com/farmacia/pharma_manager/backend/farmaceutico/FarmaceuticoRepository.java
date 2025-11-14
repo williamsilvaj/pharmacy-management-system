@@ -6,9 +6,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface FarmaceuticoRepository extends JpaRepository<Farmaceutico, Integer> {
-    
+
     @Query("SELECT f FROM Farmaceutico f WHERE " +
-           "LOWER(f.funcionario.nome) LIKE LOWER(CONCAT('%', :termo, '%')) OR " +
+           "LOWER(f.nome) LIKE LOWER(CONCAT('%', :termo, '%')) OR " +
            "LOWER(f.crf) LIKE LOWER(CONCAT('%', :termo, '%'))")
-    List<Farmaceutico> findByNomeOrCrfContaining(@Param("termo") String termo);
+    List<Farmaceutico> searchByNomeOrCrf(@Param("termo") String termo);
+
 }

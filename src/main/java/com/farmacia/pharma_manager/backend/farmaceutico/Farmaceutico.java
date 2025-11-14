@@ -7,12 +7,12 @@ import com.farmacia.pharma_manager.backend.funcionario.Funcionario;
 import jakarta.persistence.*;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "idFuncionario")
 @Table(name = "farmaceutico")
+@PrimaryKeyJoinColumn(name = "idFuncionario")
 public class Farmaceutico extends Funcionario {
 
-	  @Column(name = "idFuncionario", insertable = false, updatable = false)
-    private Integer id;
+	//@Column(name = "idFuncionario", insertable = false, updatable = false)
+    //private Integer id;
 
     @Column(name = "turno", nullable = false, length = 45)
     private String turno;
@@ -23,9 +23,9 @@ public class Farmaceutico extends Funcionario {
     @Column(name = "cargaHoraria", nullable = false)
     private Float cargaHoraria;
 
-    @OneToOne
-    @JoinColumn(name = "idFuncionario", referencedColumnName = "idFuncionario", insertable = false, updatable = false)
-    private Funcionario funcionario;
+    //@OneToOne
+    //@JoinColumn(name = "idFuncionario", referencedColumnName = "idFuncionario", insertable = false, updatable = false)
+    //private Funcionario funcionario;
 
 
     public Farmaceutico(String nome, String telefone, String cpf, Cargo cargo, Endereco endereco, String turno, String crf, Float cargaHoraria) {

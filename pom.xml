@@ -10,6 +10,9 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
+
+
+
   <groupId>com.farmacia</groupId>
   <artifactId>pharma-manager</artifactId>
   <version>0.0.1-SNAPSHOT</version>
