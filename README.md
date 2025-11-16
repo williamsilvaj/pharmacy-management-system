@@ -1,4 +1,6 @@
+This project consists of the complete development of a web-based pharmacy management system, integrating employee, product, inventory, sales, customer, supplier, and expense management, using Java, Spring Boot, MySQL, and a web interface developed with HTML, CSS, and JavaScript.
 
+The system was developed as a team using agile methodologies, version control with Git, and best architectural practices in Linux environments. I actively contributed to both the backend and frontend, focusing on optimizing SQL queries and organizing the data flow.
 # Guia de Configuração
 
 ## Iniciar o projeto:
@@ -50,3 +52,4 @@ mvn checkstyle:check
 
 ### Eclipse:
 1. Instale o plugin **EditorConfig Eclipse Plugin**.
+
